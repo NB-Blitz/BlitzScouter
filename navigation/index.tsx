@@ -54,7 +54,9 @@ function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="Teams"
       screenOptions={{
-        tabBarActiveTintColor: "#f2e438",
+        tabBarActiveTintColor: "#fff",
+        unmountOnBlur: true,
+        headerShown: false,
       }}>
       <BottomTab.Screen
         name="Teams"

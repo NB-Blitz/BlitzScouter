@@ -1,30 +1,19 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
+import { TBA } from '../components/TBA';
 
-import { Text, View } from '../components/Themed';
+import { Text, Title, Container } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
 export default function TeamsScreen({ navigation }: RootTabScreenProps<'Teams'>) {
-  return (
-    <View style={styles.container}>
-      
-    </View>
-  );
+    return (
+        <Container>
+            <Title>Teams</Title>
+            <Text>Team data has not been downloaded from TBA yet. Download is available under settings</Text>
+        </Container>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
+
 });
