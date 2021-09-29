@@ -5,6 +5,8 @@ const prefix = "https://www.thebluealliance.com/api/v3/";
 const suffix = "?X-TBA-Auth-Key=" + APIKey;
 
 const MATCH_TYPES = ["qm", "qf", "sf", "f"];
+const YEAR = 2019;
+const DEFAULT_IMG = "data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
 
 export class TBA
 {
@@ -12,36 +14,63 @@ export class TBA
     static teams?: any[];
     static matches?: any[];
 
-    static async downloadData(id: string)
+    static async downloadData(id?: string)
     {
-        TBA.eventID = id;
-        AsyncStorage.setItem('event_id', TBA.eventID);
+        if (id)
+        {
+            TBA.eventID = id;
+            await AsyncStorage.setItem('event_id', TBA.eventID);
+        }
 
+        // Teams
         let teams = await this.getTeams();
         if (!(teams))
             return Alert.alert("Error","Could not connect to The Blue Alliance");
         TBA.teams = teams;
         TBA._sortTeams();
-        AsyncStorage.setItem('team_data', JSON.stringify(teams));
 
+        // Team Media
+        let imageCount = 0;
+        for (let team of teams)
+        {
+            let media = await TBA.getTeamMedia(team.key);
+            team.thumb = DEFAULT_IMG;
+            if (media.length > 0)
+            {
+                if ("base64Image" in media[0].details)
+                {
+                    team.thumb = "data:image/png;base64, " + media[0].details.base64Image;
+                    imageCount++;
+                }
+            }
+        }
+
+        await AsyncStorage.setItem('team_data', JSON.stringify(teams));
+
+        // Matches
         let matches = await this.getMatches();
         if (!(matches))
             return Alert.alert("Error","Could not connect to The Blue Alliance");
         TBA.matches = matches;
         this._sortMatches();
-        AsyncStorage.setItem('match_data', JSON.stringify(matches));
+        await AsyncStorage.setItem('match_data', JSON.stringify(matches));
 
-        Alert.alert("Success", "Successfully downloaded data from The Blue Alliance");
+        Alert.alert("Success", "Successfully downloaded data from The Blue Alliance. (" + imageCount + " / " + teams.length + " images)");
     }
 
     static getEvents()
     {
-        return TBA._fetch("events/2019");
+        return TBA._fetch("events/" + YEAR);
     }
 
     static getTeams()
     {
         return TBA._fetch("event/" + TBA.eventID + "/teams/simple");
+    }
+
+    static getTeamMedia(teamKey: string)
+    {
+        return TBA._fetch("team/" + teamKey + "/media/" + YEAR);
     }
 
     static getMatches()

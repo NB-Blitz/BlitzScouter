@@ -2,12 +2,13 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import QRCode from "react-qr-code";
 
-import { Container } from '../components/Themed';
+import { Container, Text } from '../components/Themed';
 
 export default function SharingScreen() {
   return (
     <View style={styles.container}>
-         <QRCode
+        
+        <QRCode
             value={"Hello World!"}
             size={300}
             bgColor='black'

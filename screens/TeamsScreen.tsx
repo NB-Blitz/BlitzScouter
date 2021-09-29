@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { TBA } from '../components/TBA';
 
 import { Text, Title, Container, Button } from '../components/Themed';
@@ -13,10 +13,15 @@ export default function TeamsScreen({ navigation }: RootTabScreenProps<'Teams'>)
         for (let team of TBA.teams)
         {
             let key = team.key;
+            let image = team.thumb;
             teamDisplay.push(
                 <Button style={styles.teamButton} key={key}>
-                    <Text style={styles.teamName}>{team.nickname}</Text>
-                    <Text style={styles.teamNumber}>{team.team_number}</Text>
+                    <Image style={styles.teamImage} source={{uri:image}} />
+                    <View>
+                        <Text style={styles.teamName}>{team.nickname}</Text>
+                        <Text style={styles.teamNumber}>{team.team_number}</Text>
+                    </View>
+                    
                 </Button>
             );
         }
@@ -38,7 +43,14 @@ export default function TeamsScreen({ navigation }: RootTabScreenProps<'Teams'>)
 
 const styles = StyleSheet.create({
     teamButton: {
-        alignItems: "flex-start",
+        flexDirection: "row",
+        justifyContent: "flex-start"
+    },
+    teamImage: {
+        width: 40,
+        height: 40,
+        marginRight: 10,
+        resizeMode: 'stretch'
     },
     teamName: {
         fontSize: 18,

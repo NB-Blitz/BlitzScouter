@@ -13,16 +13,18 @@ export default function SettingsScreen()
     return (
         <Container>
             <Title>Settings</Title>
+
             <Button style={styles.button}
-                    onPress={() => {setModalVisible(true)}}>
-                <Text style={styles.buttonText}>Download TBA Data</Text>
+                    onPress={() => {TBA.downloadData()}}>
+                <Text style={styles.buttonText}>Update Data</Text>
             </Button>
 
-            <RegionalModal 
-                visible={modalVisible}
-                onRequestClose={() => {
-                    setModalVisible(!modalVisible);
-                }} />
+            <Button style={styles.button}
+                    onPress={() => {setModalVisible(true)}}>
+                <Text style={styles.buttonText}>Change Regional</Text>
+            </Button>
+
+            <RegionalModal visible={modalVisible} setVisible={setModalVisible} />
         </Container>
     );
 }
@@ -30,9 +32,12 @@ export default function SettingsScreen()
 const styles = StyleSheet.create({
     button: {
         backgroundColor: "#deda04",
+        marginBottom: 10,
+        borderRadius: 5
     },
     buttonText: {
-        color: "#000"
+        color: "#000",
+        fontSize: 16
     },
     textInput: {
         color: "#fff",

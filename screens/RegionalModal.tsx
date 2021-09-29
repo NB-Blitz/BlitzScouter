@@ -1,8 +1,14 @@
 import React from "react";
-import { Alert, Modal, ModalProps, ScrollView, StyleSheet, View } from "react-native";
+import { Alert, Modal, ScrollView, StyleSheet, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { TBA } from "../components/TBA";
 import { Button, Container, Text, Title } from "../components/Themed";
+
+interface ModalProps
+{
+    visible: boolean;
+    setVisible: Function;
+}
 
 export default function RegionalModal(props: ModalProps)
 {
@@ -32,7 +38,7 @@ export default function RegionalModal(props: ModalProps)
             let key = regional.key;
             if (regional.name.toLowerCase().includes(searchTerm))
                 regionalsDisplay.push(
-                    <Button key={key} onPress={() => {TBA.downloadData(key);}}>
+                    <Button key={key} onPress={() => { TBA.downloadData(key).then(() => { props.setVisible(false); }); }}>
                         <Text style={styles.regionalButton}>{regional.name}</Text>
                     </Button>
                 )
@@ -45,7 +51,8 @@ export default function RegionalModal(props: ModalProps)
         <Modal
             animationType="slide"
             transparent={true}
-            {...props}>
+            visible={props.visible}
+            onRequestClose={() => props.setVisible(false)} >
 
             <View style={styles.modal}>
                 <Title>Regional:</Title>
@@ -60,7 +67,7 @@ export default function RegionalModal(props: ModalProps)
                 </ScrollView>
             </View>
 
-            <Button style={styles.button} onPress={() => {React.useState()}}>
+            <Button style={styles.button} onPress={() => {props.setVisible(false);}}>
                 <Text style={styles.buttonText}>Cancel</Text>
             </Button>
         </Modal>
