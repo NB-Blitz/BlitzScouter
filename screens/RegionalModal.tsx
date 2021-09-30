@@ -1,6 +1,7 @@
 import React from "react";
 import { Alert, Modal, ScrollView, StyleSheet, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import DownloadingModal from "../components/DownloadingModal";
 import { TBA } from "../components/TBA";
 import { Button, Container, Text, Title } from "../components/Themed";
 
@@ -14,10 +15,11 @@ export default function RegionalModal(props: ModalProps)
 {
     const [searchTerm, updateSearch] = React.useState("");
     const [regionalList, updateRegionals] = React.useState([] as any[]);
+    const [downloadStatus, setDownloadStatus] = React.useState("");
 
     // Generate List
     let regionalsDisplay: JSX.Element[] = [];
-    if (regionalList.length <= 0)
+    if (regionalList.length <= 0 && props.visible)
     {
         TBA.getEvents().then((events: any[]) => {
             updateRegionals(events);
@@ -38,8 +40,15 @@ export default function RegionalModal(props: ModalProps)
             let key = regional.key;
             if (regional.name.toLowerCase().includes(searchTerm))
                 regionalsDisplay.push(
-                    <Button key={key} onPress={() => { TBA.downloadData(key).then(() => { props.setVisible(false); }); }}>
-                        <Text style={styles.regionalButton}>{regional.name}</Text>
+                    <Button
+                        key={key}
+                        onPress={() => { TBA.downloadData(key, setDownloadStatus).then(() => { props.setVisible(false); }); }}
+                        style={styles.regionalButton}>
+
+                        <Text style={styles.regionalText}>
+                            {regional.name}
+                        </Text>
+
                     </Button>
                 )
         }
@@ -70,6 +79,8 @@ export default function RegionalModal(props: ModalProps)
             <Button style={styles.button} onPress={() => {props.setVisible(false);}}>
                 <Text style={styles.buttonText}>Cancel</Text>
             </Button>
+
+            <DownloadingModal status={downloadStatus} />
         </Modal>
     );
 }
@@ -87,7 +98,11 @@ const styles = StyleSheet.create({
         color: "#000"
     },
     regionalButton: {
-        textAlign: "center"
+        padding: 6,
+        flexDirection: "row"
+    },
+    regionalText:{
+        fontSize: 16
     },
     textInput: {
         color: "#fff",

@@ -25,7 +25,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#000000"
-      }
+      },
+      "package": "org.team5148.blitzscouter"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

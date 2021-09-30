@@ -4,8 +4,11 @@ import { TBA } from '../components/TBA';
 
 import { Text, Title, Container, Button } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
+import TeamModal from './TeamModal';
 
 export default function TeamsScreen({ navigation }: RootTabScreenProps<'Teams'>) {
+    const [teamID, setTeamID] = React.useState("");
+    
     let teamDisplay: JSX.Element[] = [];
 
     if (TBA.teams)
@@ -13,10 +16,14 @@ export default function TeamsScreen({ navigation }: RootTabScreenProps<'Teams'>)
         for (let team of TBA.teams)
         {
             let key = team.key;
-            let image = team.thumb;
             teamDisplay.push(
-                <Button style={styles.teamButton} key={key}>
-                    <Image style={styles.teamImage} source={{uri:image}} />
+                <Button
+                    style={styles.teamButton}
+                    key={key}
+                    onPress={() => setTeamID(key)}>
+                    
+                    <Image style={styles.teamImage} source={{uri:team.media[0]}} />
+
                     <View>
                         <Text style={styles.teamName}>{team.nickname}</Text>
                         <Text style={styles.teamNumber}>{team.team_number}</Text>
@@ -35,6 +42,8 @@ export default function TeamsScreen({ navigation }: RootTabScreenProps<'Teams'>)
 
     return (
         <Container>
+            <TeamModal teamID={teamID} setTeam={setTeamID} />
+
             <Title>Teams</Title>
             {teamDisplay}
         </Container>

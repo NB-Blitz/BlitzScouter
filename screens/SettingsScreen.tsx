@@ -2,6 +2,7 @@ import { Picker } from '@react-native-picker/picker';
 import * as React from 'react';
 import { Modal, ScrollView, StyleSheet } from 'react-native';
 import { Switch, TextInput } from 'react-native-gesture-handler';
+import DownloadingModal from '../components/DownloadingModal';
 import { TBA } from '../components/TBA';
 import { Text, Container, Title, Button } from '../components/Themed';
 import RegionalModal from './RegionalModal';
@@ -9,13 +10,14 @@ import RegionalModal from './RegionalModal';
 export default function SettingsScreen()
 {
     const [modalVisible, setModalVisible] = React.useState(false);
+    const [downloadStatus, setDownloadStatus] = React.useState("");
 
     return (
         <Container>
             <Title>Settings</Title>
 
             <Button style={styles.button}
-                    onPress={() => {TBA.downloadData()}}>
+                    onPress={() => {TBA.downloadData(TBA.eventID, setDownloadStatus)}}>
                 <Text style={styles.buttonText}>Update Data</Text>
             </Button>
 
@@ -24,7 +26,13 @@ export default function SettingsScreen()
                 <Text style={styles.buttonText}>Change Regional</Text>
             </Button>
 
+            <Button style={styles.button}
+                    onPress={() => {setModalVisible(true)}}>
+                <Text style={styles.buttonText}>Clear All Data</Text>
+            </Button>
+
             <RegionalModal visible={modalVisible} setVisible={setModalVisible} />
+            <DownloadingModal status={downloadStatus} />
         </Container>
     );
 }

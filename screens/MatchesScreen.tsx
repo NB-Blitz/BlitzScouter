@@ -3,8 +3,11 @@ import { StyleSheet } from 'react-native';
 import { TBA } from '../components/TBA';
 
 import { Text, Container, Title, Button } from '../components/Themed';
+import MatchModal from './MatchModal';
 
 export default function MatchesScreen() {
+    const [matchID, setMatchID] = React.useState("");
+    
     let matchDisplay: JSX.Element[] = [];
 
     if (TBA.matches)
@@ -12,34 +15,15 @@ export default function MatchesScreen() {
         for (let match of TBA.matches)
         {
             let key = match.key;
-            let matchName = match.comp_level + "-" + match.match_number;
-            switch (match.comp_level)
-            {
-                case "qm":
-                    matchName = "Qualification " + match.match_number;
-                    break;
-                case "qf":
-                    matchName = "Quarter-Finals " + match.match_number;
-                    break;
-                case "sf":
-                    matchName = "Semi-Finals " + match.match_number;
-                    break;
-                case "f":
-                    matchName = "Finals " + match.match_number;
-                    break;
-            }
-
-            let matchDesc = "";
-            for (let team of match.alliances.blue.team_keys)
-                matchDesc += team.substring(3) + " ";
-            matchDesc += " -  "
-            for (let team of match.alliances.red.team_keys)
-                matchDesc += team.substring(3) + " ";
-
+            
             matchDisplay.push(
-                <Button style={styles.matchButton} key={key}>
-                    <Text style={styles.matchName}>{matchName}</Text>
-                    <Text style={styles.matchDesc}>{matchDesc}</Text>
+                <Button
+                    style={styles.matchButton}
+                    key={key}
+                    onPress={() => {setMatchID(key);}}>
+                        
+                    <Text style={styles.matchName}>{match.name}</Text>
+                    <Text style={styles.matchDesc}>{match.description}</Text>
                 </Button>
             );
         }
@@ -55,6 +39,8 @@ export default function MatchesScreen() {
         <Container>
             <Title>Matches</Title>
             {matchDisplay}
+
+            <MatchModal matchID={matchID} setMatch={setMatchID} />
         </Container>
     );
 }
