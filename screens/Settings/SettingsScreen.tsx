@@ -1,25 +1,31 @@
-import { Picker } from '@react-native-picker/picker';
 import * as React from 'react';
-import { Modal, ScrollView, StyleSheet } from 'react-native';
-import { Switch, TextInput } from 'react-native-gesture-handler';
-import DownloadingModal from '../components/DownloadingModal';
-import { TBA } from '../components/TBA';
-import { Text, Container, Title, Button } from '../components/Themed';
+import { StyleSheet } from 'react-native';
+import DownloadingModal from './DownloadingModal';
+import { Text, Container, Title, Button, ScrollContainer } from '../../components/Themed';
 import RegionalModal from './RegionalModal';
+import { BlitzDB } from '../../components/Database/BlitzDB';
 
+// BUG "Update Data" is available after a data wipe
+// TODO More settings
 export default function SettingsScreen()
 {
     const [modalVisible, setModalVisible] = React.useState(false);
     const [downloadStatus, setDownloadStatus] = React.useState("");
 
+    let updateButton;
+    if (BlitzDB.event)
+        updateButton = (
+        <Button
+            style={styles.button}
+            onPress={() => {BlitzDB.download(BlitzDB.event ? BlitzDB.event.id : "", setDownloadStatus)}}>
+            <Text style={styles.buttonText}>Update Data</Text>
+        </Button>);
+
     return (
-        <Container>
+        <ScrollContainer>
             <Title>Settings</Title>
 
-            <Button style={styles.button}
-                    onPress={() => {TBA.downloadData(TBA.eventID, setDownloadStatus)}}>
-                <Text style={styles.buttonText}>Update Data</Text>
-            </Button>
+            {updateButton}
 
             <Button style={styles.button}
                     onPress={() => {setModalVisible(true)}}>
@@ -27,13 +33,13 @@ export default function SettingsScreen()
             </Button>
 
             <Button style={styles.button}
-                    onPress={() => {setModalVisible(true)}}>
+                    onPress={() => {BlitzDB.deleteAll(true);}}>
                 <Text style={styles.buttonText}>Clear All Data</Text>
             </Button>
 
             <RegionalModal visible={modalVisible} setVisible={setModalVisible} />
             <DownloadingModal status={downloadStatus} />
-        </Container>
+        </ScrollContainer>
     );
 }
 

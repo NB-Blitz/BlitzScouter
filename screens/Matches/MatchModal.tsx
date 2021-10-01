@@ -1,15 +1,13 @@
-import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
-import { Alert, Dimensions, Image, Modal, ScrollView, StyleSheet, View } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import DarkBackground from "../components/DarkBackground";
-import { TBA } from "../components/TBA";
-import { Button, Container, Text, Title } from "../components/Themed";
+import { Alert, Modal, ScrollView, StyleSheet } from "react-native";
+import DarkBackground from "../../components/DarkBackground";
+import { BlitzDB } from "../../components/Database/BlitzDB";
+import { Button, Text, Title } from "../../components/Themed";
 
 interface ModalProps
 {
     matchID: string;
-    setMatch: Function;
+    setMatchID: Function;
 }
 
 export default function MatchModal(props: ModalProps)
@@ -19,11 +17,11 @@ export default function MatchModal(props: ModalProps)
         return null;
             
     // Grab Match Data
-    let match = TBA.getMatch(props.matchID);
+    let match = BlitzDB.getMatch(props.matchID);
     if (!(match))
     {
         Alert.alert("Error", "There was an error grabbing the data from that match. Try re-downloading TBA data then try again.");
-        props.setMatch("");
+        props.setMatchID("");
         return null;
     }
 
@@ -33,7 +31,7 @@ export default function MatchModal(props: ModalProps)
             animationType="slide"
             transparent={true}
             visible={true}
-            onRequestClose={() => props.setMatch("")} >
+            onRequestClose={() => props.setMatchID("")} >
 
             <DarkBackground />
 
@@ -45,7 +43,7 @@ export default function MatchModal(props: ModalProps)
                 <Title style={styles.header}>Team Comments:</Title>
             </ScrollView>
 
-            <Button style={styles.button} onPress={() => {props.setMatch("");}}>
+            <Button style={styles.button} onPress={() => {props.setMatchID("");}}>
                 <Text style={styles.buttonText}>Return</Text>
             </Button>
         </Modal>
@@ -60,7 +58,7 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: "#deda04",
         position: "absolute",
-        bottom: 80,
+        bottom: 35,
         right: 20,
         left: 20,
         borderRadius: 10
@@ -72,12 +70,14 @@ const styles = StyleSheet.create({
         backgroundColor: "#0b0b0b",
         flex: 1,
         borderRadius: 10,
-        marginTop: 30,
+        marginTop: 10,
+        marginBottom: 20,
+        marginLeft: 5,
+        marginRight: 5,
         paddingTop: 30,
         paddingLeft: 20,
         paddingRight: 20,
         paddingBottom: 70,
-        marginBottom: 60,
     },
     title: {
         marginBottom: 0

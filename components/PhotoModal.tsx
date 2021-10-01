@@ -8,6 +8,7 @@ interface PhotoProps
     setImageData: Function;
 }
 
+// TODO Improve Photo Modal
 export default function PhotoModal(props: PhotoProps)
 {
     if (props.imageData === "")

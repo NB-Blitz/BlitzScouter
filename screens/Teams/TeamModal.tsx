@@ -1,16 +1,16 @@
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
-import { Alert, Dimensions, Image, Modal, ScrollView, StyleSheet, View } from "react-native";
-import DarkBackground from "../components/DarkBackground";
-import { TBA } from "../components/TBA";
-import { Button, Container, Text, Title } from "../components/Themed";
+import { Alert, Image, Modal, ScrollView, StyleSheet } from "react-native";
+import DarkBackground from "../../components/DarkBackground";
+import { Button, Text, Title } from "../../components/Themed";
 import * as ImagePicker from 'expo-image-picker';
-import PhotoModal from "../components/PhotoModal";
+import PhotoModal from "../../components/PhotoModal";
+import { BlitzDB } from "../../components/Database/BlitzDB";
 
 interface ModalProps
 {
     teamID: string;
-    setTeam: Function;
+    setTeamID: Function;
 }
 
 export default function TeamModal(props: ModalProps)
@@ -22,11 +22,11 @@ export default function TeamModal(props: ModalProps)
         return null;
             
     // Grab Team Data
-    let team = TBA.getTeam(props.teamID);
+    let team = BlitzDB.getTeam(props.teamID);
     if (!(team))
     {
         Alert.alert("Error", "There was an error grabbing the data from that team. Try re-downloading TBA data then try again.");
-        props.setTeam("");
+        props.setTeamID("");
         return null;
     }
 
@@ -36,7 +36,10 @@ export default function TeamModal(props: ModalProps)
     {
         let preview = imageData;
         mediaList.push(
-            <Button style={styles.imageButton} onPress={() => setPreviewPhoto(preview)}>
+            <Button
+                style={styles.imageButton}
+                onPress={() => setPreviewPhoto(preview)}
+                key={Math.random()}>
                 <Image style={styles.thumbnail} source={{uri:imageData}} key={Math.random()}/>
             </Button>
         );
@@ -48,7 +51,7 @@ export default function TeamModal(props: ModalProps)
             animationType="slide"
             transparent={true}
             visible={true}
-            onRequestClose={() => props.setTeam("")} >
+            onRequestClose={() => props.setTeamID("")} >
 
             <DarkBackground />
 
@@ -85,13 +88,13 @@ export default function TeamModal(props: ModalProps)
                     </Button>
                 </ScrollView>
                 
-                <Title style={styles.title}>{team ? team.nickname : ""}</Title>
-                <Title style={styles.subtitle}>{team ? team.team_number : ""}</Title>
+                <Title style={styles.title}>{team ? team.name : ""}</Title>
+                <Title style={styles.subtitle}>{team ? team.number : ""}</Title>
 
                 <Title style={styles.header}>Team Comments:</Title>
             </ScrollView>
 
-            <Button style={styles.button} onPress={() => {props.setTeam("");}}>
+            <Button style={styles.button} onPress={() => {props.setTeamID("");}}>
                 <Text style={styles.buttonText}>Return</Text>
             </Button>
             
@@ -115,7 +118,7 @@ function addPhoto(teamID: string)
         if (!result.base64)
             return;
 
-        TBA.addTeamMedia(teamID, result.base64);
+        BlitzDB.addTeamMedia(teamID, result.base64);
     });
 }
 
@@ -134,7 +137,7 @@ function addFile(teamID: string)
         if (!result.base64)
             return;
 
-        TBA.addTeamMedia(teamID, result.base64);
+        BlitzDB.addTeamMedia(teamID, result.base64);
     });
 }
 

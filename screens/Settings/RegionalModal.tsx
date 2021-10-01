@@ -1,10 +1,11 @@
 import React from "react";
 import { Alert, Modal, ScrollView, StyleSheet, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import DownloadingModal from "../components/DownloadingModal";
-import { TBA } from "../components/TBA";
-import { Button, Container, Text, Title } from "../components/Themed";
-
+import { BlitzDB } from "../../components/Database/BlitzDB";
+import { TBAEvent } from "../../components/Database/DBModels";
+import { TBA } from "../../components/Database/TBA";
+import { Button, Text, Title } from "../../components/Themed";
+import DownloadingModal from "./DownloadingModal";
 interface ModalProps
 {
     visible: boolean;
@@ -14,15 +15,16 @@ interface ModalProps
 export default function RegionalModal(props: ModalProps)
 {
     const [searchTerm, updateSearch] = React.useState("");
-    const [regionalList, updateRegionals] = React.useState([] as any[]);
+    const [regionalList, updateRegionals] = React.useState([] as TBAEvent[]);
     const [downloadStatus, setDownloadStatus] = React.useState("");
 
     // Generate List
     let regionalsDisplay: JSX.Element[] = [];
     if (regionalList.length <= 0 && props.visible)
     {
-        TBA.getEvents().then((events: any[]) => {
-            updateRegionals(events);
+        TBA.getEvents().then((events) => {
+            if (events)
+                updateRegionals(events);
         }).catch(() => {
             Alert.alert("Error","Could not connect to The Blue Alliance");
         });
@@ -42,7 +44,7 @@ export default function RegionalModal(props: ModalProps)
                 regionalsDisplay.push(
                     <Button
                         key={key}
-                        onPress={() => { TBA.downloadData(key, setDownloadStatus).then(() => { props.setVisible(false); }); }}
+                        onPress={() => { BlitzDB.download(key, setDownloadStatus).then(() => { props.setVisible(false); }); }}
                         style={styles.regionalButton}>
 
                         <Text style={styles.regionalText}>
@@ -98,7 +100,8 @@ const styles = StyleSheet.create({
         color: "#000"
     },
     regionalButton: {
-        padding: 6,
+        padding: 8,
+        marginLeft: 4,
         flexDirection: "row"
     },
     regionalText:{
@@ -106,9 +109,11 @@ const styles = StyleSheet.create({
     },
     textInput: {
         color: "#fff",
-        borderBottomColor: "#fff",
-        borderBottomWidth: 1,
-        marginBottom: 10
+        backgroundColor: "#222222",
+        borderRadius: 10,
+        padding: 10,
+        marginBottom: 10,
+        marginTop: -10
     },
     modal: {
         backgroundColor: "#0b0b0b",

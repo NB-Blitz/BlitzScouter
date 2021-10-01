@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { TBA } from '../components/TBA';
-
-import { Text, Title, Container, Button } from '../components/Themed';
-import { RootTabScreenProps } from '../types';
+import { BlitzDB } from '../../components/Database/BlitzDB';
+import { Text, Title, Button, ScrollContainer } from '../../components/Themed';
+import { RootTabScreenProps } from '../../types';
 import TeamModal from './TeamModal';
 
 export default function TeamsScreen({ navigation }: RootTabScreenProps<'Teams'>) {
@@ -11,22 +10,21 @@ export default function TeamsScreen({ navigation }: RootTabScreenProps<'Teams'>)
     
     let teamDisplay: JSX.Element[] = [];
 
-    if (TBA.teams)
+    if (BlitzDB.currentTeams.length > 0)
     {
-        for (let team of TBA.teams)
+        for (let team of BlitzDB.currentTeams)
         {
-            let key = team.key;
             teamDisplay.push(
                 <Button
                     style={styles.teamButton}
-                    key={key}
-                    onPress={() => setTeamID(key)}>
+                    key={team.id}
+                    onPress={() => setTeamID(team.id)}>
                     
-                    <Image style={styles.teamImage} source={{uri:team.media[0]}} />
+                    <Image style={styles.teamImage} source={team.media.length > 0 ? {uri:team.media[0]} : {}} />
 
                     <View>
-                        <Text style={styles.teamName}>{team.nickname}</Text>
-                        <Text style={styles.teamNumber}>{team.team_number}</Text>
+                        <Text style={styles.teamName}>{team.name}</Text>
+                        <Text style={styles.teamNumber}>{team.number}</Text>
                     </View>
                     
                 </Button>
@@ -41,12 +39,12 @@ export default function TeamsScreen({ navigation }: RootTabScreenProps<'Teams'>)
     }
 
     return (
-        <Container>
-            <TeamModal teamID={teamID} setTeam={setTeamID} />
+        <ScrollContainer>
+            <TeamModal teamID={teamID} setTeamID={setTeamID} />
 
             <Title>Teams</Title>
             {teamDisplay}
-        </Container>
+        </ScrollContainer>
     );
 }
 
@@ -67,5 +65,5 @@ const styles = StyleSheet.create({
     },
     teamNumber: {
         color: "#bbb"
-    },
+    }
 });

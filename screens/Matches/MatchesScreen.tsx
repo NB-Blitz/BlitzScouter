@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import { TBA } from '../components/TBA';
+import { ScrollView } from 'react-native-gesture-handler';
+import { BlitzDB } from '../../components/Database/BlitzDB';
 
-import { Text, Container, Title, Button } from '../components/Themed';
+import { Text, Container, Title, Button, ScrollContainer } from '../../components/Themed';
 import MatchModal from './MatchModal';
 
 export default function MatchesScreen() {
@@ -10,17 +11,15 @@ export default function MatchesScreen() {
     
     let matchDisplay: JSX.Element[] = [];
 
-    if (TBA.matches)
+    if (BlitzDB.event)
     {
-        for (let match of TBA.matches)
+        for (let match of BlitzDB.event.matches)
         {
-            let key = match.key;
-            
             matchDisplay.push(
                 <Button
                     style={styles.matchButton}
-                    key={key}
-                    onPress={() => {setMatchID(key);}}>
+                    key={match.id}
+                    onPress={() => {setMatchID(match.id);}}>
                         
                     <Text style={styles.matchName}>{match.name}</Text>
                     <Text style={styles.matchDesc}>{match.description}</Text>
@@ -36,12 +35,12 @@ export default function MatchesScreen() {
     }
 
     return (
-        <Container>
+        <ScrollContainer>
             <Title>Matches</Title>
             {matchDisplay}
 
-            <MatchModal matchID={matchID} setMatch={setMatchID} />
-        </Container>
+            <MatchModal matchID={matchID} setMatchID={setMatchID} />
+        </ScrollContainer>
     );
 }
 
