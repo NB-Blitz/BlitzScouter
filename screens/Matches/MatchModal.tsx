@@ -33,7 +33,7 @@ export default function MatchModal(props: ModalProps)
             visible={true}
             onRequestClose={() => props.setMatchID("")} >
 
-            <DarkBackground />
+            <DarkBackground isTransparent={true} />
 
             <ScrollView style={styles.modal}>
                 

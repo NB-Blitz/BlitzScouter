@@ -1,6 +1,6 @@
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
-import { Alert, Image, Modal, ScrollView, StyleSheet } from "react-native";
+import { Alert, Dimensions, Image, Modal, ScrollView, StyleSheet, TextInput, View } from "react-native";
 import DarkBackground from "../../components/DarkBackground";
 import { Button, Text, Title } from "../../components/Themed";
 import * as ImagePicker from 'expo-image-picker';
@@ -53,7 +53,7 @@ export default function TeamModal(props: ModalProps)
             visible={true}
             onRequestClose={() => props.setTeamID("")} >
 
-            <DarkBackground />
+            <DarkBackground isTransparent={true} />
 
             <ScrollView style={styles.modal}>
                 <ScrollView style={styles.media} horizontal={true}>
@@ -91,7 +91,23 @@ export default function TeamModal(props: ModalProps)
                 <Title style={styles.title}>{team ? team.name : ""}</Title>
                 <Title style={styles.subtitle}>{team ? team.number : ""}</Title>
 
-                <Title style={styles.header}>Team Comments:</Title>
+                <View style={{flexDirection: "row"}}>
+                    <TextInput 
+                        placeholder="Comment..."
+                        placeholderTextColor="#fff"
+                        style={styles.textInput}
+                        multiline={true}
+                    />
+                    <Button
+                        style={styles.sendCommentButton}>
+                        <FontAwesome 
+                            size={20}
+                            name={"arrow-right"}
+                            color={"white"}
+                            style={{marginBottom: 20}}/>
+                    </Button>
+                </View>
+                
             </ScrollView>
 
             <Button style={styles.button} onPress={() => {props.setTeamID("");}}>
@@ -170,6 +186,19 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingRight: 20,
         paddingBottom: 70,
+    },
+    textInput: {
+        color: "#fff",
+        backgroundColor: "#222222",
+        borderRadius: 10,
+        paddingLeft: 10,
+        marginBottom: 10,
+        marginTop: -10,
+        marginRight: 10,
+        width: Dimensions.get("screen").width - 100
+    },
+    sendCommentButton: {
+        flexDirection: "row"
     },
     title: {
         marginBottom: 0

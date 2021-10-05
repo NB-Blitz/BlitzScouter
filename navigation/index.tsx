@@ -3,19 +3,17 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import NotFoundScreen from '../screens/NotFoundScreen';
 import TeamsScreen from '../screens/Teams/TeamsScreen';
 import MatchesScreen from '../screens/Matches/MatchesScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
-import LinkingConfiguration from './LinkingConfiguration';
 import SharingScreen from '../screens/Sharing/SharingScreen';
 import SettingsScreen from '../screens/Settings/SettingsScreen';
 import { Animated } from 'react-native';
+import { TabBarIcon } from '../components/Themed';
 
 export default function Navigation() {
   return (
     <NavigationContainer
-      linking={LinkingConfiguration}
       theme={DarkTheme}>
       <RootNavigator />
     </NavigationContainer>
@@ -28,7 +26,6 @@ function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{}}>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
     </Stack.Navigator>
   );
 }
@@ -41,7 +38,6 @@ function BottomTabNavigator() {
       initialRouteName="Teams"
       screenOptions={{
         tabBarActiveTintColor: "#deda04",
-        unmountOnBlur: true,
         headerShown: false
       }}>
       <BottomTab.Screen
@@ -78,11 +74,4 @@ function BottomTabNavigator() {
       />
     </BottomTab.Navigator>
   );
-}
-
-function TabBarIcon(props: {
-    name: React.ComponentProps<typeof FontAwesome>['name'];
-    color: string;
-}) {
-    return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
 }

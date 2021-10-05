@@ -1,10 +1,15 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-export default function DarkBackground()
+interface DarkBackgroundProps
+{
+    isTransparent: boolean;
+}
+
+export default function DarkBackground(props: DarkBackgroundProps)
 {
     return (
-        <View style={styles.background} />
+        <View style={{...styles.background, opacity: props.isTransparent ? .6 : 1}} />
     );
 }
 
@@ -15,7 +20,6 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: "black",
-        opacity: 0.6
+        backgroundColor: "black"
     }
 });

@@ -20,7 +20,7 @@ export default function TeamsScreen({ navigation }: RootTabScreenProps<'Teams'>)
                     key={team.id}
                     onPress={() => setTeamID(team.id)}>
                     
-                    <Image style={styles.teamImage} source={team.media.length > 0 ? {uri:team.media[0]} : {}} />
+                    <Image style={styles.teamImage} fadeDuration={0} source={team.media.length > 0 ? {uri:team.media[0]} : {}} />
 
                     <View>
                         <Text style={styles.teamName}>{team.name}</Text>

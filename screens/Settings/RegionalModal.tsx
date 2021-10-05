@@ -1,6 +1,7 @@
 import React from "react";
 import { Alert, Modal, ScrollView, StyleSheet, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import DarkBackground from "../../components/DarkBackground";
 import { BlitzDB } from "../../components/Database/BlitzDB";
 import { TBAEvent } from "../../components/Database/DBModels";
 import { TBA } from "../../components/Database/TBA";
@@ -65,6 +66,8 @@ export default function RegionalModal(props: ModalProps)
             visible={props.visible}
             onRequestClose={() => props.setVisible(false)} >
 
+            <DarkBackground isTransparent={true} />
+
             <View style={styles.modal}>
                 <Title>Regional:</Title>
                 <TextInput 
@@ -91,7 +94,7 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: "#deda04",
         position: "absolute",
-        bottom: 80,
+        bottom: 35,
         right: 20,
         left: 20,
         borderRadius: 10
@@ -119,12 +122,14 @@ const styles = StyleSheet.create({
         backgroundColor: "#0b0b0b",
         flex: 1,
         borderRadius: 10,
-        marginTop: 30,
+        marginTop: 10,
+        marginBottom: 20,
+        marginLeft: 5,
+        marginRight: 5,
         paddingTop: 30,
         paddingLeft: 20,
         paddingRight: 20,
         paddingBottom: 70,
-        marginBottom: 60,
     },
     loadingText: {
         textAlign: "center",

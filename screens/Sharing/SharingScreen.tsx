@@ -4,17 +4,21 @@ import QRCode from "react-qr-code";
 import { Container } from '../../components/Themed';
 
 export default function SharingScreen() {
-  return (
-    <Container style={styles.container}>
-        
-        <QRCode
-            value={"Hello World!"}
-            size={300}
-            bgColor='black'
-            fgColor='white' />
 
-    </Container>
-  );
+    let tempString = "";
+    for (let i = 0; i < 500; i++)
+        tempString += Math.floor(Math.random() * 10).toString();
+    return (
+        <Container style={styles.container}>
+            
+            <QRCode
+                value={tempString}
+                size={350}
+                bgColor='black'
+                fgColor='white' />
+
+        </Container>
+    );
 }
 
 const styles = StyleSheet.create({

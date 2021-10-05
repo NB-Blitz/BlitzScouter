@@ -21,7 +21,7 @@ export default function PhotoModal(props: PhotoProps)
                 onRequestClose={() => props.setImageData("")} >
 
                 <View style={styles.container}>
-                    <DarkBackground />
+                    <DarkBackground isTransparent={false} />
                     <Image style={styles.image} source={{uri:props.imageData}} />
                     
                 </View>

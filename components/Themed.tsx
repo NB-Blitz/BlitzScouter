@@ -1,3 +1,5 @@
+import { FontAwesome } from '@expo/vector-icons';
+import { useFocusEffect, useIsFocused } from '@react-navigation/core';
 import * as React from 'react';
 import { ScrollView, StyleSheet, Text as DefaultText, View as DefaultView, TouchableOpacity as DefaultButton, Animated, View } from 'react-native';
 
@@ -56,31 +58,49 @@ export function Title(props: TextProps) {
 // Containers
 export function Container(props: ViewProps) {
     const { style, ...otherProps } = props;
-    const opacity = useFadeIn();
 
-    return (<Animated.View style={{ opacity }}><View style={[style]} {...otherProps} /></Animated.View>);
+    return (<FadeIn><View style={[style]} {...otherProps} /></FadeIn>);
 }
 export function ScrollContainer(props: ViewProps) {
     const { style, ...otherProps } = props;
-    const opacity = useFadeIn();
 
     // BUG Gap at the end of each scroll view
-    return (<Animated.View style={{ opacity }}><ScrollView style={[styles.scrollContainer, style]} {...otherProps} /></Animated.View>);
+    return (<FadeIn><ScrollView style={[styles.scrollContainer, style]} {...otherProps} /></FadeIn>);
 }
 
 // Fade Animation
-function useFadeIn() {
-    const opacityRef = React.useRef<Animated.Value | undefined>(undefined);
-    if (opacityRef.current === undefined)
-        opacityRef.current = new Animated.Value(0);
-  
-    React.useEffect(() => {
-        Animated.timing(opacityRef.current as Animated.Value, {
+function FadeIn(props: ViewProps) {
+    const fadeAnim = React.useRef(new Animated.Value(0)).current;
+
+    useFocusEffect(() => {
+        Animated.timing(fadeAnim, {
             toValue: 1,
             duration: 300,
-            useNativeDriver: true,
+            useNativeDriver: true
         }).start();
-    }, []);
-  
-    return opacityRef.current;
-  }
+
+        return () => {
+            Animated.timing(fadeAnim, {
+                toValue: 0,
+                duration: 300,
+                useNativeDriver: true
+            }).start();
+        }
+    });
+
+    return (<Animated.View
+        style={{
+            flex: 1,
+            opacity: fadeAnim,
+        }}>
+        {props.children}
+        </Animated.View>
+    );
+}
+
+export function TabBarIcon(props: {
+    name: React.ComponentProps<typeof FontAwesome>['name'];
+    color: string;
+}) {
+    return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+}

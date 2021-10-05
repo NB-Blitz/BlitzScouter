@@ -18,7 +18,7 @@ export default function DownloadingModal(props: ModalProps)
             transparent={true}
             visible={props.status !== ""} >
             
-            <DarkBackground />
+            <DarkBackground isTransparent={true} />
             
             <View style={styles.modal}>
                 
