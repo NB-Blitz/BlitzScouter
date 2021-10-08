@@ -2,7 +2,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import * as React from 'react';
-import { BlitzDB } from '../components/Database/BlitzDB';
+import { BlitzDB } from '../api/BlitzDB';
 
 export default function useCachedResources() {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);

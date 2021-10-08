@@ -1,19 +1,21 @@
 import React from "react";
 import { Alert, Modal, ScrollView, StyleSheet } from "react-native";
-import DarkBackground from "../../components/DarkBackground";
-import { BlitzDB } from "../../components/Database/BlitzDB";
-import { Button, Text, Title } from "../../components/Themed";
+import { BlitzDB } from "../../api/BlitzDB";
+import DarkBackground from "../../components/common/DarkBackground";
+import { Button, HorizontalBar, Text, Title } from "../../components/Themed";
+import TeamBanner from "../Teams/TeamBanner";
 
 interface ModalProps
 {
     matchID: string;
-    setMatchID: Function;
+    isVisible: boolean;
+    setVisible: (isVisible: boolean) => void;
 }
 
 export default function MatchModal(props: ModalProps)
 {
     // Default Behaviour
-    if (props.matchID === "")
+    if (!props.isVisible)
         return null;
             
     // Grab Match Data
@@ -21,9 +23,17 @@ export default function MatchModal(props: ModalProps)
     if (!(match))
     {
         Alert.alert("Error", "There was an error grabbing the data from that match. Try re-downloading TBA data then try again.");
-        props.setMatchID("");
+        props.setVisible(false);
         return null;
     }
+
+    // Grab Team List
+    let redTeams = [];
+    let blueTeams = [];
+    for (let teamID of match.blueTeamIDs)
+        blueTeams.push(<TeamBanner teamID={teamID} key={teamID} />);
+    for (let teamID of match.redTeamIDs)
+        redTeams.push(<TeamBanner teamID={teamID} key={teamID} />);
 
     // Return Modal
     return (
@@ -31,7 +41,7 @@ export default function MatchModal(props: ModalProps)
             animationType="slide"
             transparent={true}
             visible={true}
-            onRequestClose={() => props.setMatchID("")} >
+            onRequestClose={() => props.setVisible(false)} >
 
             <DarkBackground isTransparent={true} />
 
@@ -40,10 +50,16 @@ export default function MatchModal(props: ModalProps)
                 <Title style={styles.title}>{match.name}</Title>
                 <Title style={styles.subtitle}>{match.description}</Title>
 
-                <Title style={styles.header}>Team Comments:</Title>
+                <HorizontalBar />
+
+                <Title style={styles.header}>Red Alliance:</Title>
+                {redTeams}
+                
+                <Title style={styles.header}>Blue Alliance:</Title>
+                {blueTeams}
             </ScrollView>
 
-            <Button style={styles.button} onPress={() => {props.setMatchID("");}}>
+            <Button style={styles.button} onPress={() => {props.setVisible(false);}}>
                 <Text style={styles.buttonText}>Return</Text>
             </Button>
         </Modal>
@@ -87,6 +103,7 @@ const styles = StyleSheet.create({
         fontSize: 15
     },
     header: {
-        fontSize: 24
+        fontSize: 24,
+        marginBottom: 5
     }
 });

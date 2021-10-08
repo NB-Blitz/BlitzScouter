@@ -1,13 +1,20 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { BlitzDB } from '../../components/Database/BlitzDB';
+import { BlitzDB } from '../../api/BlitzDB';
 
 import { Text, Container, Title, Button, ScrollContainer } from '../../components/Themed';
+import MatchBanner from './MatchBanner';
 import MatchModal from './MatchModal';
 
 export default function MatchesScreen() {
     const [matchID, setMatchID] = React.useState("");
+    const [version, setVersion] = React.useState(0);
+
+    BlitzDB.eventEmitter.addListener("dataUpdate", () => {
+        BlitzDB.eventEmitter.removeCurrentListener();
+        setVersion(version + 1);
+    });
+
     
     let matchDisplay: JSX.Element[] = [];
 
@@ -16,14 +23,7 @@ export default function MatchesScreen() {
         for (let match of BlitzDB.event.matches)
         {
             matchDisplay.push(
-                <Button
-                    style={styles.matchButton}
-                    key={match.id}
-                    onPress={() => {setMatchID(match.id);}}>
-                        
-                    <Text style={styles.matchName}>{match.name}</Text>
-                    <Text style={styles.matchDesc}>{match.description}</Text>
-                </Button>
+                <MatchBanner matchID={match.id} key={match.id} />
             );
         }
     }
@@ -38,8 +38,6 @@ export default function MatchesScreen() {
         <ScrollContainer>
             <Title>Matches</Title>
             {matchDisplay}
-
-            <MatchModal matchID={matchID} setMatchID={setMatchID} />
         </ScrollContainer>
     );
 }

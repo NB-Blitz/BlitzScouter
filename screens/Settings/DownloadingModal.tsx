@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, StyleSheet, View } from "react-native";
-import DarkBackground from "../../components/DarkBackground";
+import DarkBackground from "../../components/common/DarkBackground";
 import { Title } from "../../components/Themed";
 
 interface ModalProps

@@ -102,5 +102,16 @@ export function TabBarIcon(props: {
     name: React.ComponentProps<typeof FontAwesome>['name'];
     color: string;
 }) {
-    return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+    return <FontAwesome size={25} style={{ marginBottom: -3 }} {...props} />;
+}
+
+export function HorizontalBar(props: {})
+{
+    return (<View
+        style={{
+        borderBottomColor: '#999',
+        borderBottomWidth: 1,
+        marginBottom: 20,
+        }}
+    />);
 }

@@ -54,8 +54,8 @@ export interface Match
     description: string;
     number: number;
     compLevel: string;
-    blueTeams: number[];
-    redTeams: number[];
+    blueTeamIDs: string[];
+    redTeamIDs: string[];
     comment: string;
 }
 export interface Event
@@ -63,4 +63,10 @@ export interface Event
     id: string;
     matches: Match[];
     teams: string[];
+}
+export interface Comment
+{
+    isScanned: boolean;
+    timestamp: number;
+    text: string;
 }

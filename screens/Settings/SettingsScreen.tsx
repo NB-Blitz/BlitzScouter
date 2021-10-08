@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { NativeEventEmitter, StyleSheet } from 'react-native';
 import DownloadingModal from './DownloadingModal';
 import { Text, Container, Title, Button, ScrollContainer } from '../../components/Themed';
 import RegionalModal from './RegionalModal';
-import { BlitzDB } from '../../components/Database/BlitzDB';
+import { BlitzDB } from '../../api/BlitzDB';
 
 // BUG "Update Data" is available after a data wipe
 // TODO More settings
@@ -11,6 +11,14 @@ export default function SettingsScreen()
 {
     const [modalVisible, setModalVisible] = React.useState(false);
     const [downloadStatus, setDownloadStatus] = React.useState("");
+    const [version, setVersion] = React.useState(0);
+
+    BlitzDB.eventEmitter.addListener("dataUpdate", () => {
+        BlitzDB.eventEmitter.removeCurrentListener();
+        setVersion(version + 1);
+    });
+
+
 
     let updateButton;
     if (BlitzDB.event)
@@ -29,7 +37,7 @@ export default function SettingsScreen()
 
             <Button style={styles.button}
                     onPress={() => {setModalVisible(true)}}>
-                <Text style={styles.buttonText}>Change Regional</Text>
+                <Text style={styles.buttonText}>{BlitzDB.event ? "Change" : "Set"} Regional</Text>
             </Button>
 
             <Button style={styles.button}

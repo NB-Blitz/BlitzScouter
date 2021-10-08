@@ -1,24 +1,31 @@
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
 import { Alert, Dimensions, Image, Modal, ScrollView, StyleSheet, TextInput, View } from "react-native";
-import DarkBackground from "../../components/DarkBackground";
-import { Button, Text, Title } from "../../components/Themed";
+import DarkBackground from "../../components/common/DarkBackground";
+import { Button, HorizontalBar, Text, Title } from "../../components/Themed";
 import * as ImagePicker from 'expo-image-picker';
 import PhotoModal from "../../components/PhotoModal";
-import { BlitzDB } from "../../components/Database/BlitzDB";
+import { BlitzDB } from "../../api/BlitzDB";
 
 interface ModalProps
 {
     teamID: string;
-    setTeamID: Function;
+    isVisible: boolean;
+    setVisible: (isVisible: boolean) => void;
 }
 
 export default function TeamModal(props: ModalProps)
 {
     const [previewData, setPreviewPhoto] = React.useState("");
+    const [version, setVersion] = React.useState(0);
+
+    BlitzDB.eventEmitter.addListener("mediaUpdate", () => {
+        BlitzDB.eventEmitter.removeCurrentListener();
+        setVersion(version + 1);
+    });
 
     // Default Behaviour
-    if (props.teamID === "")
+    if (!props.isVisible)
         return null;
             
     // Grab Team Data
@@ -26,7 +33,7 @@ export default function TeamModal(props: ModalProps)
     if (!(team))
     {
         Alert.alert("Error", "There was an error grabbing the data from that team. Try re-downloading TBA data then try again.");
-        props.setTeamID("");
+        props.setVisible(false);
         return null;
     }
 
@@ -51,7 +58,7 @@ export default function TeamModal(props: ModalProps)
             animationType="slide"
             transparent={true}
             visible={true}
-            onRequestClose={() => props.setTeamID("")} >
+            onRequestClose={() => props.setVisible(false)} >
 
             <DarkBackground isTransparent={true} />
 
@@ -91,7 +98,9 @@ export default function TeamModal(props: ModalProps)
                 <Title style={styles.title}>{team ? team.name : ""}</Title>
                 <Title style={styles.subtitle}>{team ? team.number : ""}</Title>
 
-                <View style={{flexDirection: "row"}}>
+                <HorizontalBar />
+
+                <View style={{flexDirection: "row", height: 50}}>
                     <TextInput 
                         placeholder="Comment..."
                         placeholderTextColor="#fff"
@@ -110,7 +119,7 @@ export default function TeamModal(props: ModalProps)
                 
             </ScrollView>
 
-            <Button style={styles.button} onPress={() => {props.setTeamID("");}}>
+            <Button style={styles.button} onPress={() => {props.setVisible(false);}}>
                 <Text style={styles.buttonText}>Return</Text>
             </Button>
             
@@ -191,7 +200,7 @@ const styles = StyleSheet.create({
         color: "#fff",
         backgroundColor: "#222222",
         borderRadius: 10,
-        paddingLeft: 10,
+        padding: 10,
         marginBottom: 10,
         marginTop: -10,
         marginRight: 10,

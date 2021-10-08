@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Alert } from "react-native";
+import { Alert, NativeEventEmitter } from "react-native";
 import { Event, Match, Team } from "./DBModels";
 import { TBA } from "./TBA";
 
@@ -9,8 +9,9 @@ const MATCH_TYPES = ["qm", "qf", "sf", "f"];
 export class BlitzDB
 {
     static event?: Event;
-    static currentTeams: Team[] = [];
+    static currentTeamIDs: string[] = [];
     static teams: Team[] = [];
+    static eventEmitter = new NativeEventEmitter();
 
     static async download(eventID: string, setDownloadStatus: Function)
     {
@@ -53,12 +54,12 @@ export class BlitzDB
         // Team Media
         let teamCount = 0;
         BlitzDB._loadCurrentTeams();
-        for (let team of BlitzDB.currentTeams)
+        for (let teamID of BlitzDB.currentTeamIDs)
         {
             teamCount++;
             setDownloadStatus("Downloading Team Media... (" + teamCount + "/" + tbaTeams.length + ")");
 
-            let mediaList = await TBA.getTeamMedia(team.id);
+            let mediaList = await TBA.getTeamMedia(teamID);
             if (mediaList)
             {
                 for (let media of mediaList)
@@ -74,8 +75,12 @@ export class BlitzDB
 
                     // Prevent Duplicate Images
                     if (imageData)
-                        if (!team.media.find(media => media === imageData))
-                            team.media.push(imageData);
+                    {
+                        let team = BlitzDB.getTeam(teamID);
+                        if (team)
+                            if (!team.media.find(media => media === imageData))
+                                team.media.push(imageData);
+                    }
                 }
             }
         }
@@ -108,20 +113,16 @@ export class BlitzDB
 
                 // Match Description / Teams
                 let matchDesc = "";
-                let blueTeams = [];
                 for (let teamKey of tbaMatch.alliances.blue.team_keys)
                 {
                     let teamNumber = parseInt(teamKey.substring(3));
                     matchDesc += teamNumber + " ";
-                    blueTeams.push(teamNumber);
                 }
                 matchDesc += " -  "
-                let redTeams = [];
                 for (let teamKey of tbaMatch.alliances.red.team_keys)
                 {
                     let teamNumber = parseInt(teamKey.substring(3));
                     matchDesc += teamNumber + " ";
-                    redTeams.push(teamNumber);
                 }
 
 
@@ -131,8 +132,8 @@ export class BlitzDB
                     description: matchDesc,
                     number: tbaMatch.match_number,
                     compLevel: tbaMatch.comp_level,
-                    blueTeams: blueTeams,
-                    redTeams: redTeams,
+                    blueTeamIDs: tbaMatch.alliances.blue.team_keys,
+                    redTeamIDs: tbaMatch.alliances.red.team_keys,
                     comment: ""
                 });
             }
@@ -152,6 +153,10 @@ export class BlitzDB
         setDownloadStatus("Saving...");
         await BlitzDB.save();
 
+        // Update Displays
+        setDownloadStatus("Updating Displays...");
+        BlitzDB.eventEmitter.emit("dataUpdate");
+
         // Exit
         setDownloadStatus("");
         Alert.alert("Success", "Successfully downloaded data from The Blue Alliance.");
@@ -164,6 +169,7 @@ export class BlitzDB
         {
             team.media.push(BASE64_PREFIX + imageData);
             BlitzDB.save();
+            BlitzDB.eventEmitter.emit("mediaUpdate");
         }
     }
 
@@ -176,6 +182,22 @@ export class BlitzDB
     {
         if (BlitzDB.event)
             return BlitzDB.event.matches.find(match => match.id === matchID);
+    }
+
+    static exportComments(): string
+    {
+        let data = "";
+        for (let team of BlitzDB.teams)
+        {
+            if (team.comments.length > 0)
+                data += ";;" + team.id;
+            for (let comment of team.comments)
+            {
+                data += "::" + comment;
+            }
+        }
+        
+        return data;
     }
 
     static async loadSave()
@@ -195,6 +217,8 @@ export class BlitzDB
     {
         if (BlitzDB.event)
             await AsyncStorage.setItem('event_data', JSON.stringify(BlitzDB.event));
+        else
+            await AsyncStorage.removeItem('event_data');
         await AsyncStorage.setItem('team_data', JSON.stringify(BlitzDB.teams));
     }
 
@@ -212,6 +236,7 @@ export class BlitzDB
                         onPress: () => {
                             BlitzDB._deleteAll().then(() => {
                                 Alert.alert("Done", "All data has been cleared");
+                                BlitzDB.eventEmitter.emit("dataUpdate");
                             });
                         }
                     },
@@ -234,22 +259,20 @@ export class BlitzDB
     static async _deleteAll()
     {
         BlitzDB.event = undefined;
-        BlitzDB.currentTeams = [];
+        BlitzDB.currentTeamIDs = [];
         BlitzDB.teams = [];
         await BlitzDB.save();
     }
 
     static _loadCurrentTeams()
     {
-        BlitzDB.currentTeams = [];
+        BlitzDB.currentTeamIDs = [];
 
         if (BlitzDB.event)
         {
             for (let teamID of BlitzDB.event.teams)
             {
-                let team = BlitzDB.getTeam(teamID);
-                if (team)
-                    BlitzDB.currentTeams.push(team);
+                 BlitzDB.currentTeamIDs.push(teamID);
             }
         }
     }

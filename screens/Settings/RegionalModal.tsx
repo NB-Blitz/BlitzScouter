@@ -1,10 +1,10 @@
 import React from "react";
 import { Alert, Modal, ScrollView, StyleSheet, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import DarkBackground from "../../components/DarkBackground";
-import { BlitzDB } from "../../components/Database/BlitzDB";
-import { TBAEvent } from "../../components/Database/DBModels";
-import { TBA } from "../../components/Database/TBA";
+import { BlitzDB } from "../../api/BlitzDB";
+import { TBAEvent } from "../../api/DBModels";
+import { TBA } from "../../api/TBA";
+import DarkBackground from "../../components/common/DarkBackground";
 import { Button, Text, Title } from "../../components/Themed";
 import DownloadingModal from "./DownloadingModal";
 interface ModalProps

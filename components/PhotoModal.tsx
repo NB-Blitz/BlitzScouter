@@ -1,6 +1,6 @@
 import React from "react";
 import { Dimensions, Image, Modal, StyleSheet, View } from "react-native";
-import DarkBackground from "./DarkBackground";
+import DarkBackground from "./common/DarkBackground";
 
 interface PhotoProps
 {
