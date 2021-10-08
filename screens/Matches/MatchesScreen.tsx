@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { BlitzDB } from '../../api/BlitzDB';
-
-import { Text, Container, Title, Button, ScrollContainer } from '../../components/Themed';
+import Text from '../../components/common/Text';
+import Title from '../../components/common/Title';
+import ScrollContainer from '../../components/containers/ScrollContainer';
 import MatchBanner from './MatchBanner';
-import MatchModal from './MatchModal';
 
 export default function MatchesScreen() {
     const [matchID, setMatchID] = React.useState("");

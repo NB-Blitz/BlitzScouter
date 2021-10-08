@@ -45,7 +45,7 @@ export interface Team
     name: string;
     number: number;
     media: string[];
-    comments: string[];
+    comments: Comment[];
 }
 export interface Match
 {

@@ -1,9 +1,12 @@
 import * as React from 'react';
 import { NativeEventEmitter, StyleSheet } from 'react-native';
 import DownloadingModal from './DownloadingModal';
-import { Text, Container, Title, Button, ScrollContainer } from '../../components/Themed';
 import RegionalModal from './RegionalModal';
 import { BlitzDB } from '../../api/BlitzDB';
+import Button from '../../components/common/Button';
+import Title from '../../components/common/Title';
+import Text from '../../components/common/Text';
+import ScrollContainer from '../../components/containers/ScrollContainer';
 
 // BUG "Update Data" is available after a data wipe
 // TODO More settings
@@ -45,7 +48,7 @@ export default function SettingsScreen()
                 <Text style={styles.buttonText}>Clear All Data</Text>
             </Button>
 
-            <RegionalModal visible={modalVisible} setVisible={setModalVisible} />
+            <RegionalModal isVisible={modalVisible} setVisible={setModalVisible} />
             <DownloadingModal status={downloadStatus} />
         </ScrollContainer>
     );

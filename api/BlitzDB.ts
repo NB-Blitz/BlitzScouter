@@ -170,6 +170,23 @@ export class BlitzDB
             team.media.push(BASE64_PREFIX + imageData);
             BlitzDB.save();
             BlitzDB.eventEmitter.emit("mediaUpdate");
+            console.log("Added Media to " + teamID);
+        }
+    }
+
+    static addTeamComment(teamID: string, commentText: string)
+    {
+        let team = BlitzDB.getTeam(teamID);
+        if (team)
+        {
+            team.comments.push({
+                isScanned: false,
+                timestamp: (new Date()).getTime(),
+                text: commentText
+            });
+            BlitzDB.save();
+            BlitzDB.eventEmitter.emit("mediaUpdate");
+            console.log("Added Comment to " + teamID);
         }
     }
 
@@ -193,7 +210,7 @@ export class BlitzDB
                 data += ";;" + team.id;
             for (let comment of team.comments)
             {
-                data += "::" + comment;
+                data += "::" + comment.text;
             }
         }
         

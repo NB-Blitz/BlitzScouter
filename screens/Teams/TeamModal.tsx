@@ -1,11 +1,14 @@
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
-import { Alert, Dimensions, Image, Modal, ScrollView, StyleSheet, TextInput, View } from "react-native";
-import DarkBackground from "../../components/common/DarkBackground";
-import { Button, HorizontalBar, Text, Title } from "../../components/Themed";
+import { Alert, Dimensions, Image, ScrollView, StyleSheet, TextInput, View } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
-import PhotoModal from "../../components/PhotoModal";
+import PhotoModal from "../../components/containers/PhotoModal";
 import { BlitzDB } from "../../api/BlitzDB";
+import Button from "../../components/common/Button";
+import Title from "../../components/common/Title";
+import HorizontalBar from "../../components/common/HorizontalBar";
+import Text from "../../components/common/Text";
+import Modal from "../../components/common/Modal";
 
 interface ModalProps
 {
@@ -19,14 +22,15 @@ export default function TeamModal(props: ModalProps)
     const [previewData, setPreviewPhoto] = React.useState("");
     const [version, setVersion] = React.useState(0);
 
+    // Default Behaviour
+    if (!props.isVisible)
+        return null;
+
+    // Re-render on New Media
     BlitzDB.eventEmitter.addListener("mediaUpdate", () => {
         BlitzDB.eventEmitter.removeCurrentListener();
         setVersion(version + 1);
     });
-
-    // Default Behaviour
-    if (!props.isVisible)
-        return null;
             
     // Grab Team Data
     let team = BlitzDB.getTeam(props.teamID);
@@ -52,78 +56,106 @@ export default function TeamModal(props: ModalProps)
         );
     }
 
+    // Grab Team Comments
+    let commentList: JSX.Element[] = [];
+    if (team.comments.length > 0)
+    {
+        for (let comment of team.comments)
+        {
+            let commentTime = new Date(comment.timestamp);
+            commentList.push(
+                <View key={Math.random()} style={styles.comment}>
+                    <Text>{comment.text}</Text>
+                    <Text>{commentTime.getHours() + ":" + commentTime.getMinutes()}</Text>
+                </View>
+            );
+        }
+    }
+    else
+    {
+        commentList.push(
+            <Text key={0}>There are no comments yet...</Text>
+        );
+    }
+    
+    // Comment Data
+    let commentText: string;
+    let commentInput: TextInput | null;
+
     // Return Modal
     return (
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={true}
-            onRequestClose={() => props.setVisible(false)} >
+        <Modal setVisible={props.setVisible}>
 
-            <DarkBackground isTransparent={true} />
+            <ScrollView style={styles.media} horizontal={true}>
+                {mediaList}
 
-            <ScrollView style={styles.modal}>
-                <ScrollView style={styles.media} horizontal={true}>
-                    {mediaList}
+                <Button
+                    style={styles.imageButton}
+                    onPress={async () => {addPhoto(props.teamID)}}>
+                    <FontAwesome 
+                        size={20}
+                        name={"plus"}
+                        color={"white"}
+                        style={{marginRight:3}}/>
+                    <FontAwesome 
+                        size={30}
+                        name={"camera"}
+                        color={"white"}/>
+                </Button>
 
-                    <Button
-                        style={styles.imageButton}
-                        onPress={async () => {addPhoto(props.teamID)}}>
-                        <FontAwesome 
-                            size={20}
-                            name={"plus"}
-                            color={"white"}
-                            style={{marginRight:3}}/>
-                        <FontAwesome 
-                            size={30}
-                            name={"camera"}
-                            color={"white"}/>
-                    </Button>
-
-                    <Button
-                        style={styles.imageButton}
-                        onPress={async () => {addFile(props.teamID)}}>
-                        <FontAwesome 
-                            size={20}
-                            name={"plus"}
-                            color={"white"}
-                            style={{marginRight:3}}/>
-                        <FontAwesome 
-                            size={30}
-                            name={"folder"}
-                            color={"white"}/>
-                    </Button>
-                </ScrollView>
-                
-                <Title style={styles.title}>{team ? team.name : ""}</Title>
-                <Title style={styles.subtitle}>{team ? team.number : ""}</Title>
-
-                <HorizontalBar />
-
-                <View style={{flexDirection: "row", height: 50}}>
-                    <TextInput 
-                        placeholder="Comment..."
-                        placeholderTextColor="#fff"
-                        style={styles.textInput}
-                        multiline={true}
-                    />
-                    <Button
-                        style={styles.sendCommentButton}>
-                        <FontAwesome 
-                            size={20}
-                            name={"arrow-right"}
-                            color={"white"}
-                            style={{marginBottom: 20}}/>
-                    </Button>
-                </View>
-                
+                <Button
+                    style={styles.imageButton}
+                    onPress={async () => {addFile(props.teamID)}}>
+                    <FontAwesome 
+                        size={20}
+                        name={"plus"}
+                        color={"white"}
+                        style={{marginRight:3}}/>
+                    <FontAwesome 
+                        size={30}
+                        name={"folder"}
+                        color={"white"}/>
+                </Button>
             </ScrollView>
-
-            <Button style={styles.button} onPress={() => {props.setVisible(false);}}>
-                <Text style={styles.buttonText}>Return</Text>
-            </Button>
             
-            <PhotoModal imageData={previewData} setImageData={setPreviewPhoto} />
+            <Title style={styles.title}>{team ? team.name : ""}</Title>
+            <Title style={styles.subtitle}>{team ? team.number : ""}</Title>
+
+            <HorizontalBar />
+
+            <View style={{flexDirection: "row", height: 50}}>
+                <TextInput 
+                    placeholder="Comment..."
+                    placeholderTextColor="#fff"
+                    style={styles.textInput}
+                    multiline={true}
+                    onChangeText={text => { commentText = text }}
+                    ref={input => {commentInput = input}}
+                />
+                <Button
+                    style={styles.sendCommentButton}
+                    onPress={() => {
+                        BlitzDB.addTeamComment(props.teamID, commentText);
+                        if (commentInput)
+                            commentInput.clear();
+                    }}>
+                    <FontAwesome 
+                        size={20}
+                        name={"arrow-right"}
+                        color={"white"}
+                        style={{marginBottom: 20}}
+                    />
+                </Button>
+            </View>
+
+            {commentList}
+
+            
+            
+            <PhotoModal
+                imageData={previewData}
+                setImageData={setPreviewPhoto}
+            />
         </Modal>
     );
 }
@@ -172,30 +204,6 @@ const styles = StyleSheet.create({
         height: 150,
         width: "100%"
     },
-    button: {
-        backgroundColor: "#deda04",
-        position: "absolute",
-        bottom: 35,
-        right: 20,
-        left: 20,
-        borderRadius: 10
-    },
-    buttonText: {
-        color: "#000"
-    },
-    modal: {
-        backgroundColor: "#0c0c0c",
-        flex: 1,
-        borderRadius: 10,
-        marginTop: 10,
-        marginBottom: 20,
-        marginLeft: 5,
-        marginRight: 5,
-        paddingTop: 30,
-        paddingLeft: 20,
-        paddingRight: 20,
-        paddingBottom: 70,
-    },
     textInput: {
         color: "#fff",
         backgroundColor: "#222222",
@@ -231,5 +239,11 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         backgroundColor: "#333",
         margin: 5
+    },
+    comment: {
+        backgroundColor: "#111",
+        borderRadius: 10,
+        marginBottom: 5,
+        padding: 10
     }
 });

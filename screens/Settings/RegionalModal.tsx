@@ -1,16 +1,20 @@
 import React from "react";
-import { Alert, Modal, ScrollView, StyleSheet, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { BlitzDB } from "../../api/BlitzDB";
 import { TBAEvent } from "../../api/DBModels";
 import { TBA } from "../../api/TBA";
+import Button from "../../components/common/Button";
 import DarkBackground from "../../components/common/DarkBackground";
-import { Button, Text, Title } from "../../components/Themed";
+import Modal from "../../components/common/Modal";
+import Text from "../../components/common/Text";
+import Title from "../../components/common/Title";
 import DownloadingModal from "./DownloadingModal";
+
 interface ModalProps
 {
-    visible: boolean;
-    setVisible: Function;
+    isVisible: boolean;
+    setVisible: (isVisible: boolean) => void;
 }
 
 export default function RegionalModal(props: ModalProps)
@@ -19,9 +23,13 @@ export default function RegionalModal(props: ModalProps)
     const [regionalList, updateRegionals] = React.useState([] as TBAEvent[]);
     const [downloadStatus, setDownloadStatus] = React.useState("");
 
+    // Default Behaviour
+    if (!props.isVisible)
+        return null;
+
     // Generate List
     let regionalsDisplay: JSX.Element[] = [];
-    if (regionalList.length <= 0 && props.visible)
+    if (regionalList.length <= 0 && props.isVisible)
     {
         TBA.getEvents().then((events) => {
             if (events)
@@ -42,6 +50,7 @@ export default function RegionalModal(props: ModalProps)
         {
             let key = regional.key;
             if (regional.name.toLowerCase().includes(searchTerm))
+            {
                 regionalsDisplay.push(
                     <Button
                         key={key}
@@ -53,37 +62,23 @@ export default function RegionalModal(props: ModalProps)
                         </Text>
 
                     </Button>
-                )
+                );
+            }
         }
     }
 
     // Display Data
 
     return (
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={props.visible}
-            onRequestClose={() => props.setVisible(false)} >
-
-            <DarkBackground isTransparent={true} />
-
-            <View style={styles.modal}>
-                <Title>Regional:</Title>
-                <TextInput 
-                    placeholder="Search..."
-                    placeholderTextColor="#fff"
-                    style={styles.textInput}
-                    onChangeText={(text) => {updateSearch(text.toLowerCase())}}
-                />
-                <ScrollView>
-                    {regionalsDisplay}
-                </ScrollView>
-            </View>
-
-            <Button style={styles.button} onPress={() => {props.setVisible(false);}}>
-                <Text style={styles.buttonText}>Cancel</Text>
-            </Button>
+        <Modal setVisible={props.setVisible}>
+            <Title>Regional:</Title>
+            <TextInput 
+                placeholder="Search..."
+                placeholderTextColor="#fff"
+                style={styles.textInput}
+                onChangeText={(text) => {updateSearch(text.toLowerCase())}}
+            />
+            {regionalsDisplay}
 
             <DownloadingModal status={downloadStatus} />
         </Modal>
@@ -91,17 +86,6 @@ export default function RegionalModal(props: ModalProps)
 }
 
 const styles = StyleSheet.create({
-    button: {
-        backgroundColor: "#deda04",
-        position: "absolute",
-        bottom: 35,
-        right: 20,
-        left: 20,
-        borderRadius: 10
-    },
-    buttonText: {
-        color: "#000"
-    },
     regionalButton: {
         padding: 8,
         marginLeft: 4,
@@ -117,19 +101,6 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 10,
         marginTop: -10
-    },
-    modal: {
-        backgroundColor: "#0b0b0b",
-        flex: 1,
-        borderRadius: 10,
-        marginTop: 10,
-        marginBottom: 20,
-        marginLeft: 5,
-        marginRight: 5,
-        paddingTop: 30,
-        paddingLeft: 20,
-        paddingRight: 20,
-        paddingBottom: 70,
     },
     loadingText: {
         textAlign: "center",

@@ -1,9 +1,9 @@
 import React from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { BlitzDB } from "../../api/BlitzDB";
-import { Team } from "../../api/DBModels";
+import Button from "../../components/common/Button";
+import Text from "../../components/common/Text";
 import TeamModal from "./TeamModal";
-import { Button, Text } from "../../components/Themed";
 
 interface TeamBannerProps
 {
@@ -17,7 +17,7 @@ export default function TeamBanner(props: TeamBannerProps)
     let team = BlitzDB.getTeam(props.teamID);
     if (!team)
     {
-        console.log("Could not find (TeamBanner ID=" + props.teamID + ")");
+        console.log("Could not find Team ID " + props.teamID);
         return null;
     }
 

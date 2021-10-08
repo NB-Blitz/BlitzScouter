@@ -7,8 +7,8 @@ import MatchesScreen from '../screens/Matches/MatchesScreen';
 import { RootStackParamList, RootTabParamList } from '../types';
 import SharingScreen from '../screens/Sharing/SharingScreen';
 import SettingsScreen from '../screens/Settings/SettingsScreen';
-import { TabBarIcon } from '../components/Themed';
 import { BlitzDB } from '../api/BlitzDB';
+import { TabBarIcon } from '../components/common/TabBarIcon';
 
 export default function Navigation() {
   return (

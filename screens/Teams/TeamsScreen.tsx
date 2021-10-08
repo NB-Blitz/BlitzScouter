@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { BlitzDB } from '../../api/BlitzDB';
 import TeamBanner from './TeamBanner';
-import { Text, Title, ScrollContainer } from '../../components/Themed';
 import { RootTabScreenProps } from '../../types';
+import Title from '../../components/common/Title';
+import ScrollContainer from '../../components/containers/ScrollContainer';
 
 export default function TeamsScreen({ navigation }: RootTabScreenProps<'Teams'>) {
     const [version, setVersion] = React.useState(0);
@@ -39,5 +40,3 @@ export default function TeamsScreen({ navigation }: RootTabScreenProps<'Teams'>)
         </ScrollContainer>
     );
 }
-
-const styles = StyleSheet.create({});

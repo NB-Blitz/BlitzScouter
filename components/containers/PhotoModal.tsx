@@ -1,11 +1,11 @@
 import React from "react";
 import { Dimensions, Image, Modal, StyleSheet, View } from "react-native";
-import DarkBackground from "./common/DarkBackground";
+import DarkBackground from "../common/DarkBackground";
 
 interface PhotoProps
 {
     imageData: string;
-    setImageData: Function;
+    setImageData: (imageData: string) => void;
 }
 
 // TODO Improve Photo Modal
