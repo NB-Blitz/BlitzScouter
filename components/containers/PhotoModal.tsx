@@ -17,7 +17,6 @@ export default function PhotoModal(props: PhotoProps)
         return (
             <Modal
                 animationType="fade"
-                transparent={true}
                 onRequestClose={() => props.setImageData("")} >
 
                 <View style={styles.container}>

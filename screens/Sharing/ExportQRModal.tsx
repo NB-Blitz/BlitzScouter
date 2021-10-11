@@ -1,4 +1,9 @@
+import LZString from 'lz-string';
 import * as React from 'react';
+import { Dimensions, Image, Modal, StyleSheet, View } from 'react-native';
+import QRCode from 'react-qr-code';
+import { BlitzDB } from '../../api/BlitzDB';
+import DarkBackground from '../../components/common/DarkBackground';
 
 export interface ModalProps
 {
@@ -8,6 +13,41 @@ export interface ModalProps
 
 export default function ExportQRModal(props: ModalProps)
 {
-    // TODO: Generate and display QRCode
-    return null;
+    // Default Behaviour
+    if (!props.isVisible)
+        return null;
+
+    const deviceWidth = Dimensions.get("window").width;
+    const commentData = BlitzDB.exportComments();
+    const compressedData = LZString.compress(commentData);
+
+    return (
+        <Modal
+            animationType="fade"
+            onRequestClose={() => props.setVisible(false)} >
+
+            <View style={styles.container}>
+                <DarkBackground isTransparent={false} />
+                
+                <QRCode
+                    value={compressedData}
+                    size={deviceWidth}
+                    bgColor="black"
+                    fgColor="white"
+                />
+            </View>
+
+        </Modal>
+    );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        position: "absolute",
+        justifyContent: "center",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0
+    }
+});

@@ -39,7 +39,8 @@
     "react-native-svg": "^12.1.1",
     "react-native-web": "~0.13.12",
     "react-native-webview": "9.0.1",
-    "react-navigation-tabs": "^2.11.1"
+    "react-navigation-tabs": "^2.11.1",
+    "react-qr-code": "^2.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

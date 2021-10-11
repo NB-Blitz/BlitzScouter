@@ -19,7 +19,7 @@ export default function SharingScreen() {
             
             {/* Export QRCode */}
             <ExportQRModal isVisible={isExportQRVisible} setVisible={setExportQRVisible} />
-            <Button style={styles.sharingButton}>
+            <Button style={styles.sharingButton} onPress={() => setExportQRVisible(true)}>
                 <FontAwesome
                     size={40}
                     name={"qrcode"} 
@@ -55,7 +55,7 @@ export default function SharingScreen() {
                 </View>
             </Button>
 
-            {/* Export CSV */}
+            {/* Export ZIP */}
             <Button style={styles.sharingButton}>
                 <FontAwesome
                     size={35}
@@ -70,7 +70,7 @@ export default function SharingScreen() {
             {/* Export Cloud */}
             <Button style={styles.sharingButton}>
                 <FontAwesome
-                    size={35}
+                    size={30}
                     name={"cloud-upload"} 
                     style={styles.buttonIcon}/>
                 <View>
@@ -82,7 +82,7 @@ export default function SharingScreen() {
             {/* Import Cloud */}
             <Button style={styles.sharingButton}>
                 <FontAwesome
-                    size={35}
+                    size={30}
                     name={"cloud-download"} 
                     style={styles.buttonIcon}/>
                 <View>
@@ -102,7 +102,8 @@ const styles = StyleSheet.create({
     },
     buttonIcon: {
         color: "#fff",
-        marginRight: 10
+        marginRight: 10,
+        width: 35
     },
     buttonTitle: {
         fontSize: 18,
