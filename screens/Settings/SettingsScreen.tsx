@@ -34,8 +34,6 @@ export default function SettingsScreen()
 
     return (
         <ScrollContainer>
-            <Title>Settings</Title>
-
             {updateButton}
 
             <Button style={styles.button}
@@ -56,7 +54,7 @@ export default function SettingsScreen()
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: "#deda04",
+        backgroundColor: "#c89f00",
         marginBottom: 10,
         borderRadius: 5
     },

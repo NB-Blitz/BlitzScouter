@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
         paddingRight: 20
     },
     button: {
-        backgroundColor: "#deda04",
+        backgroundColor: "#c89f00",
         position: "absolute",
         bottom: 35,
         right: 20,

@@ -15,8 +15,6 @@ export default function SharingScreen() {
     return (
         <ScrollContainer>
             
-            <Title>Sharing</Title>
-            
             {/* Export QRCode */}
             <ExportQRModal isVisible={isExportQRVisible} setVisible={setExportQRVisible} />
             <Button style={styles.sharingButton} onPress={() => setExportQRVisible(true)}>

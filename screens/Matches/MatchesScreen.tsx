@@ -7,7 +7,6 @@ import ScrollContainer from '../../components/containers/ScrollContainer';
 import MatchBanner from './MatchBanner';
 
 export default function MatchesScreen() {
-    const [matchID, setMatchID] = React.useState("");
     const [version, setVersion] = React.useState(0);
 
     BlitzDB.eventEmitter.addListener("dataUpdate", () => {
@@ -15,7 +14,6 @@ export default function MatchesScreen() {
         setVersion(version + 1);
     });
 
-    
     let matchDisplay: JSX.Element[] = [];
 
     if (BlitzDB.event)
@@ -36,7 +34,6 @@ export default function MatchesScreen() {
 
     return (
         <ScrollContainer>
-            <Title>Matches</Title>
             {matchDisplay}
         </ScrollContainer>
     );

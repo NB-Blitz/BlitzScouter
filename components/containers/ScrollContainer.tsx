@@ -11,12 +11,12 @@ export default function ScrollContainer(props: ViewProps) {
         <FadeIn>
             <ScrollView
                 style={{
-                    marginTop: 40,
+                    marginTop: 0,
                     paddingLeft: 20,
                     paddingRight: 20
                 }}>
                     
-                <View style={[{ marginTop: 30 }, style]} {...otherProps} />
+                <View style={[{ marginTop: 10 }, style]} {...otherProps} />
             </ScrollView>
         </FadeIn>
     );

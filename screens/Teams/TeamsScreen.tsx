@@ -35,7 +35,6 @@ export default function TeamsScreen({ navigation }: RootTabScreenProps<'Teams'>)
 
     return (
         <ScrollContainer>
-            <Title>Teams</Title>
             {teamList}
         </ScrollContainer>
     );
