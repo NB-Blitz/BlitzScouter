@@ -34,22 +34,24 @@ function BottomTabNavigator()
 {
     return (
         <Drawer.Navigator
-        initialRouteName="Teams"
+        initialRouteName="Matches"
+        
         screenOptions={{
-            headerShown: true,
-            headerTitleStyle: {
-                color: "#fff",
-            },
+            headerTitleStyle: { color: "#fff" },
+            headerStyle: {backgroundColor: "#111111" },
             drawerActiveBackgroundColor: "#c89f00",
-            drawerActiveTintColor: "#000"
+            drawerActiveTintColor: "#000",
+            headerTintColor: "white",
+            unmountOnBlur: true,
+            gestureEnabled: true
         }}>
-            <Drawer.Screen
-                name="Teams"
-                component={TeamsScreen}
-            />
             <Drawer.Screen
                 name="Matches"
                 component={MatchesScreen}
+            />
+            <Drawer.Screen
+                name="Teams"
+                component={TeamsScreen}
             />
             <Drawer.Screen
                 name="Sharing"

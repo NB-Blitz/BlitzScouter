@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { ReactNode } from "react";
 import { StyleSheet, Modal as DefaultModal, View, ScrollView } from "react-native";
+import Text from '../text/Text';
 import Button from './Button';
 import DarkBackground from "./DarkBackground";
-import Text from './Text';
 
 export interface ModalProps
 {

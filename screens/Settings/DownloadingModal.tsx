@@ -1,7 +1,8 @@
 import React from "react";
 import { Modal, StyleSheet, View } from "react-native";
 import DarkBackground from "../../components/common/DarkBackground";
-import Title from "../../components/common/Title";
+import Subtitle from "../../components/text/Subtitle";
+import Title from "../../components/text/Title";
 
 interface ModalProps
 {
@@ -22,8 +23,8 @@ export default function DownloadingModal(props: ModalProps)
             
             <View style={styles.modal}>
                 
-                <Title style={styles.title}>Downloading, Please Wait</Title>
-                <Title style={styles.subtitle}>{props.status}</Title>
+                <Title>Downloading, Please Wait</Title>
+                <Subtitle>{props.status}</Subtitle>
 
             </View>
         </Modal>
@@ -42,13 +43,5 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingRight: 20,
         paddingBottom: 80,
-    },
-    title: {
-        fontSize: 24,
-        marginBottom: 0
-    },
-    subtitle: {
-        color: "#bbb",
-        fontSize: 18
     }
 });

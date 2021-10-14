@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { BlitzDB } from "../../api/BlitzDB";
 import Button from "../../components/common/Button";
-import Text from "../../components/common/Text";
+import Text from "../../components/text/Text";
 import MatchModal from "./MatchModal";
 
 interface MatchBannerProps

@@ -3,12 +3,12 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Button from '../../components/common/Button';
 import ScrollContainer from '../../components/containers/ScrollContainer';
-import Text from '../../components/common/Text';
-import Title from '../../components/common/Title';
+import Text from '../../components/text/Text';
 import ExportQRModal from './ExportQRModal';
 import ImportQRModal from './ImportQRModal';
 
-export default function SharingScreen() {
+export default function SharingScreen()
+{
     const [isExportQRVisible, setExportQRVisible] = React.useState(false);
     const [isImportQRVisible, setImportQRVisible] = React.useState(false);
 
@@ -24,7 +24,7 @@ export default function SharingScreen() {
                     style={styles.buttonIcon}/>
                 <View>
                     <Text style={styles.buttonTitle}>Show QRCode</Text>
-                    <Text style={styles.buttonSubtitle}>Export Comments</Text>
+                    <Text style={styles.buttonSubtitle}>Export Scouting Data</Text>
                 </View>
             </Button>
 
@@ -37,7 +37,7 @@ export default function SharingScreen() {
                     style={styles.buttonIcon}/>
                 <View>
                     <Text style={styles.buttonTitle}>Scan QRCode</Text>
-                    <Text style={styles.buttonSubtitle}>Import Comments</Text>
+                    <Text style={styles.buttonSubtitle}>Import Scouting Data</Text>
                 </View>
             </Button>
 
@@ -49,7 +49,7 @@ export default function SharingScreen() {
                     style={styles.buttonIcon}/>
                 <View>
                     <Text style={styles.buttonTitle}>Save to CSV</Text>
-                    <Text style={styles.buttonSubtitle}>Export Teams &amp; Comments</Text>
+                    <Text style={styles.buttonSubtitle}>Export Scouting Data</Text>
                 </View>
             </Button>
 
@@ -73,7 +73,7 @@ export default function SharingScreen() {
                     style={styles.buttonIcon}/>
                 <View>
                     <Text style={styles.buttonTitle}>Upload to Cloud</Text>
-                    <Text style={styles.buttonSubtitle}>Export Images, Teams, &amp; Comments</Text>
+                    <Text style={styles.buttonSubtitle}>Export Everything</Text>
                 </View>
             </Button>
 
@@ -85,7 +85,19 @@ export default function SharingScreen() {
                     style={styles.buttonIcon}/>
                 <View>
                     <Text style={styles.buttonTitle}>Download from Cloud</Text>
-                    <Text style={styles.buttonSubtitle}>Import Images, Teams, &amp; Comments</Text>
+                    <Text style={styles.buttonSubtitle}>Import Everything</Text>
+                </View>
+            </Button>
+
+            {/* Sync USB */}
+            <Button style={styles.sharingButton}>
+                <FontAwesome
+                    size={30}
+                    name={"usb"} 
+                    style={styles.buttonIcon}/>
+                <View>
+                    <Text style={styles.buttonTitle}>Sync from USB</Text>
+                    <Text style={styles.buttonSubtitle}>Import &amp; Export Everything</Text>
                 </View>
             </Button>
 

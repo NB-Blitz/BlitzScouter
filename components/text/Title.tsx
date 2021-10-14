@@ -8,8 +8,7 @@ export default function Title(props: TextProps) {
   
     return <Text style={[{
                 color: "#fff",
-                fontSize: 40,
-                fontWeight: 'bold',
-                marginBottom: 20
+                fontSize: 30,
+                fontWeight: 'bold'
             }, style]} {...otherProps} />;
 }

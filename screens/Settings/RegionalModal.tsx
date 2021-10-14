@@ -7,8 +7,8 @@ import { TBA } from "../../api/TBA";
 import Button from "../../components/common/Button";
 import DarkBackground from "../../components/common/DarkBackground";
 import Modal from "../../components/common/Modal";
-import Text from "../../components/common/Text";
-import Title from "../../components/common/Title";
+import Text from "../../components/text/Text";
+import Title from "../../components/text/Title";
 import DownloadingModal from "./DownloadingModal";
 
 interface ModalProps

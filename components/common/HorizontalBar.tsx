@@ -9,9 +9,10 @@ export default function HorizontalBar(props: ViewProps)
 
     return (<View
         style={[{
-            borderBottomColor: '#999',
+            borderBottomColor: '#333333',
             borderBottomWidth: 1,
-            marginBottom: 20,
+            marginBottom: 15,
+            marginTop: 15
         }, style]}
         
         {...otherProps}

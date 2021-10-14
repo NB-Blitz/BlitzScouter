@@ -13,7 +13,8 @@ export default function ScrollContainer(props: ViewProps) {
                 style={{
                     marginTop: 0,
                     paddingLeft: 20,
-                    paddingRight: 20
+                    paddingRight: 20,
+                    backgroundColor: "#0a0a0a"
                 }}>
                     
                 <View style={[{ marginTop: 10 }, style]} {...otherProps} />

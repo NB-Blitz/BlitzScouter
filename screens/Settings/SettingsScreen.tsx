@@ -4,9 +4,8 @@ import DownloadingModal from './DownloadingModal';
 import RegionalModal from './RegionalModal';
 import { BlitzDB } from '../../api/BlitzDB';
 import Button from '../../components/common/Button';
-import Title from '../../components/common/Title';
-import Text from '../../components/common/Text';
 import ScrollContainer from '../../components/containers/ScrollContainer';
+import Text from '../../components/text/Text';
 
 // BUG "Update Data" is available after a data wipe
 // TODO More settings
@@ -14,15 +13,8 @@ export default function SettingsScreen()
 {
     const [modalVisible, setModalVisible] = React.useState(false);
     const [downloadStatus, setDownloadStatus] = React.useState("");
-    const [version, setVersion] = React.useState(0);
 
-    BlitzDB.eventEmitter.addListener("dataUpdate", () => {
-        BlitzDB.eventEmitter.removeCurrentListener();
-        setVersion(version + 1);
-    });
-
-
-
+    // Update Button
     let updateButton;
     if (BlitzDB.event)
         updateButton = (

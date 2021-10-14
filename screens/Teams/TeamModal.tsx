@@ -5,10 +5,11 @@ import * as ImagePicker from 'expo-image-picker';
 import PhotoModal from "../../components/containers/PhotoModal";
 import { BlitzDB } from "../../api/BlitzDB";
 import Button from "../../components/common/Button";
-import Title from "../../components/common/Title";
 import HorizontalBar from "../../components/common/HorizontalBar";
-import Text from "../../components/common/Text";
 import Modal from "../../components/common/Modal";
+import Text from "../../components/text/Text";
+import Title from "../../components/text/Title";
+import Subtitle from "../../components/text/Subtitle";
 
 interface ModalProps
 {
@@ -56,32 +57,6 @@ export default function TeamModal(props: ModalProps)
         );
     }
 
-    // Grab Team Comments
-    let commentList: JSX.Element[] = [];
-    if (team.comments.length > 0)
-    {
-        for (let comment of team.comments)
-        {
-            let commentTime = new Date(comment.timestamp);
-            commentList.push(
-                <View key={Math.random()} style={styles.comment}>
-                    <Text>{comment.text}</Text>
-                    <Text>{commentTime.getHours() + ":" + commentTime.getMinutes()}</Text>
-                </View>
-            );
-        }
-    }
-    else
-    {
-        commentList.push(
-            <Text key={0}>There are no comments yet...</Text>
-        );
-    }
-    
-    // Comment Data
-    let commentText: string;
-    let commentInput: TextInput | null;
-
     // Return Modal
     return (
         <Modal setVisible={props.setVisible}>
@@ -118,40 +93,11 @@ export default function TeamModal(props: ModalProps)
                 </Button>
             </ScrollView>
             
-            <Title style={styles.title}>{team ? team.name : ""}</Title>
-            <Title style={styles.subtitle}>{team ? team.number : ""}</Title>
+            <Title>{team.name}</Title>
+            <Subtitle>{team.number}</Subtitle>
 
             <HorizontalBar />
 
-            <View style={{flexDirection: "row", height: 50}}>
-                <TextInput 
-                    placeholder="Comment..."
-                    placeholderTextColor="#fff"
-                    style={styles.textInput}
-                    multiline={true}
-                    onChangeText={text => { commentText = text }}
-                    ref={input => {commentInput = input}}
-                />
-                <Button
-                    style={styles.sendCommentButton}
-                    onPress={() => {
-                        BlitzDB.addTeamComment(props.teamID, commentText);
-                        if (commentInput)
-                            commentInput.clear();
-                    }}>
-                    <FontAwesome 
-                        size={20}
-                        name={"arrow-right"}
-                        color={"white"}
-                        style={{marginBottom: 20}}
-                    />
-                </Button>
-            </View>
-
-            {commentList}
-
-            
-            
             <PhotoModal
                 imageData={previewData}
                 setImageData={setPreviewPhoto}
@@ -204,29 +150,6 @@ const styles = StyleSheet.create({
         height: 150,
         width: "100%"
     },
-    textInput: {
-        color: "#fff",
-        backgroundColor: "#222222",
-        borderRadius: 10,
-        padding: 10,
-        marginBottom: 10,
-        marginTop: -10,
-        marginRight: 10,
-        width: Dimensions.get("screen").width - 100
-    },
-    sendCommentButton: {
-        flexDirection: "row"
-    },
-    title: {
-        marginBottom: 0
-    },
-    subtitle: {
-        color: "#bbb",
-        fontSize: 30
-    },
-    header: {
-        fontSize: 24
-    },
     thumbnail: {
         height: 150,
         width: 150,
@@ -237,13 +160,7 @@ const styles = StyleSheet.create({
         width: 150,
         justifyContent: "center",
         flexDirection: "row",
-        backgroundColor: "#333",
+        backgroundColor: "#444",
         margin: 5
     },
-    comment: {
-        backgroundColor: "#111",
-        borderRadius: 10,
-        marginBottom: 5,
-        padding: 10
-    }
 });

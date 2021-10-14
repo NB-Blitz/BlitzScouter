@@ -1,13 +1,11 @@
 import React from "react";
-import { Alert, ScrollView, StyleSheet } from "react-native";
+import { Alert, ScrollView, StyleSheet, View } from "react-native";
 import { BlitzDB } from "../../api/BlitzDB";
-import Button from "../../components/common/Button";
-import DarkBackground from "../../components/common/DarkBackground";
 import HorizontalBar from "../../components/common/HorizontalBar";
 import Modal from "../../components/common/Modal";
-import Text from "../../components/common/Text";
-import Title from "../../components/common/Title";
-import TeamBanner from "../Teams/TeamBanner";
+import Subtitle from "../../components/text/Subtitle";
+import Title from "../../components/text/Title";
+import TeamPreview from "./TeamPreview";
 
 interface ModalProps
 {
@@ -35,42 +33,44 @@ export default function MatchModal(props: ModalProps)
     let redTeams = [];
     let blueTeams = [];
     for (let teamID of match.blueTeamIDs)
-        blueTeams.push(<TeamBanner teamID={teamID} key={teamID} />);
+        blueTeams.push(<TeamPreview teamID={teamID} key={teamID} />);
     for (let teamID of match.redTeamIDs)
-        redTeams.push(<TeamBanner teamID={teamID} key={teamID} />);
+        redTeams.push(<TeamPreview teamID={teamID} key={teamID} />);
 
     // Return Modal
     return (
         <Modal setVisible={props.setVisible}>
                 
-            <Title style={styles.title}>{match.name}</Title>
-            <Title style={styles.subtitle}>{match.description}</Title>
+            <Title>{match.name}</Title>
+            <Subtitle>{match.description}</Subtitle>
 
             <HorizontalBar />
 
-            <Title style={styles.header}>Red Alliance:</Title>
-            {redTeams}
-            
-            <Title style={styles.header}>Blue Alliance:</Title>
-            {blueTeams}
+            <Title style={styles.allianceHeader}>Red Alliance</Title>
+
+            <ScrollView horizontal={true}>
+                <View>
+                    {redTeams}
+                </View>
+            </ScrollView>
+
+            <HorizontalBar />
+
+            <Title style={styles.allianceHeader}>Blue Alliance</Title>
+
+            <ScrollView horizontal={true}>
+                <View>
+                    {blueTeams}
+                </View>
+            </ScrollView>
+
+            <HorizontalBar />
         </Modal>
     );
 }
 
 const styles = StyleSheet.create({
-    media: {
-        flexDirection: "row",
-        marginBottom: 10
-    },
-    title: {
-        marginBottom: 0
-    },
-    subtitle: {
-        color: "#bbb",
-        fontSize: 15
-    },
-    header: {
-        fontSize: 24,
-        marginBottom: 5
+    allianceHeader: {
+        marginBottom: 15
     }
 });

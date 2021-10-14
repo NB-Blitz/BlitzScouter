@@ -153,10 +153,6 @@ export class BlitzDB
         setDownloadStatus("Saving...");
         await BlitzDB.save();
 
-        // Update Displays
-        setDownloadStatus("Updating Displays...");
-        BlitzDB.eventEmitter.emit("dataUpdate");
-
         // Exit
         setDownloadStatus("");
         Alert.alert("Success", "Successfully downloaded data from The Blue Alliance.");
@@ -171,22 +167,6 @@ export class BlitzDB
             BlitzDB.save();
             BlitzDB.eventEmitter.emit("mediaUpdate");
             console.log("Added Media to " + teamID);
-        }
-    }
-
-    static addTeamComment(teamID: string, commentText: string)
-    {
-        let team = BlitzDB.getTeam(teamID);
-        if (team)
-        {
-            team.comments.push({
-                isScanned: false,
-                timestamp: (new Date()).getTime(),
-                text: commentText
-            });
-            BlitzDB.save();
-            BlitzDB.eventEmitter.emit("mediaUpdate");
-            console.log("Added Comment to " + teamID);
         }
     }
 
@@ -253,7 +233,6 @@ export class BlitzDB
                         onPress: () => {
                             BlitzDB._deleteAll().then(() => {
                                 Alert.alert("Done", "All data has been cleared");
-                                BlitzDB.eventEmitter.emit("dataUpdate");
                             });
                         }
                     },
