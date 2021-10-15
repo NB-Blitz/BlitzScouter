@@ -23,7 +23,7 @@ export default function DownloadingModal(props: ModalProps)
             
             <View style={styles.modal}>
                 
-                <Title>Downloading, Please Wait</Title>
+                <Title>Downloading</Title>
                 <Subtitle>{props.status}</Subtitle>
 
             </View>

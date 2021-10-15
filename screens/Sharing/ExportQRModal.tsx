@@ -17,7 +17,8 @@ export default function ExportQRModal(props: ModalProps)
     if (!props.isVisible)
         return null;
 
-    const deviceWidth = Dimensions.get("window").width;
+    const windowSize = Dimensions.get("window");
+    const qrSize = Math.min(windowSize.width, windowSize.height);
     const commentData = BlitzDB.exportComments();
     const compressedData = LZString.compress(commentData);
 
@@ -31,7 +32,7 @@ export default function ExportQRModal(props: ModalProps)
                 
                 <QRCode
                     value={compressedData}
-                    size={deviceWidth}
+                    size={qrSize}
                     bgColor="black"
                     fgColor="white"
                 />

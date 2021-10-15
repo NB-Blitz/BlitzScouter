@@ -1,8 +1,7 @@
 import React from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { BlitzDB } from "../../api/BlitzDB";
-import Button from "../../components/common/Button";
-import Text from "../../components/text/Text";
+import StandardButton from "../../components/common/StandardButton";
 import TeamModal from "./TeamModal";
 
 interface TeamBannerProps
@@ -21,26 +20,23 @@ export default function TeamBanner(props: TeamBannerProps)
         return null;
     }
 
-    return (<Button
-        style={styles.teamButton}
-        onPress={() => setVisible(true)}>
-        
-        <TeamModal
-            teamID={team.id}
-            isVisible={isVisible}
-            setVisible={setVisible} />
-
-        <Image
-            style={styles.teamImage}
-            fadeDuration={0}
-            source={team.media.length > 0 ? {uri:team.media[0]} : {}} />
-
+    return (
         <View>
-            <Text style={styles.teamName}>{team.name}</Text>
-            <Text style={styles.teamNumber}>{team.number}</Text>
-        </View>
         
-    </Button>);
+            <TeamModal
+                teamID={team.id}
+                isVisible={isVisible}
+                setVisible={setVisible} />
+            
+            <StandardButton
+                iconData={team.media.length > 0 ? team.media[0] : undefined}
+                iconType={team.media.length > 0 ? undefined : "ban"}
+                title={team.name}
+                subtitle={team.number.toString()}
+                onPress={() => { setVisible(true); }} />
+        
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({

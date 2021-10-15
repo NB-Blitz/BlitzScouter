@@ -1,15 +1,15 @@
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
-import { Alert, Dimensions, Image, ScrollView, StyleSheet, TextInput, View } from "react-native";
+import { Alert, Image, ScrollView, StyleSheet } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import PhotoModal from "../../components/containers/PhotoModal";
 import { BlitzDB } from "../../api/BlitzDB";
 import Button from "../../components/common/Button";
 import HorizontalBar from "../../components/common/HorizontalBar";
 import Modal from "../../components/common/Modal";
-import Text from "../../components/text/Text";
 import Title from "../../components/text/Title";
 import Subtitle from "../../components/text/Subtitle";
+import StandardButton from "../../components/common/StandardButton";
 
 interface ModalProps
 {
@@ -95,6 +95,20 @@ export default function TeamModal(props: ModalProps)
             
             <Title>{team.name}</Title>
             <Subtitle>{team.number}</Subtitle>
+
+            <HorizontalBar />
+
+            <StandardButton
+                iconType={"binoculars"}
+                title={"Scout Team"}
+                subtitle={"Pit scout this team"}
+                onPress={() => {}} />
+
+            <StandardButton
+                iconType={"list"}
+                title={"List Matches"}
+                subtitle={"List the matches Team " + team.number + " is in"}
+                onPress={() => {}} />
 
             <HorizontalBar />
 

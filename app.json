@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "BlitzScouter",
+    "name": "Blitz Scouter",
     "slug": "BlitzScouter",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
-    "userInterfaceStyle": "automatic",
+    "scheme": "blitz",
+    "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",

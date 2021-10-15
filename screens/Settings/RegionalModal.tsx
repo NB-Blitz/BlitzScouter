@@ -6,7 +6,9 @@ import { TBAEvent } from "../../api/DBModels";
 import { TBA } from "../../api/TBA";
 import Button from "../../components/common/Button";
 import DarkBackground from "../../components/common/DarkBackground";
+import HorizontalBar from "../../components/common/HorizontalBar";
 import Modal from "../../components/common/Modal";
+import Subtitle from "../../components/text/Subtitle";
 import Text from "../../components/text/Text";
 import Title from "../../components/text/Title";
 import DownloadingModal from "./DownloadingModal";
@@ -71,7 +73,8 @@ export default function RegionalModal(props: ModalProps)
 
     return (
         <Modal setVisible={props.setVisible}>
-            <Title>Regional:</Title>
+            <Title>Set Regional</Title>
+            <Subtitle>Select the upcoming regional:</Subtitle>
             <TextInput 
                 placeholder="Search..."
                 placeholderTextColor="#fff"
@@ -100,7 +103,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 10,
         marginBottom: 10,
-        marginTop: -10
+        marginTop: 10
     },
     loadingText: {
         textAlign: "center",

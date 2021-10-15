@@ -8,7 +8,7 @@ interface PhotoProps
     setImageData: (imageData: string) => void;
 }
 
-// TODO Improve Photo Modal
+// TODO Photo Zoom, Delete, and Re-Arrange
 export default function PhotoModal(props: PhotoProps)
 {
     if (props.imageData === "")

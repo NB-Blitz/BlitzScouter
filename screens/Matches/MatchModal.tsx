@@ -3,6 +3,7 @@ import { Alert, ScrollView, StyleSheet, View } from "react-native";
 import { BlitzDB } from "../../api/BlitzDB";
 import HorizontalBar from "../../components/common/HorizontalBar";
 import Modal from "../../components/common/Modal";
+import StandardButton from "../../components/common/StandardButton";
 import Subtitle from "../../components/text/Subtitle";
 import Title from "../../components/text/Title";
 import TeamPreview from "./TeamPreview";
@@ -43,6 +44,14 @@ export default function MatchModal(props: ModalProps)
                 
             <Title>{match.name}</Title>
             <Subtitle>{match.description}</Subtitle>
+
+            <HorizontalBar />
+
+            <StandardButton
+                iconType={"binoculars"}
+                title={"Scout Match"}
+                subtitle={"Scout this match"}
+                onPress={() => {}} />
 
             <HorizontalBar />
 

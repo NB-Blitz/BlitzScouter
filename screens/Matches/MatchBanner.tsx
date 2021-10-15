@@ -1,8 +1,7 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { BlitzDB } from "../../api/BlitzDB";
-import Button from "../../components/common/Button";
-import Text from "../../components/text/Text";
+import StandardButton from "../../components/common/StandardButton";
 import MatchModal from "./MatchModal";
 
 interface MatchBannerProps
@@ -18,26 +17,40 @@ export default function MatchBanner(props: MatchBannerProps)
     if (!match)
         return null;
 
-    return (<Button
-        style={styles.matchButton}
-        onPress={() => { setVisible(true) }}>
-
-        <MatchModal matchID={match.id} isVisible={isVisible} setVisible={setVisible} />
+    return (
+        <View>
+            <StandardButton
+                iconText={match.number.toString()}
+                title={match.name}
+                subtitle={match.description}
+                onPress={() => { setVisible(true); }} />
             
-        <Text style={styles.matchName}>{match.name}</Text>
-        <Text style={styles.matchDesc}>{match.description}</Text>
-    </Button>);
+            <MatchModal
+                matchID={match.id}
+                isVisible={isVisible}
+                setVisible={setVisible} />
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
-    matchButton: {
-        alignItems: "flex-start"
+    button: {
+        flexDirection: "row",
+        justifyContent: "flex-start"
     },
-    matchName: {
-        fontSize: 18,
-        textAlign: "left"
+    buttonTitle: {
+        fontSize: 18
     },
-    matchDesc: {
+    buttonSubtitle: {
         color: "#bbb"
     },
+    matchThumbnail: {
+        fontSize: 20,
+        fontWeight: "bold",
+        marginRight: 10,
+        width: 35,
+        height: 35,
+        paddingTop: 5,
+        textAlign: "center"
+    }
 });

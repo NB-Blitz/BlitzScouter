@@ -224,9 +224,7 @@ export class BlitzDB
 
         if (alert)
         {
-            Alert.alert(
-                "Are you sure?",
-                "This will delete all scouting data from your device. Are you sure you want to continue?",
+            Alert.alert( "Are you sure?", "This will delete all scouting data from your device. Are you sure you want to continue?", 
                 [
                     {
                         text: "Confirm",
@@ -236,14 +234,8 @@ export class BlitzDB
                             });
                         }
                     },
-                    {
-                        text: "Cancel",
-                        style: "cancel"
-                    }
-                ],
-                {
-                    cancelable: true
-                }
+                    {  text: "Cancel", style: "cancel" }
+                ], { cancelable: true }
             );
         }
         else

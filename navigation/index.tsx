@@ -23,7 +23,10 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{}}>
-      <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
+      <Stack.Screen 
+        name="Root" 
+        component={BottomTabNavigator} 
+        options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
@@ -48,18 +51,22 @@ function BottomTabNavigator()
             <Drawer.Screen
                 name="Matches"
                 component={MatchesScreen}
+                options={{drawerIcon: (props) => {return (<FontAwesome name="trophy" style={{marginRight:-12}} {...props} />)}}}
             />
             <Drawer.Screen
                 name="Teams"
                 component={TeamsScreen}
+                options={{drawerIcon: (props) => {return (<FontAwesome name="users" style={{marginRight:-15}} {...props} />)}}}
             />
             <Drawer.Screen
                 name="Sharing"
                 component={SharingScreen}
+                options={{drawerIcon: (props) => {return (<FontAwesome name="share-alt" style={{marginRight:-10}} {...props} />)}}}
             />
             <Drawer.Screen
                 name="Settings"
                 component={SettingsScreen}
+                options={{drawerIcon: (props) => {return (<FontAwesome name="gear" style={{marginRight:-10}} {...props} />)}}}
             />
         </Drawer.Navigator>
     );

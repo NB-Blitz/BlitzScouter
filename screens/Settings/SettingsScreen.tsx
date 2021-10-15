@@ -1,72 +1,68 @@
 import * as React from 'react';
-import { NativeEventEmitter, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import DownloadingModal from './DownloadingModal';
 import RegionalModal from './RegionalModal';
 import { BlitzDB } from '../../api/BlitzDB';
-import Button from '../../components/common/Button';
 import ScrollContainer from '../../components/containers/ScrollContainer';
-import Text from '../../components/text/Text';
+import HorizontalBar from '../../components/common/HorizontalBar';
+import TemplateModal from './Template/TemplateModal';
+import { TemplateType } from '../../api/DBModels';
+import StandardButton from '../../components/common/StandardButton';
 
-// BUG "Update Data" is available after a data wipe
-// TODO More settings
 export default function SettingsScreen()
 {
-    const [modalVisible, setModalVisible] = React.useState(false);
+    const [regionalModalVisible, setRegionalModalVisible] = React.useState(false);
+    const [templateModalType, setTemplateModalType] = React.useState(TemplateType.None);
     const [downloadStatus, setDownloadStatus] = React.useState("");
-
-    // Update Button
-    let updateButton;
-    if (BlitzDB.event)
-        updateButton = (
-        <Button
-            style={styles.button}
-            onPress={() => {BlitzDB.download(BlitzDB.event ? BlitzDB.event.id : "", setDownloadStatus)}}>
-            <Text style={styles.buttonText}>Update Data</Text>
-        </Button>);
 
     return (
         <ScrollContainer>
-            {updateButton}
 
-            <Button style={styles.button}
-                    onPress={() => {setModalVisible(true)}}>
-                <Text style={styles.buttonText}>{BlitzDB.event ? "Change" : "Set"} Regional</Text>
-            </Button>
+            {/* Data Buttons */}
+            {BlitzDB.event ? 
+                <StandardButton
+                    iconType={"cloud-download"}
+                    title={"Update Data"}
+                    subtitle={"Re-download data from TBA"}
+                    onPress={() => { BlitzDB.download(BlitzDB.event ? BlitzDB.event.id : "", setDownloadStatus); }}
+                />
+            : null}
 
-            <Button style={styles.button}
-                    onPress={() => {BlitzDB.deleteAll(true);}}>
-                <Text style={styles.buttonText}>Clear All Data</Text>
-            </Button>
+            <StandardButton
+                iconType={"map-marker"}
+                title={(BlitzDB.event ? "Change" : "Set") + "Regional"}
+                subtitle={"Download regional data from TBA"} 
+                onPress={() => { setRegionalModalVisible(true); }} />
+            <StandardButton
+                iconType={"trash"}
+                title={"Clear All Data"}
+                subtitle={"Wipes all data on your device"} 
+                onPress={() => { BlitzDB.deleteAll(true); }} />
 
-            <RegionalModal isVisible={modalVisible} setVisible={setModalVisible} />
+            <HorizontalBar />
+
+            {/* Scouting Buttons */}
+            <StandardButton
+                iconType={"pencil-square-o"}
+                title={"Edit Pit Scouting"}
+                subtitle={"Adjust the pit scouting template"} 
+                onPress={() => { setTemplateModalType(TemplateType.Pit); }} />
+            <StandardButton
+                iconType={"pencil-square-o"}
+                title={"Edit Match Scouting"}
+                subtitle={"Adjust the match scouting template"} 
+                onPress={() => { setTemplateModalType(TemplateType.Match); }} />
+            <StandardButton
+                iconType={"user"}
+                title={"Assign Default Team"}
+                subtitle={"Assign the Default Team to Scout"} 
+                onPress={() => {}} />
+            <HorizontalBar />
+
+            {/* Modals */}
+            <RegionalModal isVisible={regionalModalVisible} setVisible={setRegionalModalVisible} />
+            <TemplateModal type={templateModalType} setType={setTemplateModalType} />
             <DownloadingModal status={downloadStatus} />
         </ScrollContainer>
     );
 }
-
-const styles = StyleSheet.create({
-    button: {
-        backgroundColor: "#c89f00",
-        marginBottom: 10,
-        borderRadius: 5
-    },
-    buttonText: {
-        color: "#000",
-        fontSize: 16
-    },
-    textInput: {
-        color: "#fff",
-        borderBottomColor: "#fff",
-        borderBottomWidth: 1,
-        marginBottom: 10
-    },
-    modal: {
-        backgroundColor: "#111",
-        margin: 20,
-        marginBottom: 100
-    },
-    loadingText: {
-        textAlign: "center",
-        fontStyle: "italic"
-    }
-});

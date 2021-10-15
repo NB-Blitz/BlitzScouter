@@ -1,9 +1,8 @@
-import { FontAwesome } from '@expo/vector-icons';
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
-import Button from '../../components/common/Button';
+import { Vibration } from 'react-native';
+import HorizontalBar from '../../components/common/HorizontalBar';
+import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
-import Text from '../../components/text/Text';
 import ExportQRModal from './ExportQRModal';
 import ImportQRModal from './ImportQRModal';
 
@@ -15,111 +14,62 @@ export default function SharingScreen()
     return (
         <ScrollContainer>
             
-            {/* Export QRCode */}
+            {/* QR Codes */}
             <ExportQRModal isVisible={isExportQRVisible} setVisible={setExportQRVisible} />
-            <Button style={styles.sharingButton} onPress={() => setExportQRVisible(true)}>
-                <FontAwesome
-                    size={40}
-                    name={"qrcode"} 
-                    style={styles.buttonIcon}/>
-                <View>
-                    <Text style={styles.buttonTitle}>Show QRCode</Text>
-                    <Text style={styles.buttonSubtitle}>Export Scouting Data</Text>
-                </View>
-            </Button>
+            <StandardButton
+                iconType={"qrcode"}
+                title={"Show QRCode"}
+                subtitle={"Export Scouting Data"} 
+                onPress={() => { setExportQRVisible(true); }} />
 
-            {/* Import QRCode */}
             <ImportQRModal isVisible={isImportQRVisible} setVisible={setImportQRVisible} />
-            <Button style={styles.sharingButton}>
-                <FontAwesome
-                    size={30}
-                    name={"camera"} 
-                    style={styles.buttonIcon}/>
-                <View>
-                    <Text style={styles.buttonTitle}>Scan QRCode</Text>
-                    <Text style={styles.buttonSubtitle}>Import Scouting Data</Text>
-                </View>
-            </Button>
+            <StandardButton
+                iconType={"camera"}
+                title={"Scan QRCode"}
+                subtitle={"Import Scouting Data"} 
+                onPress={() => { setImportQRVisible(true); }} />
+            <HorizontalBar />
 
-            {/* Export CSV */}
-            <Button style={styles.sharingButton}>
-                <FontAwesome
-                    size={35}
-                    name={"table"} 
-                    style={styles.buttonIcon}/>
-                <View>
-                    <Text style={styles.buttonTitle}>Save to CSV</Text>
-                    <Text style={styles.buttonSubtitle}>Export Scouting Data</Text>
-                </View>
-            </Button>
+            {/* File Formats */}
+            <StandardButton
+                iconType={"table"}
+                title={"Save to CSV"}
+                subtitle={"Export Scouting Data"} 
+                onPress={() => {}} />
+            
+            <StandardButton
+                iconType={"file-zip-o"}
+                title={"Save to ZIP"}
+                subtitle={"Export Images"} 
+                onPress={() => {}} />
+            <HorizontalBar />
 
-            {/* Export ZIP */}
-            <Button style={styles.sharingButton}>
-                <FontAwesome
-                    size={35}
-                    name={"file-zip-o"} 
-                    style={styles.buttonIcon}/>
-                <View>
-                    <Text style={styles.buttonTitle}>Save to ZIP</Text>
-                    <Text style={styles.buttonSubtitle}>Export Images</Text>
-                </View>
-            </Button>
+            {/* Cloud Save */}
+            <StandardButton
+                iconType={"cloud-upload"}
+                title={"Upload to Cloud"}
+                subtitle={"Export Everything"} 
+                onPress={() => {}} />
+            
+            <StandardButton
+                iconType={"cloud-download"}
+                title={"Download from Cloud"}
+                subtitle={"Import Everything"} 
+                onPress={() => {}} />
+            <HorizontalBar />
 
-            {/* Export Cloud */}
-            <Button style={styles.sharingButton}>
-                <FontAwesome
-                    size={30}
-                    name={"cloud-upload"} 
-                    style={styles.buttonIcon}/>
-                <View>
-                    <Text style={styles.buttonTitle}>Upload to Cloud</Text>
-                    <Text style={styles.buttonSubtitle}>Export Everything</Text>
-                </View>
-            </Button>
-
-            {/* Import Cloud */}
-            <Button style={styles.sharingButton}>
-                <FontAwesome
-                    size={30}
-                    name={"cloud-download"} 
-                    style={styles.buttonIcon}/>
-                <View>
-                    <Text style={styles.buttonTitle}>Download from Cloud</Text>
-                    <Text style={styles.buttonSubtitle}>Import Everything</Text>
-                </View>
-            </Button>
-
-            {/* Sync USB */}
-            <Button style={styles.sharingButton}>
-                <FontAwesome
-                    size={30}
-                    name={"usb"} 
-                    style={styles.buttonIcon}/>
-                <View>
-                    <Text style={styles.buttonTitle}>Sync from USB</Text>
-                    <Text style={styles.buttonSubtitle}>Import &amp; Export Everything</Text>
-                </View>
-            </Button>
+            {/* Hardware Sync */}
+            <StandardButton
+                iconType={"usb"}
+                title={"Sync from USB"}
+                subtitle={"Import & Export Everything"} 
+                onPress={() => {}} />
+             <StandardButton
+                iconType={"rss"}
+                title={"Sync from NFC"}
+                subtitle={"Import & Export Everything"} 
+                onPress={() => { Vibration.vibrate([200, 200, 200, 200, 200, 600], false); }} />
 
         </ScrollContainer>
     );
 }
-
-const styles = StyleSheet.create({
-    sharingButton: {
-        flexDirection: "row",
-        justifyContent: "flex-start"
-    },
-    buttonIcon: {
-        color: "#fff",
-        marginRight: 10,
-        width: 35
-    },
-    buttonTitle: {
-        fontSize: 18,
-        textAlign: "left"
-    },
-    buttonSubtitle: {
-        color: "#bbb"
-    }
-});

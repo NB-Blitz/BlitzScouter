@@ -70,3 +70,24 @@ export interface Comment
     timestamp: number;
     text: string;
 }
+
+/*  Template  */
+export enum TemplateType
+{
+    None,
+    Pit,
+    Match
+}
+
+export enum ScoutingElement
+{
+    counter,
+    checkbox,
+    textbox,
+    rating
+}
+
+interface Template
+{
+    elements: ScoutingElement[];
+}
