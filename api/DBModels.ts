@@ -74,20 +74,23 @@ export interface Comment
 /*  Template  */
 export enum TemplateType
 {
-    None,
     Pit,
     Match
 }
 
-export enum ScoutingElement
+export enum ElementType
 {
-    counter,
-    checkbox,
-    textbox,
-    rating
+    title,
+    subtitle,
+    text,
+    hr
 }
 
-interface Template
+export interface ElementData
 {
-    elements: ScoutingElement[];
+    type: ElementType;
+    label: string;
+    options: any;
 }
+
+export type ScoutingTemplate = ElementData[];

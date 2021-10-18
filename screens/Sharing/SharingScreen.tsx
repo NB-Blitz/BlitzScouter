@@ -45,6 +45,7 @@ export default function SharingScreen()
             <HorizontalBar />
 
             {/* Cloud Save */}
+            {/*
             <StandardButton
                 iconType={"cloud-upload"}
                 title={"Upload to Cloud"}
@@ -57,6 +58,7 @@ export default function SharingScreen()
                 subtitle={"Import Everything"} 
                 onPress={() => {}} />
             <HorizontalBar />
+            */}
 
             {/* Hardware Sync */}
             <StandardButton
@@ -64,11 +66,16 @@ export default function SharingScreen()
                 title={"Sync from USB"}
                 subtitle={"Import & Export Everything"} 
                 onPress={() => {}} />
-             <StandardButton
+            <StandardButton
                 iconType={"rss"}
                 title={"Sync from NFC"}
                 subtitle={"Import & Export Everything"} 
-                onPress={() => { Vibration.vibrate([200, 200, 200, 200, 200, 600], false); }} />
+                onPress={() => {}} />
+            <StandardButton
+                iconType={"bluetooth-b"}
+                title={"Sync from Bluetooth"}
+                subtitle={"Import & Export Everything"} 
+                onPress={() => {}} />
 
         </ScrollContainer>
     );

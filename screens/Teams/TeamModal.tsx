@@ -1,6 +1,6 @@
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
-import { Alert, Image, ScrollView, StyleSheet } from "react-native";
+import { Alert, Image, Linking, ScrollView, StyleSheet } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import PhotoModal from "../../components/containers/PhotoModal";
 import { BlitzDB } from "../../api/BlitzDB";
@@ -10,6 +10,8 @@ import Modal from "../../components/common/Modal";
 import Title from "../../components/text/Title";
 import Subtitle from "../../components/text/Subtitle";
 import StandardButton from "../../components/common/StandardButton";
+import TeamMatchesModal from "./TeamMatchesModal";
+import { TBA } from "../../api/TBA";
 
 interface ModalProps
 {
@@ -20,7 +22,8 @@ interface ModalProps
 
 export default function TeamModal(props: ModalProps)
 {
-    const [previewData, setPreviewPhoto] = React.useState("");
+    const [previewIndex, setPreviewIndex] = React.useState(-1);
+    const [isTeamMatchesVisible, setTeamMatchesVisible] = React.useState(false);
     const [version, setVersion] = React.useState(0);
 
     // Default Behaviour
@@ -31,6 +34,7 @@ export default function TeamModal(props: ModalProps)
     BlitzDB.eventEmitter.addListener("mediaUpdate", () => {
         BlitzDB.eventEmitter.removeCurrentListener();
         setVersion(version + 1);
+        setPreviewIndex(-1);
     });
             
     // Grab Team Data
@@ -44,13 +48,13 @@ export default function TeamModal(props: ModalProps)
 
     // Grab Team Media
     let mediaList: JSX.Element[] = [];
-    for (let imageData of team.media)
+    for (let i = 0; i < team.media.length; i++)
     {
-        let preview = imageData;
+        let imageData = team.media[i];
         mediaList.push(
             <Button
                 style={styles.imageButton}
-                onPress={() => setPreviewPhoto(preview)}
+                onPress={() => { setPreviewIndex(i); }}
                 key={Math.random()}>
                 <Image style={styles.thumbnail} source={{uri:imageData}} key={Math.random()}/>
             </Button>
@@ -108,14 +112,24 @@ export default function TeamModal(props: ModalProps)
                 iconType={"list"}
                 title={"List Matches"}
                 subtitle={"List the matches Team " + team.number + " is in"}
-                onPress={() => {}} />
+                onPress={() => { setTeamMatchesVisible(true); }} />
+
+            <StandardButton
+                iconType={"globe"}
+                title={"View on TBA"}
+                subtitle={"View Team " + team.number + " on The Blue Alliance"}
+                onPress={() => { team ? TBA.openTeam(team.number) : null }} />
 
             <HorizontalBar />
 
             <PhotoModal
-                imageData={previewData}
-                setImageData={setPreviewPhoto}
-            />
+                teamID={props.teamID}
+                imageIndex={previewIndex}
+                setImageIndex={setPreviewIndex} />
+            <TeamMatchesModal
+                teamID={props.teamID}
+                isVisible={isTeamMatchesVisible}
+                setVisible={setTeamMatchesVisible} />
         </Modal>
     );
 }

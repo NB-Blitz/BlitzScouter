@@ -1,10 +1,10 @@
-import { Alert } from 'react-native';
+import { Alert, Linking } from 'react-native';
 import { TBAEvent, TBAMatch, TBAMedia, TBATeam } from './DBModels';
 
 const API_KEY = "i90dAcKHXvQ9havypHJKeGY8O1tfymFpaW1Po3RGYpvoMTRVwtiUsUFaLmstCDp3";
 const URL_PREFIX = "https://www.thebluealliance.com/api/v3/";
 const URL_SUFFIX = "?X-TBA-Auth-Key=" + API_KEY;
-const YEAR = 2019;
+const YEAR = 2020;
 
 export class TBA
 {
@@ -26,6 +26,16 @@ export class TBA
     static getTeamMedia(teamID: string)
     {
         return TBA._fetch<TBAMedia[]>("team/" + teamID + "/media/" + YEAR);
+    }
+
+    static openTeam(teamNumber: number)
+    {
+        Linking.openURL("https://www.thebluealliance.com/team/" + teamNumber + "/" + YEAR);
+    }
+
+    static openMatch(matchID: string)
+    {
+        Linking.openURL("https://www.thebluealliance.com/match/" + matchID);
     }
 
     static async _fetch<Type>(path: string): Promise<Type | undefined>

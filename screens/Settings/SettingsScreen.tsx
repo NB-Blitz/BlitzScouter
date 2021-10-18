@@ -12,7 +12,8 @@ import StandardButton from '../../components/common/StandardButton';
 export default function SettingsScreen()
 {
     const [regionalModalVisible, setRegionalModalVisible] = React.useState(false);
-    const [templateModalType, setTemplateModalType] = React.useState(TemplateType.None);
+    const [pitTemplateModalVisible, setPitTemplateModalVisible] = React.useState(false);
+    const [matchTemplateModalVisible, setMatchTemplateModalVisible] = React.useState(false);
     const [downloadStatus, setDownloadStatus] = React.useState("");
 
     return (
@@ -30,7 +31,7 @@ export default function SettingsScreen()
 
             <StandardButton
                 iconType={"map-marker"}
-                title={(BlitzDB.event ? "Change" : "Set") + "Regional"}
+                title={(BlitzDB.event ? "Change" : "Set") + " Regional"}
                 subtitle={"Download regional data from TBA"} 
                 onPress={() => { setRegionalModalVisible(true); }} />
             <StandardButton
@@ -46,12 +47,12 @@ export default function SettingsScreen()
                 iconType={"pencil-square-o"}
                 title={"Edit Pit Scouting"}
                 subtitle={"Adjust the pit scouting template"} 
-                onPress={() => { setTemplateModalType(TemplateType.Pit); }} />
+                onPress={() => { setPitTemplateModalVisible(true); }} />
             <StandardButton
                 iconType={"pencil-square-o"}
                 title={"Edit Match Scouting"}
                 subtitle={"Adjust the match scouting template"} 
-                onPress={() => { setTemplateModalType(TemplateType.Match); }} />
+                onPress={() => { setMatchTemplateModalVisible(true); }} />
             <StandardButton
                 iconType={"user"}
                 title={"Assign Default Team"}
@@ -61,7 +62,8 @@ export default function SettingsScreen()
 
             {/* Modals */}
             <RegionalModal isVisible={regionalModalVisible} setVisible={setRegionalModalVisible} />
-            <TemplateModal type={templateModalType} setType={setTemplateModalType} />
+            <TemplateModal type={TemplateType.Pit} setVisible={setPitTemplateModalVisible} isVisible={pitTemplateModalVisible} />
+            <TemplateModal type={TemplateType.Match} setVisible={setMatchTemplateModalVisible} isVisible={matchTemplateModalVisible} />
             <DownloadingModal status={downloadStatus} />
         </ScrollContainer>
     );

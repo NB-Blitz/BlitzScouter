@@ -41,7 +41,7 @@ function BottomTabNavigator()
         
         screenOptions={{
             headerTitleStyle: { color: "#fff" },
-            headerStyle: {backgroundColor: "#111111" },
+            headerStyle: {backgroundColor: "#151515" },
             drawerActiveBackgroundColor: "#c89f00",
             drawerActiveTintColor: "#000",
             headerTintColor: "white",

@@ -1,6 +1,7 @@
 import React from "react";
 import { Alert, ScrollView, StyleSheet, View } from "react-native";
 import { BlitzDB } from "../../api/BlitzDB";
+import { TBA } from "../../api/TBA";
 import HorizontalBar from "../../components/common/HorizontalBar";
 import Modal from "../../components/common/Modal";
 import StandardButton from "../../components/common/StandardButton";
@@ -52,6 +53,12 @@ export default function MatchModal(props: ModalProps)
                 title={"Scout Match"}
                 subtitle={"Scout this match"}
                 onPress={() => {}} />
+
+            <StandardButton
+                iconType={"globe"}
+                title={"View on TBA"}
+                subtitle={"View this Match on The Blue Alliance"}
+                onPress={() => { match ? TBA.openMatch(match.id) : null }} />
 
             <HorizontalBar />
 

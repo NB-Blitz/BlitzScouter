@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert, NativeEventEmitter } from "react-native";
-import { Event, Match, Team } from "./DBModels";
+import { Event, Match, ScoutingTemplate, Team, TemplateType } from "./DBModels";
 import { TBA } from "./TBA";
 
 const BASE64_PREFIX = "data:image/png;base64, ";
@@ -11,6 +11,7 @@ export class BlitzDB
     static event?: Event;
     static currentTeamIDs: string[] = [];
     static teams: Team[] = [];
+    static templates: Record<TemplateType, ScoutingTemplate> = [[], []];
     static eventEmitter = new NativeEventEmitter();
 
     static async download(eventID: string, setDownloadStatus: Function)
@@ -170,6 +171,34 @@ export class BlitzDB
         }
     }
 
+    static removeTeamMedia(teamID: string, mediaIndex: number)
+    {
+        let team = BlitzDB.getTeam(teamID);
+        if (team)
+        {
+            team.media.splice(mediaIndex, 1);
+            BlitzDB.save();
+            BlitzDB.eventEmitter.emit("mediaUpdate");
+            console.log("Removed Media " + mediaIndex + " from " + teamID);
+        }
+    }
+
+    static swapTeamMedia(teamID: string, mediaIndex1: number, mediaIndex2?: number)
+    {
+        let team = BlitzDB.getTeam(teamID);
+        if (team)
+        {
+            if (mediaIndex2 === undefined)
+                mediaIndex2 = team.media.length - 1;
+            let tempMedia = team.media[mediaIndex1];
+            team.media[mediaIndex1] = team.media[mediaIndex2];
+            team.media[mediaIndex2] = tempMedia;
+            BlitzDB.save();
+            BlitzDB.eventEmitter.emit("mediaUpdate");
+            console.log("Swapped Media " + mediaIndex1 + " <-> " + mediaIndex2 + " from " + teamID);
+        }
+    }
+
     static getTeam(teamID: string): Team | undefined
     {
         return BlitzDB.teams.find(team => team.id === teamID);
@@ -179,6 +208,18 @@ export class BlitzDB
     {
         if (BlitzDB.event)
             return BlitzDB.event.matches.find(match => match.id === matchID);
+    }
+
+    static getTeamMatches(teamID: string): Match[]
+    {
+        if (!(this.event))
+            return [];
+        
+        let matchList: Match[] = [];
+        for (let match of this.event.matches)
+            if (match.blueTeamIDs.includes(teamID) || match.redTeamIDs.includes(teamID))
+                matchList.push(match);
+        return matchList;
     }
 
     static exportComments(): string

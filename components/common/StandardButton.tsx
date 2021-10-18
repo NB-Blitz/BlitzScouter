@@ -40,6 +40,7 @@ export default function StandardButton(props: ButtonProps)
             {props.iconData ?
                 <Image style={styles.buttonIconSVG} fadeDuration={0} source={{uri:props.iconData}} />
             : null}
+            
 
             {/*  Titles  */}
             <View>
