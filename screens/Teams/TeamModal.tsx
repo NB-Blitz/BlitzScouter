@@ -1,27 +1,25 @@
 import { FontAwesome } from "@expo/vector-icons";
-import React from "react";
-import { Alert, Image, Linking, ScrollView, StyleSheet } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
-import PhotoModal from "../../components/containers/PhotoModal";
+import React from "react";
+import { Alert, Image, ScrollView, StyleSheet } from "react-native";
 import { BlitzDB } from "../../api/BlitzDB";
+import { TBA } from "../../api/TBA";
 import Button from "../../components/common/Button";
 import HorizontalBar from "../../components/common/HorizontalBar";
 import Modal from "../../components/common/Modal";
-import Title from "../../components/text/Title";
-import Subtitle from "../../components/text/Subtitle";
 import StandardButton from "../../components/common/StandardButton";
+import PhotoModal from "../../components/containers/PhotoModal";
+import Subtitle from "../../components/text/Subtitle";
+import Title from "../../components/text/Title";
 import TeamMatchesModal from "./TeamMatchesModal";
-import { TBA } from "../../api/TBA";
 
-interface ModalProps
-{
+interface ModalProps {
     teamID: string;
     isVisible: boolean;
     setVisible: (isVisible: boolean) => void;
 }
 
-export default function TeamModal(props: ModalProps)
-{
+export default function TeamModal(props: ModalProps) {
     const [previewIndex, setPreviewIndex] = React.useState(-1);
     const [isTeamMatchesVisible, setTeamMatchesVisible] = React.useState(false);
     const [version, setVersion] = React.useState(0);
@@ -36,11 +34,10 @@ export default function TeamModal(props: ModalProps)
         setVersion(version + 1);
         setPreviewIndex(-1);
     });
-            
+
     // Grab Team Data
     let team = BlitzDB.getTeam(props.teamID);
-    if (!(team))
-    {
+    if (!(team)) {
         Alert.alert("Error", "There was an error grabbing the data from that team. Try re-downloading TBA data then try again.");
         props.setVisible(false);
         return null;
@@ -48,15 +45,14 @@ export default function TeamModal(props: ModalProps)
 
     // Grab Team Media
     let mediaList: JSX.Element[] = [];
-    for (let i = 0; i < team.media.length; i++)
-    {
+    for (let i = 0; i < team.media.length; i++) {
         let imageData = team.media[i];
         mediaList.push(
             <Button
                 style={styles.imageButton}
                 onPress={() => { setPreviewIndex(i); }}
                 key={Math.random()}>
-                <Image style={styles.thumbnail} source={{uri:imageData}} key={Math.random()}/>
+                <Image style={styles.thumbnail} source={{ uri: imageData }} key={Math.random()} />
             </Button>
         );
     }
@@ -70,33 +66,33 @@ export default function TeamModal(props: ModalProps)
 
                 <Button
                     style={styles.imageButton}
-                    onPress={async () => {addPhoto(props.teamID)}}>
-                    <FontAwesome 
+                    onPress={async () => { addPhoto(props.teamID) }}>
+                    <FontAwesome
                         size={20}
                         name={"plus"}
                         color={"white"}
-                        style={{marginRight:3}}/>
-                    <FontAwesome 
+                        style={{ marginRight: 3 }} />
+                    <FontAwesome
                         size={30}
                         name={"camera"}
-                        color={"white"}/>
+                        color={"white"} />
                 </Button>
 
                 <Button
                     style={styles.imageButton}
-                    onPress={async () => {addFile(props.teamID)}}>
-                    <FontAwesome 
+                    onPress={async () => { addFile(props.teamID) }}>
+                    <FontAwesome
                         size={20}
                         name={"plus"}
                         color={"white"}
-                        style={{marginRight:3}}/>
-                    <FontAwesome 
+                        style={{ marginRight: 3 }} />
+                    <FontAwesome
                         size={30}
                         name={"folder"}
-                        color={"white"}/>
+                        color={"white"} />
                 </Button>
             </ScrollView>
-            
+
             <Title>{team.name}</Title>
             <Subtitle>{team.number}</Subtitle>
 
@@ -106,7 +102,7 @@ export default function TeamModal(props: ModalProps)
                 iconType={"binoculars"}
                 title={"Scout Team"}
                 subtitle={"Pit scout this team"}
-                onPress={() => {}} />
+                onPress={() => { }} />
 
             <StandardButton
                 iconType={"list"}
@@ -134,15 +130,14 @@ export default function TeamModal(props: ModalProps)
     );
 }
 
-function addPhoto(teamID: string)
-{
+function addPhoto(teamID: string) {
     return ImagePicker.launchCameraAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: .5,
-            
-            base64: true
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: .5,
+
+        base64: true
     }).then(result => {
         if (result.cancelled)
             return;
@@ -153,15 +148,14 @@ function addPhoto(teamID: string)
     });
 }
 
-function addFile(teamID: string)
-{
+function addFile(teamID: string) {
     return ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: .5,
-            
-            base64: true
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: .5,
+
+        base64: true
     }).then(result => {
         if (result.cancelled)
             return;

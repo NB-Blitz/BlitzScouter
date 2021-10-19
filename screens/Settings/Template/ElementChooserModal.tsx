@@ -7,15 +7,13 @@ import StandardButton from '../../../components/common/StandardButton';
 import Subtitle from '../../../components/text/Subtitle';
 import Title from '../../../components/text/Title';
 
-interface ModalProps
-{   
+interface ModalProps {
     isVisible: boolean;
     setVisible: (isVisible: boolean) => void;
     type: TemplateType;
 }
 
-export default function ElementChooserModal(props: ModalProps)
-{
+export default function ElementChooserModal(props: ModalProps) {
     // Default Behaviour
     if (!props.isVisible)
         return null;
@@ -26,7 +24,7 @@ export default function ElementChooserModal(props: ModalProps)
             label: "Element",
             options: {}
         });
-        
+
         props.setVisible(false);
     }
 
@@ -40,26 +38,26 @@ export default function ElementChooserModal(props: ModalProps)
                 iconType={"hashtag"}
                 title={"Counter"}
                 subtitle={"Increment and decrement a number"}
-                onPress={() => {}} />
+                onPress={() => { }} />
 
             <StandardButton
                 iconType={"check-square-o"}
                 title={"Checkbox"}
                 subtitle={"A simple check or uncheck"}
-                onPress={() => {}} />
+                onPress={() => { }} />
 
             <StandardButton
                 iconType={"pencil-square-o"}
                 title={"Textbox"}
                 subtitle={"Type in text or comments"}
-                onPress={() => {}} />
+                onPress={() => { }} />
 
             <StandardButton
                 iconType={"star"}
                 title={"5-Star Rating"}
                 subtitle={"Similar to reviews"}
-                onPress={() => {}} />
-            
+                onPress={() => { }} />
+
             <HorizontalBar />
 
             <StandardButton
@@ -73,7 +71,7 @@ export default function ElementChooserModal(props: ModalProps)
                 title={"Subtitle"}
                 subtitle={"A title or section for scouters"}
                 onPress={() => { chooseElement(ElementType.subtitle); }} />
-            
+
             <StandardButton
                 iconText={"F"}
                 title={"Text"}

@@ -9,23 +9,20 @@ import Subtitle from "../../components/text/Subtitle";
 import Title from "../../components/text/Title";
 import TeamPreview from "./TeamPreview";
 
-interface ModalProps
-{
+interface ModalProps {
     matchID: string;
     isVisible: boolean;
     setVisible: (isVisible: boolean) => void;
 }
 
-export default function MatchModal(props: ModalProps)
-{
+export default function MatchModal(props: ModalProps) {
     // Default Behaviour
     if (!props.isVisible)
         return null;
-            
+
     // Grab Match Data
     let match = BlitzDB.getMatch(props.matchID);
-    if (!(match))
-    {
+    if (!(match)) {
         Alert.alert("Error", "There was an error grabbing the data from that match. Try re-downloading TBA data then try again.");
         props.setVisible(false);
         return null;
@@ -42,7 +39,7 @@ export default function MatchModal(props: ModalProps)
     // Return Modal
     return (
         <Modal setVisible={props.setVisible}>
-                
+
             <Title>{match.name}</Title>
             <Subtitle>{match.description}</Subtitle>
 
@@ -52,7 +49,7 @@ export default function MatchModal(props: ModalProps)
                 iconType={"binoculars"}
                 title={"Scout Match"}
                 subtitle={"Scout this match"}
-                onPress={() => {}} />
+                onPress={() => { }} />
 
             <StandardButton
                 iconType={"globe"}

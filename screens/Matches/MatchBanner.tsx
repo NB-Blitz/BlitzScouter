@@ -4,13 +4,11 @@ import { BlitzDB } from "../../api/BlitzDB";
 import StandardButton from "../../components/common/StandardButton";
 import MatchModal from "./MatchModal";
 
-interface MatchBannerProps
-{
+interface MatchBannerProps {
     matchID: string;
 }
 
-export default function MatchBanner(props: MatchBannerProps)
-{
+export default function MatchBanner(props: MatchBannerProps) {
     const [isVisible, setVisible] = React.useState(false);
 
     let match = BlitzDB.getMatch(props.matchID);
@@ -24,7 +22,7 @@ export default function MatchBanner(props: MatchBannerProps)
                 title={match.name}
                 subtitle={match.description}
                 onPress={() => { setVisible(true); }} />
-            
+
             <MatchModal
                 matchID={match.id}
                 isVisible={isVisible}

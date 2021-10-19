@@ -1,12 +1,10 @@
 /*   The Blue Alliance   */
-export interface TBATeam
-{
+export interface TBATeam {
     key: string;
     nickname: string;
     team_number: number;
 }
-export interface TBAMatch
-{
+export interface TBAMatch {
     alliances: {
         blue: {
             score: number;
@@ -24,13 +22,11 @@ export interface TBAMatch
     videos: any[];
     winning_alliance: string;
 }
-export interface TBAEvent
-{
+export interface TBAEvent {
     key: string;
     name: string;
 }
-export interface TBAMedia
-{
+export interface TBAMedia {
     details: {
         base64Image?: string;
         model_image?: string;
@@ -38,17 +34,21 @@ export interface TBAMedia
     direct_url?: string;
 }
 
+export interface TBAStatus {
+    is_datafeed_down: boolean;
+    max_season: number;
+    current_season: number;
+}
+
 /*   Database   */
-export interface Team
-{
+export interface Team {
     id: string;
     name: string;
     number: number;
     media: string[];
     comments: Comment[];
 }
-export interface Match
-{
+export interface Match {
     id: string;
     name: string;
     description: string;
@@ -58,36 +58,31 @@ export interface Match
     redTeamIDs: string[];
     comment: string;
 }
-export interface Event
-{
+export interface Event {
     id: string;
     matches: Match[];
     teams: string[];
 }
-export interface Comment
-{
+export interface Comment {
     isScanned: boolean;
     timestamp: number;
     text: string;
 }
 
 /*  Template  */
-export enum TemplateType
-{
+export enum TemplateType {
     Pit,
     Match
 }
 
-export enum ElementType
-{
+export enum ElementType {
     title,
     subtitle,
     text,
     hr
 }
 
-export interface ElementData
-{
+export interface ElementData {
     type: ElementType;
     label: string;
     options: any;

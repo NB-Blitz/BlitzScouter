@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { BlitzDB } from '../../api/BlitzDB';
+import { TemplateType } from '../../api/DBModels';
+import HorizontalBar from '../../components/common/HorizontalBar';
+import StandardButton from '../../components/common/StandardButton';
+import ScrollContainer from '../../components/containers/ScrollContainer';
 import DownloadingModal from './DownloadingModal';
 import RegionalModal from './RegionalModal';
-import { BlitzDB } from '../../api/BlitzDB';
-import ScrollContainer from '../../components/containers/ScrollContainer';
-import HorizontalBar from '../../components/common/HorizontalBar';
 import TemplateModal from './Template/TemplateModal';
-import { TemplateType } from '../../api/DBModels';
-import StandardButton from '../../components/common/StandardButton';
+import YearModal from './YearModal';
 
-export default function SettingsScreen()
-{
+export default function SettingsScreen() {
+    const [yearModalVisible, setYearModalVisible] = React.useState(false);
     const [regionalModalVisible, setRegionalModalVisible] = React.useState(false);
     const [pitTemplateModalVisible, setPitTemplateModalVisible] = React.useState(false);
     const [matchTemplateModalVisible, setMatchTemplateModalVisible] = React.useState(false);
@@ -20,24 +20,31 @@ export default function SettingsScreen()
         <ScrollContainer>
 
             {/* Data Buttons */}
-            {BlitzDB.event ? 
+            {BlitzDB.event ?
                 <StandardButton
                     iconType={"cloud-download"}
                     title={"Re-Download Data"}
                     subtitle={"Re-downloads all the data from TBA"}
                     onPress={() => { BlitzDB.downloadAll(BlitzDB.event ? BlitzDB.event.id : "", setDownloadStatus); }}
                 />
-            : null}
+                : null}
+
+            <StandardButton
+                iconType={"calendar"}
+                title={"Change Year"}
+                subtitle={"Changes the year for practice & testing"}
+                onPress={() => { setYearModalVisible(true); }} />
 
             <StandardButton
                 iconType={"map-marker"}
                 title={(BlitzDB.event ? "Change" : "Set") + " Regional"}
-                subtitle={"Downloads regional data from TBA"} 
+                subtitle={"Downloads regional data from TBA"}
                 onPress={() => { setRegionalModalVisible(true); }} />
+
             <StandardButton
                 iconType={"trash"}
                 title={"Clear All Data"}
-                subtitle={"Wipes all data on your device"} 
+                subtitle={"Wipes all data on your device"}
                 onPress={() => { BlitzDB.deleteAll(true); }} />
 
             <HorizontalBar />
@@ -46,21 +53,22 @@ export default function SettingsScreen()
             <StandardButton
                 iconType={"pencil-square-o"}
                 title={"Edit Pit Scouting"}
-                subtitle={"Adjust the pit scouting template"} 
+                subtitle={"Adjust the pit scouting template"}
                 onPress={() => { setPitTemplateModalVisible(true); }} />
             <StandardButton
                 iconType={"pencil-square-o"}
                 title={"Edit Match Scouting"}
-                subtitle={"Adjust the match scouting template"} 
+                subtitle={"Adjust the match scouting template"}
                 onPress={() => { setMatchTemplateModalVisible(true); }} />
             <StandardButton
                 iconType={"user"}
                 title={"Assign Default Team"}
-                subtitle={"Assign the Default Team to Scout"} 
-                onPress={() => {}} />
+                subtitle={"Assign the Default Team to Scout"}
+                onPress={() => { }} />
             <HorizontalBar />
 
             {/* Modals */}
+            <YearModal isVisible={yearModalVisible} setVisible={setYearModalVisible} />
             <RegionalModal isVisible={regionalModalVisible} setVisible={setRegionalModalVisible} />
             <TemplateModal type={TemplateType.Pit} setVisible={setPitTemplateModalVisible} isVisible={pitTemplateModalVisible} />
             <TemplateModal type={TemplateType.Match} setVisible={setMatchTemplateModalVisible} isVisible={matchTemplateModalVisible} />

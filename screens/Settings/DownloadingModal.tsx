@@ -4,13 +4,11 @@ import DarkBackground from "../../components/common/DarkBackground";
 import Subtitle from "../../components/text/Subtitle";
 import Title from "../../components/text/Title";
 
-interface ModalProps
-{
+interface ModalProps {
     status: string;
 }
 
-export default function DownloadingModal(props: ModalProps)
-{
+export default function DownloadingModal(props: ModalProps) {
 
     // Return Modal
     return (
@@ -18,11 +16,11 @@ export default function DownloadingModal(props: ModalProps)
             animationType="slide"
             transparent={true}
             visible={props.status !== ""} >
-            
+
             <DarkBackground isTransparent={true} />
-            
+
             <View style={styles.modal}>
-                
+
                 <Title>Downloading</Title>
                 <Subtitle>{props.status}</Subtitle>
 

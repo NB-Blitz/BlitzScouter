@@ -6,16 +6,14 @@ import { TBA } from "./TBA";
 const BASE64_PREFIX = "data:image/png;base64, ";
 const MATCH_TYPES = ["qm", "qf", "sf", "f"];
 
-export class BlitzDB
-{
+export class BlitzDB {
     static event?: Event;
     static currentTeamIDs: string[] = [];
     static teams: Team[] = [];
     static templates: Record<TemplateType, ScoutingTemplate> = [[], []];
     static eventEmitter = new NativeEventEmitter();
 
-    static async downloadAll(eventID: string, setDownloadStatus: Function)
-    {
+    static async downloadAll(eventID: string, setDownloadStatus: Function) {
         BlitzDB.event = {
             id: eventID,
             matches: [],
@@ -25,26 +23,22 @@ export class BlitzDB
         // Teams
         setDownloadStatus("Downloading Team Roster...");
         let success1 = await BlitzDB.downloadTeams();
-        if (!success1)
-        {
+        if (!success1) {
             setDownloadStatus("");
             return;
         }
 
-        
+
         // Team Media
         let teamCount = 0;
         BlitzDB._loadCurrentTeams();
-        for (let teamID of BlitzDB.currentTeamIDs)
-        {
+        for (let teamID of BlitzDB.currentTeamIDs) {
             teamCount++;
             setDownloadStatus("Downloading Team Media... (" + teamCount + "/" + BlitzDB.event.teams.length + ")");
 
             let mediaList = await TBA.getTeamMedia(teamID);
-            if (mediaList)
-            {
-                for (let media of mediaList)
-                {
+            if (mediaList) {
+                for (let media of mediaList) {
                     // Get Image Data
                     let imageData: string | undefined;
                     if (media.details.base64Image)
@@ -55,8 +49,7 @@ export class BlitzDB
                         imageData = media.direct_url;
 
                     // Prevent Duplicate Images
-                    if (imageData)
-                    {
+                    if (imageData) {
                         let team = BlitzDB.getTeam(teamID);
                         if (team)
                             if (!team.media.find(media => media === imageData))
@@ -69,8 +62,7 @@ export class BlitzDB
         // Matches
         setDownloadStatus("Downloading Match List...");
         let success2 = await BlitzDB.downloadMatches();
-        if (!success2)
-        {
+        if (!success2) {
             setDownloadStatus("");
             return;
         }
@@ -84,21 +76,18 @@ export class BlitzDB
         Alert.alert("Success", "Successfully downloaded data from The Blue Alliance.");
     }
 
-    static async downloadTeams(): Promise<boolean>
-    {
+    static async downloadTeams(): Promise<boolean> {
         if (!BlitzDB.event)
             return false;
-        
+
         let tbaTeams = await TBA.getTeams(BlitzDB.event.id);
         if (!tbaTeams)
             return false;
-        
+
         tbaTeams.sort((a, b) => a.team_number - b.team_number);
-        for (let tbaTeam of tbaTeams)
-        {
+        for (let tbaTeam of tbaTeams) {
             let existingTeam = BlitzDB.getTeam(tbaTeam.key);
-            if (!(existingTeam))
-            {
+            if (!(existingTeam)) {
                 BlitzDB.teams.push({
                     id: tbaTeam.key,
                     name: tbaTeam.nickname,
@@ -112,24 +101,21 @@ export class BlitzDB
         return true;
     }
 
-    static async downloadMatches(): Promise<boolean>
-    {
+    static async downloadMatches(): Promise<boolean> {
         if (!BlitzDB.event)
             return false;
-        
+
         // Get Matches
         let tbaMatches = await TBA.getMatches(BlitzDB.event.id)
         if (!tbaMatches)
             return false;
-        
+
         // Parse Matches
         BlitzDB.event.matches = [];
-        for (let tbaMatch of tbaMatches)
-        {
+        for (let tbaMatch of tbaMatches) {
             // Match Name
             let matchName = tbaMatch.comp_level + "-" + tbaMatch.match_number;
-            switch (tbaMatch.comp_level)
-            {
+            switch (tbaMatch.comp_level) {
                 case "qm":
                     matchName = "Qualification " + tbaMatch.match_number;
                     break;
@@ -146,18 +132,16 @@ export class BlitzDB
 
             // Match Description / Teams
             let matchDesc = "";
-            for (let teamKey of tbaMatch.alliances.blue.team_keys)
-            {
+            for (let teamKey of tbaMatch.alliances.blue.team_keys) {
                 let teamNumber = parseInt(teamKey.substring(3));
                 matchDesc += teamNumber + " ";
             }
             matchDesc += " -  "
-            for (let teamKey of tbaMatch.alliances.red.team_keys)
-            {
+            for (let teamKey of tbaMatch.alliances.red.team_keys) {
                 let teamNumber = parseInt(teamKey.substring(3));
                 matchDesc += teamNumber + " ";
             }
-            
+
             // Add to DB
             BlitzDB.event.matches.push({
                 id: tbaMatch.key,
@@ -172,18 +156,16 @@ export class BlitzDB
         }
 
         // Sort
-        BlitzDB.event.matches.sort((a, b) => 
+        BlitzDB.event.matches.sort((a, b) =>
             (a.number + MATCH_TYPES.indexOf(a.compLevel) * 500) - (b.number + MATCH_TYPES.indexOf(b.compLevel) * 500)
         );
-        
+
         return true;
     }
 
-    static addTeamMedia(teamID: string, imageData: string)
-    {
+    static addTeamMedia(teamID: string, imageData: string) {
         let team = BlitzDB.getTeam(teamID);
-        if (team)
-        {
+        if (team) {
             team.media.push(BASE64_PREFIX + imageData);
             BlitzDB.save();
             BlitzDB.eventEmitter.emit("mediaUpdate");
@@ -191,11 +173,9 @@ export class BlitzDB
         }
     }
 
-    static removeTeamMedia(teamID: string, mediaIndex: number)
-    {
+    static removeTeamMedia(teamID: string, mediaIndex: number) {
         let team = BlitzDB.getTeam(teamID);
-        if (team)
-        {
+        if (team) {
             team.media.splice(mediaIndex, 1);
             BlitzDB.save();
             BlitzDB.eventEmitter.emit("mediaUpdate");
@@ -203,11 +183,9 @@ export class BlitzDB
         }
     }
 
-    static swapTeamMedia(teamID: string, mediaIndex1: number, mediaIndex2?: number)
-    {
+    static swapTeamMedia(teamID: string, mediaIndex1: number, mediaIndex2?: number) {
         let team = BlitzDB.getTeam(teamID);
-        if (team)
-        {
+        if (team) {
             if (mediaIndex2 === undefined)
                 mediaIndex2 = team.media.length - 1;
             let tempMedia = team.media[mediaIndex1];
@@ -219,22 +197,23 @@ export class BlitzDB
         }
     }
 
-    static getTeam(teamID: string): Team | undefined
-    {
+    static getTeam(teamID: string): Team | undefined {
         return BlitzDB.teams.find(team => team.id === teamID);
     }
 
-    static getMatch(matchID: string): Match | undefined
-    {
+    static getMatch(matchID: string): Match | undefined {
         if (BlitzDB.event)
             return BlitzDB.event.matches.find(match => match.id === matchID);
     }
 
-    static getTeamMatches(teamID: string): Match[]
-    {
+    static setYear(year: number) {
+        TBA.year = year;
+    }
+
+    static getTeamMatches(teamID: string): Match[] {
         if (!(this.event))
             return [];
-        
+
         let matchList: Match[] = [];
         for (let match of this.event.matches)
             if (match.blueTeamIDs.includes(teamID) || match.redTeamIDs.includes(teamID))
@@ -242,24 +221,20 @@ export class BlitzDB
         return matchList;
     }
 
-    static exportComments(): string
-    {
+    static exportComments(): string {
         let data = "";
-        for (let team of BlitzDB.teams)
-        {
+        for (let team of BlitzDB.teams) {
             if (team.comments.length > 0)
                 data += ";;" + team.id;
-            for (let comment of team.comments)
-            {
+            for (let comment of team.comments) {
                 data += "::" + comment.text;
             }
         }
-        
+
         return data;
     }
 
-    static async loadSave()
-    {
+    static async loadSave() {
         let eventData = await AsyncStorage.getItem('event_data');
         if (eventData)
             BlitzDB.event = JSON.parse(eventData);
@@ -271,8 +246,7 @@ export class BlitzDB
         BlitzDB._loadCurrentTeams();
     }
 
-    static async save()
-    {
+    static async save() {
         if (BlitzDB.event)
             await AsyncStorage.setItem('event_data', JSON.stringify(BlitzDB.event));
         else
@@ -280,12 +254,10 @@ export class BlitzDB
         await AsyncStorage.setItem('team_data', JSON.stringify(BlitzDB.teams));
     }
 
-    static async deleteAll(alert: boolean)
-    {
+    static async deleteAll(alert: boolean) {
 
-        if (alert)
-        {
-            Alert.alert( "Are you sure?", "This will delete all scouting data from your device. Are you sure you want to continue?", 
+        if (alert) {
+            Alert.alert("Are you sure?", "This will delete all scouting data from your device. Are you sure you want to continue?",
                 [
                     {
                         text: "Confirm",
@@ -295,33 +267,28 @@ export class BlitzDB
                             });
                         }
                     },
-                    {  text: "Cancel", style: "cancel" }
+                    { text: "Cancel", style: "cancel" }
                 ], { cancelable: true }
             );
         }
-        else
-        {
+        else {
             await this._deleteAll();
         }
     }
 
-    static async _deleteAll()
-    {
+    static async _deleteAll() {
         BlitzDB.event = undefined;
         BlitzDB.currentTeamIDs = [];
         BlitzDB.teams = [];
         await BlitzDB.save();
     }
 
-    static _loadCurrentTeams()
-    {
+    static _loadCurrentTeams() {
         BlitzDB.currentTeamIDs = [];
 
-        if (BlitzDB.event)
-        {
-            for (let teamID of BlitzDB.event.teams)
-            {
-                 BlitzDB.currentTeamIDs.push(teamID);
+        if (BlitzDB.event) {
+            for (let teamID of BlitzDB.event.teams) {
+                BlitzDB.currentTeamIDs.push(teamID);
             }
         }
     }

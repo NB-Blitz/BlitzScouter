@@ -4,37 +4,34 @@ import { BlitzDB } from "../../api/BlitzDB";
 import StandardButton from "../../components/common/StandardButton";
 import TeamModal from "./TeamModal";
 
-interface TeamBannerProps
-{
+interface TeamBannerProps {
     teamID: string;
 }
 
-export default function TeamBanner(props: TeamBannerProps)
-{
+export default function TeamBanner(props: TeamBannerProps) {
     const [isVisible, setVisible] = React.useState(false);
 
     let team = BlitzDB.getTeam(props.teamID);
-    if (!team)
-    {
+    if (!team) {
         console.log("Could not find Team ID " + props.teamID);
         return null;
     }
 
     return (
         <View>
-        
+
             <TeamModal
                 teamID={team.id}
                 isVisible={isVisible}
                 setVisible={setVisible} />
-            
+
             <StandardButton
                 iconData={team.media.length > 0 ? team.media[0] : undefined}
                 iconType={team.media.length > 0 ? undefined : "ban"}
                 title={team.name}
                 subtitle={team.number.toString()}
                 onPress={() => { setVisible(true); }} />
-        
+
         </View>
     );
 }

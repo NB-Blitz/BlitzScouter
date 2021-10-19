@@ -1,47 +1,42 @@
 import { FontAwesome } from '@expo/vector-icons';
 import * as React from 'react';
-import { Alert, Image, ScrollView, StyleSheet, View } from "react-native";
+import { Alert, Image, StyleSheet, View } from "react-native";
 import { BlitzDB } from '../../api/BlitzDB';
-import Text from '../../components/text/Text';
 import Button from '../../components/common/Button';
+import Text from '../../components/text/Text';
 import TeamModal from '../Teams/TeamModal';
 
-interface TeamThumbnailProps
-{
+interface TeamThumbnailProps {
     teamID: string
 }
 
-export default function TeamPreview(props: TeamThumbnailProps)
-{
+export default function TeamPreview(props: TeamThumbnailProps) {
     const [isVisible, setVisible] = React.useState(false);
 
     // Grab Team Data
     let team = BlitzDB.getTeam(props.teamID);
-    if (!(team))
-    {
+    if (!(team)) {
         Alert.alert("Error", "There was an error grabbing the data from that team. Try re-downloading TBA data then try again.");
         return null;
     }
 
     // Grab Team Media
     let mediaIcon: JSX.Element;
-    if (team.media.length > 0)
-    {
+    if (team.media.length > 0) {
         let preview = team.media[team.media.length - 1];
         mediaIcon = (
             <Image
                 style={styles.thumbnail}
-                source={{uri: preview}}
+                source={{ uri: preview }}
                 key={Math.random()} />
         );
     }
-    else
-    {
+    else {
         mediaIcon = (
             <View style={styles.thumbnail}>
                 <FontAwesome
                     name="ban"
-                    size={50} 
+                    size={50}
                     color={"#aaa"} />
             </View>
         );
@@ -59,11 +54,11 @@ export default function TeamPreview(props: TeamThumbnailProps)
                 setVisible={setVisible} />
 
             {mediaIcon}
-            
+
             <View style={styles.subContainer}>
                 <Text style={styles.teamName}>{team.name}</Text>
                 <Text style={styles.teamDesc}>{team.number}</Text>
-                
+
             </View>
         </Button>
     );

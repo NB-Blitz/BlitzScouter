@@ -1,26 +1,22 @@
 import React from "react";
-import { Alert, ScrollView, StyleSheet, View } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { BlitzDB } from "../../api/BlitzDB";
 import { TBAEvent } from "../../api/DBModels";
 import { TBA } from "../../api/TBA";
 import Button from "../../components/common/Button";
-import DarkBackground from "../../components/common/DarkBackground";
-import HorizontalBar from "../../components/common/HorizontalBar";
 import Modal from "../../components/common/Modal";
 import Subtitle from "../../components/text/Subtitle";
 import Text from "../../components/text/Text";
 import Title from "../../components/text/Title";
 import DownloadingModal from "./DownloadingModal";
 
-interface ModalProps
-{
+interface ModalProps {
     isVisible: boolean;
     setVisible: (isVisible: boolean) => void;
 }
 
-export default function RegionalModal(props: ModalProps)
-{
+export default function RegionalModal(props: ModalProps) {
     const [searchTerm, updateSearch] = React.useState("");
     const [regionalList, updateRegionals] = React.useState([] as TBAEvent[]);
     const [downloadStatus, setDownloadStatus] = React.useState("");
@@ -31,13 +27,12 @@ export default function RegionalModal(props: ModalProps)
 
     // Generate List
     let regionalsDisplay: JSX.Element[] = [];
-    if (regionalList.length <= 0 && props.isVisible)
-    {
+    if (regionalList.length <= 0 && props.isVisible) {
         TBA.getEvents().then((events) => {
             if (events)
                 updateRegionals(events);
         }).catch(() => {
-            Alert.alert("Error","Could not connect to The Blue Alliance");
+            Alert.alert("Error", "Could not connect to The Blue Alliance");
         });
 
         regionalsDisplay.push(
@@ -46,13 +41,10 @@ export default function RegionalModal(props: ModalProps)
             </Text>
         );
     }
-    else
-    {
-        for (let regional of regionalList)
-        {
+    else {
+        for (let regional of regionalList) {
             let key = regional.key;
-            if (regional.name.toLowerCase().includes(searchTerm))
-            {
+            if (regional.name.toLowerCase().includes(searchTerm)) {
                 regionalsDisplay.push(
                     <Button
                         key={key}
@@ -75,11 +67,11 @@ export default function RegionalModal(props: ModalProps)
         <Modal setVisible={props.setVisible}>
             <Title>Set Regional</Title>
             <Subtitle>Select the upcoming regional:</Subtitle>
-            <TextInput 
+            <TextInput
                 placeholder="Search..."
                 placeholderTextColor="#fff"
                 style={styles.textInput}
-                onChangeText={(text) => {updateSearch(text.toLowerCase())}}
+                onChangeText={(text) => { updateSearch(text.toLowerCase()) }}
             />
             {regionalsDisplay}
 
@@ -94,7 +86,7 @@ const styles = StyleSheet.create({
         marginLeft: 4,
         flexDirection: "row"
     },
-    regionalText:{
+    regionalText: {
         fontSize: 16
     },
     textInput: {

@@ -1,19 +1,17 @@
 import * as React from 'react';
 import { Alert } from 'react-native';
 import { BlitzDB } from '../../../api/BlitzDB';
-import { ElementData, TemplateType } from '../../../api/DBModels';
+import { TemplateType } from '../../../api/DBModels';
 import HorizontalBar from '../../../components/common/HorizontalBar';
 import Modal from '../../../components/common/Modal';
 import StandardButton from '../../../components/common/StandardButton';
 import ScoutingElement from '../../../components/elements/ScoutingElement';
-import TextElement from '../../../components/elements/TextElement';
 import Subtitle from '../../../components/text/Subtitle';
 import Text from '../../../components/text/Text';
 import Title from '../../../components/text/Title';
 import ElementChooserModal from './ElementChooserModal';
 
-interface ModalProps
-{
+interface ModalProps {
     isVisible: boolean;
     setVisible: (isVisible: boolean) => void;
     type: TemplateType;
@@ -24,8 +22,7 @@ const StringTypes = [
     "Match"
 ];
 
-export default function TemplateModal(props: ModalProps)
-{
+export default function TemplateModal(props: ModalProps) {
     const [isVisible, setVisible] = React.useState(false);
     const [version, setVersion] = React.useState(0);
 
@@ -37,23 +34,20 @@ export default function TemplateModal(props: ModalProps)
     const stringType = StringTypes[props.type];
     const template = BlitzDB.templates[props.type];
     let elementList: JSX.Element[] = [];
-    if (template.length > 0)
-    {
-        for (let elementData of template)
-        {
+    if (template.length > 0) {
+        for (let elementData of template) {
             elementList.push(
                 <ScoutingElement data={elementData} key={Math.random()} />
             );
         }
     }
-    else
-    {
-        elementList.push( <Text key={"0"}>There are no elements yet. Add an element to scout below</Text> );
+    else {
+        elementList.push(<Text key={"0"}>There are no elements yet. Add an element to scout below</Text>);
     }
 
     // Clear Behaviour
     const clearTemplate = () => {
-        Alert.alert( "Are you sure?", "This will delete all elements in this template. Are you sure you want to continue?", 
+        Alert.alert("Are you sure?", "This will delete all elements in this template. Are you sure you want to continue?",
             [
                 {
                     text: "Confirm",
@@ -62,7 +56,7 @@ export default function TemplateModal(props: ModalProps)
                         setVersion(version + 1);
                     }
                 },
-                {  text: "Cancel", style: "cancel" }
+                { text: "Cancel", style: "cancel" }
             ], { cancelable: true }
         );
     }

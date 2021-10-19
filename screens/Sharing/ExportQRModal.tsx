@@ -1,18 +1,16 @@
 import LZString from 'lz-string';
 import * as React from 'react';
-import { Dimensions, Image, Modal, StyleSheet, View } from 'react-native';
+import { Dimensions, Modal, StyleSheet, View } from 'react-native';
 import QRCode from 'react-qr-code';
 import { BlitzDB } from '../../api/BlitzDB';
 import DarkBackground from '../../components/common/DarkBackground';
 
-export interface ModalProps
-{
+export interface ModalProps {
     isVisible: boolean;
     setVisible: (isVisible: boolean) => void;
 }
 
-export default function ExportQRModal(props: ModalProps)
-{
+export default function ExportQRModal(props: ModalProps) {
     // Default Behaviour
     if (!props.isVisible)
         return null;
@@ -29,7 +27,7 @@ export default function ExportQRModal(props: ModalProps)
 
             <View style={styles.container}>
                 <DarkBackground isTransparent={false} />
-                
+
                 <QRCode
                     value={compressedData}
                     size={qrSize}
