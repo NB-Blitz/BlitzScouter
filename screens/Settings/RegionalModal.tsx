@@ -56,7 +56,7 @@ export default function RegionalModal(props: ModalProps)
                 regionalsDisplay.push(
                     <Button
                         key={key}
-                        onPress={() => { BlitzDB.download(key, setDownloadStatus).then(() => { props.setVisible(false); }); }}
+                        onPress={() => { BlitzDB.downloadAll(key, setDownloadStatus).then(() => { props.setVisible(false); }); }}
                         style={styles.regionalButton}>
 
                         <Text style={styles.regionalText}>

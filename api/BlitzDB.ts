@@ -14,7 +14,7 @@ export class BlitzDB
     static templates: Record<TemplateType, ScoutingTemplate> = [[], []];
     static eventEmitter = new NativeEventEmitter();
 
-    static async download(eventID: string, setDownloadStatus: Function)
+    static async downloadAll(eventID: string, setDownloadStatus: Function)
     {
         BlitzDB.event = {
             id: eventID,
@@ -24,33 +24,13 @@ export class BlitzDB
 
         // Teams
         setDownloadStatus("Downloading Team Roster...");
-        let tbaTeams = await TBA.getTeams(eventID);
-        if (tbaTeams)
-        {
-            setDownloadStatus("Sorting Team Roster...");
-            tbaTeams.sort((a, b) => a.team_number - b.team_number);
-            for (let tbaTeam of tbaTeams)
-            {
-                let existingTeam = BlitzDB.getTeam(tbaTeam.key);
-                if (!(existingTeam))
-                {
-                    BlitzDB.teams.push({
-                        id: tbaTeam.key,
-                        name: tbaTeam.nickname,
-                        number: tbaTeam.team_number,
-                        media: [],
-                        comments: []
-                    });
-                }
-
-                BlitzDB.event.teams.push(tbaTeam.key);
-            }
-        }
-        else
+        let success1 = await BlitzDB.downloadTeams();
+        if (!success1)
         {
             setDownloadStatus("");
             return;
         }
+
         
         // Team Media
         let teamCount = 0;
@@ -58,7 +38,7 @@ export class BlitzDB
         for (let teamID of BlitzDB.currentTeamIDs)
         {
             teamCount++;
-            setDownloadStatus("Downloading Team Media... (" + teamCount + "/" + tbaTeams.length + ")");
+            setDownloadStatus("Downloading Team Media... (" + teamCount + "/" + BlitzDB.event.teams.length + ")");
 
             let mediaList = await TBA.getTeamMedia(teamID);
             if (mediaList)
@@ -88,63 +68,8 @@ export class BlitzDB
 
         // Matches
         setDownloadStatus("Downloading Match List...");
-        let tbaMatches = await TBA.getMatches(eventID);
-        if (tbaMatches)
-        {
-            setDownloadStatus("Sorting Match List");
-            for (let tbaMatch of tbaMatches)
-            {
-                // Match Name
-                let matchName = tbaMatch.comp_level + "-" + tbaMatch.match_number;
-                switch (tbaMatch.comp_level)
-                {
-                    case "qm":
-                        matchName = "Qualification " + tbaMatch.match_number;
-                        break;
-                    case "qf":
-                        matchName = "Quarter-Finals " + tbaMatch.match_number;
-                        break;
-                    case "sf":
-                        matchName = "Semi-Finals " + tbaMatch.match_number;
-                        break;
-                    case "f":
-                        matchName = "Finals " + tbaMatch.match_number;
-                        break;
-                }
-
-                // Match Description / Teams
-                let matchDesc = "";
-                for (let teamKey of tbaMatch.alliances.blue.team_keys)
-                {
-                    let teamNumber = parseInt(teamKey.substring(3));
-                    matchDesc += teamNumber + " ";
-                }
-                matchDesc += " -  "
-                for (let teamKey of tbaMatch.alliances.red.team_keys)
-                {
-                    let teamNumber = parseInt(teamKey.substring(3));
-                    matchDesc += teamNumber + " ";
-                }
-
-
-                BlitzDB.event.matches.push({
-                    id: tbaMatch.key,
-                    name: matchName,
-                    description: matchDesc,
-                    number: tbaMatch.match_number,
-                    compLevel: tbaMatch.comp_level,
-                    blueTeamIDs: tbaMatch.alliances.blue.team_keys,
-                    redTeamIDs: tbaMatch.alliances.red.team_keys,
-                    comment: ""
-                });
-            }
-
-            // Sort
-            BlitzDB.event.matches.sort((a, b) => 
-                (a.number + MATCH_TYPES.indexOf(a.compLevel) * 500) - (b.number + MATCH_TYPES.indexOf(b.compLevel) * 500)
-            );
-        }
-        else
+        let success2 = await BlitzDB.downloadMatches();
+        if (!success2)
         {
             setDownloadStatus("");
             return;
@@ -157,6 +82,101 @@ export class BlitzDB
         // Exit
         setDownloadStatus("");
         Alert.alert("Success", "Successfully downloaded data from The Blue Alliance.");
+    }
+
+    static async downloadTeams(): Promise<boolean>
+    {
+        if (!BlitzDB.event)
+            return false;
+        
+        let tbaTeams = await TBA.getTeams(BlitzDB.event.id);
+        if (!tbaTeams)
+            return false;
+        
+        tbaTeams.sort((a, b) => a.team_number - b.team_number);
+        for (let tbaTeam of tbaTeams)
+        {
+            let existingTeam = BlitzDB.getTeam(tbaTeam.key);
+            if (!(existingTeam))
+            {
+                BlitzDB.teams.push({
+                    id: tbaTeam.key,
+                    name: tbaTeam.nickname,
+                    number: tbaTeam.team_number,
+                    media: [],
+                    comments: []
+                });
+            }
+            BlitzDB.event.teams.push(tbaTeam.key);
+        }
+        return true;
+    }
+
+    static async downloadMatches(): Promise<boolean>
+    {
+        if (!BlitzDB.event)
+            return false;
+        
+        // Get Matches
+        let tbaMatches = await TBA.getMatches(BlitzDB.event.id)
+        if (!tbaMatches)
+            return false;
+        
+        // Parse Matches
+        BlitzDB.event.matches = [];
+        for (let tbaMatch of tbaMatches)
+        {
+            // Match Name
+            let matchName = tbaMatch.comp_level + "-" + tbaMatch.match_number;
+            switch (tbaMatch.comp_level)
+            {
+                case "qm":
+                    matchName = "Qualification " + tbaMatch.match_number;
+                    break;
+                case "qf":
+                    matchName = "Quarter-Finals " + tbaMatch.match_number;
+                    break;
+                case "sf":
+                    matchName = "Semi-Finals " + tbaMatch.match_number;
+                    break;
+                case "f":
+                    matchName = "Finals " + tbaMatch.match_number;
+                    break;
+            }
+
+            // Match Description / Teams
+            let matchDesc = "";
+            for (let teamKey of tbaMatch.alliances.blue.team_keys)
+            {
+                let teamNumber = parseInt(teamKey.substring(3));
+                matchDesc += teamNumber + " ";
+            }
+            matchDesc += " -  "
+            for (let teamKey of tbaMatch.alliances.red.team_keys)
+            {
+                let teamNumber = parseInt(teamKey.substring(3));
+                matchDesc += teamNumber + " ";
+            }
+            
+            // Add to DB
+            BlitzDB.event.matches.push({
+                id: tbaMatch.key,
+                name: matchName,
+                description: matchDesc,
+                number: tbaMatch.match_number,
+                compLevel: tbaMatch.comp_level,
+                blueTeamIDs: tbaMatch.alliances.blue.team_keys,
+                redTeamIDs: tbaMatch.alliances.red.team_keys,
+                comment: ""
+            });
+        }
+
+        // Sort
+        BlitzDB.event.matches.sort((a, b) => 
+            (a.number + MATCH_TYPES.indexOf(a.compLevel) * 500) - (b.number + MATCH_TYPES.indexOf(b.compLevel) * 500)
+        );
+        
+        return true;
     }
 
     static addTeamMedia(teamID: string, imageData: string)

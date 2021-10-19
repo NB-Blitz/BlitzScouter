@@ -1,11 +1,26 @@
 import * as React from 'react';
-import { ScrollView, View } from "react-native";
+import { RefreshControl, ScrollView, StyleProp, ToastAndroid, View, ViewStyle } from "react-native";
 import FadeIn from '../common/FadeIn';
 
 export type ViewProps = View['props'];
+interface ScrollContainerProps
+{
+    children: React.ReactNode
+    onRefresh?: () => Promise<void>;
+}
 
-export default function ScrollContainer(props: ViewProps) {
-    const { style, ...otherProps } = props;
+export default function ScrollContainer(props: ScrollContainerProps)
+{
+    const [isRefreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+
+        if (props.onRefresh !== undefined)
+            props.onRefresh().then(() => setRefreshing(false));
+        else
+            setRefreshing(false);
+    }, []);
 
     return (
         <FadeIn>
@@ -15,9 +30,14 @@ export default function ScrollContainer(props: ViewProps) {
                     paddingLeft: 20,
                     paddingRight: 20,
                     backgroundColor: "#0a0a0a"
-                }}>
-                    
-                <View style={[{ marginTop: 10 }, style]} {...otherProps} />
+                }}
+                refreshControl={
+                    props.onRefresh ? <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} /> : undefined
+                }
+            >
+                <View style={{ marginTop: 10 }}>
+                    {props.children}
+                </View>
             </ScrollView>
         </FadeIn>
     );

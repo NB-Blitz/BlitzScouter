@@ -23,16 +23,16 @@ export default function SettingsScreen()
             {BlitzDB.event ? 
                 <StandardButton
                     iconType={"cloud-download"}
-                    title={"Update Data"}
-                    subtitle={"Re-download data from TBA"}
-                    onPress={() => { BlitzDB.download(BlitzDB.event ? BlitzDB.event.id : "", setDownloadStatus); }}
+                    title={"Re-Download Data"}
+                    subtitle={"Re-downloads all the data from TBA"}
+                    onPress={() => { BlitzDB.downloadAll(BlitzDB.event ? BlitzDB.event.id : "", setDownloadStatus); }}
                 />
             : null}
 
             <StandardButton
                 iconType={"map-marker"}
                 title={(BlitzDB.event ? "Change" : "Set") + " Regional"}
-                subtitle={"Download regional data from TBA"} 
+                subtitle={"Downloads regional data from TBA"} 
                 onPress={() => { setRegionalModalVisible(true); }} />
             <StandardButton
                 iconType={"trash"}
