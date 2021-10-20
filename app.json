@@ -1,38 +1,38 @@
 {
-  "expo": {
-    "name": "Blitz Scouter",
-    "slug": "BlitzScouter",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "blitz",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#1e1e1e"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "org.team5148.blitzscouter",
-      "buildNumber": "1.0.0"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon.png",
-        "backgroundColor": "#1e1e1e"
-      },
-      "package": "org.team5148.blitzscouter",
-      "versionCode":1
-    },
-    "web": {
-      "favicon": "./assets/images/icon.png"
+    "expo": {
+        "name": "Blitz Scouter",
+        "slug": "BlitzScouter",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/images/icon.png",
+        "scheme": "blitz",
+        "userInterfaceStyle": "light",
+        "splash": {
+            "image": "./assets/images/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#1e1e1e"
+        },
+        "updates": {
+            "fallbackToCacheTimeout": 0
+        },
+        "assetBundlePatterns": [
+            "**/*"
+        ],
+        "ios": {
+            "supportsTablet": true,
+            "bundleIdentifier": "com.nbblitz.blitzscouter",
+            "buildNumber": "1.0.0"
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/images/icon.png",
+                "backgroundColor": "#1e1e1e"
+            },
+            "package": "com.nbblitz.blitzscouter",
+            "versionCode": 1
+        },
+        "web": {
+            "favicon": "./assets/images/icon.png"
+        }
     }
-  }
 }

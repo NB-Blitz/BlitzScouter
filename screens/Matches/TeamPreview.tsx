@@ -1,17 +1,17 @@
 import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/core';
 import * as React from 'react';
 import { Alert, Image, StyleSheet, View } from "react-native";
 import { BlitzDB } from '../../api/BlitzDB';
 import Button from '../../components/common/Button';
 import Text from '../../components/text/Text';
-import TeamModal from '../Teams/TeamModal';
 
 interface TeamThumbnailProps {
     teamID: string
 }
 
 export default function TeamPreview(props: TeamThumbnailProps) {
-    const [isVisible, setVisible] = React.useState(false);
+    const navigator = useNavigation();
 
     // Grab Team Data
     let team = BlitzDB.getTeam(props.teamID);
@@ -46,12 +46,7 @@ export default function TeamPreview(props: TeamThumbnailProps) {
     return (
         <Button
             style={styles.container}
-            onPress={() => { setVisible(true) }}>
-
-            <TeamModal
-                teamID={team.id}
-                isVisible={isVisible}
-                setVisible={setVisible} />
+            onPress={() => { navigator.navigate("Team", { teamID: team ? team.id : "" }) }} >
 
             {mediaIcon}
 
@@ -68,7 +63,7 @@ const styles = StyleSheet.create({
     container: {
         marginBottom: 10,
         flexDirection: "row",
-        height: 150
+        height: 200
     },
     subContainer: {
         width: "100%"
@@ -82,8 +77,8 @@ const styles = StyleSheet.create({
         backgroundColor: "black"
     },
     thumbnail: {
-        height: 150,
-        width: 150,
+        height: 200,
+        width: 200,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#444",
@@ -93,7 +88,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         textAlign: "left",
-        width: 150
+        width: 100
     },
     teamDesc: {
         color: "#bbb",

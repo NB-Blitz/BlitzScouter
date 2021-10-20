@@ -1,9 +1,11 @@
+import * as Application from 'expo-application';
 import * as React from 'react';
 import { BlitzDB } from '../../api/BlitzDB';
 import { TemplateType } from '../../api/DBModels';
 import HorizontalBar from '../../components/common/HorizontalBar';
 import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
+import Subtitle from '../../components/text/Subtitle';
 import DownloadingModal from './DownloadingModal';
 import RegionalModal from './RegionalModal';
 import TemplateModal from './Template/TemplateModal';
@@ -66,6 +68,7 @@ export default function SettingsScreen() {
                 subtitle={"Assign the Default Team to Scout"}
                 onPress={() => { }} />
             <HorizontalBar />
+            <Subtitle>Blitz Scouter v{Application.nativeApplicationVersion}</Subtitle>
 
             {/* Modals */}
             <YearModal isVisible={yearModalVisible} setVisible={setYearModalVisible} />

@@ -1,17 +1,17 @@
+import { useNavigation } from "@react-navigation/core";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { BlitzDB } from "../../api/BlitzDB";
 import StandardButton from "../../components/common/StandardButton";
-import MatchModal from "./MatchModal";
 
 interface MatchBannerProps {
     matchID: string;
 }
 
 export default function MatchBanner(props: MatchBannerProps) {
-    const [isVisible, setVisible] = React.useState(false);
+    const navigator = useNavigation();
 
-    let match = BlitzDB.getMatch(props.matchID);
+    const match = BlitzDB.getMatch(props.matchID);
     if (!match)
         return null;
 
@@ -21,12 +21,7 @@ export default function MatchBanner(props: MatchBannerProps) {
                 iconText={match.number.toString()}
                 title={match.name}
                 subtitle={match.description}
-                onPress={() => { setVisible(true); }} />
-
-            <MatchModal
-                matchID={match.id}
-                isVisible={isVisible}
-                setVisible={setVisible} />
+                onPress={() => { navigator.navigate("Match", { matchID: match.id }) }} />
         </View>
     );
 }

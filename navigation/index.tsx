@@ -3,9 +3,12 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
+import MatchScreen from '../screens/Match/MatchScreen';
 import MatchesScreen from '../screens/Matches/MatchesScreen';
 import SettingsScreen from '../screens/Settings/SettingsScreen';
 import SharingScreen from '../screens/Sharing/SharingScreen';
+import TeamScreen from '../screens/Team/TeamScreen';
+import TeamMatchesScreen from '../screens/TeamMatches/TeamMatchesScreen';
 import TeamsScreen from '../screens/Teams/TeamsScreen';
 import { RootStackParamList, RootTabParamList } from '../types';
 
@@ -22,7 +25,22 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
     return (
-        <Stack.Navigator screenOptions={{}}>
+        <Stack.Navigator initialRouteName={"Root"}>
+            <Stack.Screen
+                name="Team"
+                component={TeamScreen}
+                options={{ title: "Team Information" }} />
+
+            <Stack.Screen
+                name="Match"
+                component={MatchScreen}
+                options={{ title: "Match Information" }} />
+
+            <Stack.Screen
+                name="TeamMatches"
+                component={TeamMatchesScreen}
+                options={{ title: "Team Matches" }} />
+
             <Stack.Screen
                 name="Root"
                 component={BottomTabNavigator}
