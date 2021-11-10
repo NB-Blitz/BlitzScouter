@@ -5,10 +5,10 @@ export type TextProps = Text['props'];
 
 export default function Title(props: TextProps) {
     const { style, ...otherProps } = props;
-  
+
     return <Text style={[{
-                color: "#fff",
-                fontSize: 30,
-                fontWeight: 'bold'
-            }, style]} {...otherProps} />;
+        color: "#fff",
+        fontSize: 30,
+        fontWeight: 'bold'
+    }, style]} {...otherProps} />;
 }

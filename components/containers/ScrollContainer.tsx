@@ -1,16 +1,14 @@
 import * as React from 'react';
-import { RefreshControl, ScrollView, StyleProp, ToastAndroid, View, ViewStyle } from "react-native";
+import { RefreshControl, ScrollView, View } from "react-native";
 import FadeIn from '../common/FadeIn';
 
 export type ViewProps = View['props'];
-interface ScrollContainerProps
-{
+interface ScrollContainerProps {
     children: React.ReactNode
     onRefresh?: () => Promise<void>;
 }
 
-export default function ScrollContainer(props: ScrollContainerProps)
-{
+export default function ScrollContainer(props: ScrollContainerProps) {
     const [isRefreshing, setRefreshing] = React.useState(false);
 
     const onRefresh = React.useCallback(() => {

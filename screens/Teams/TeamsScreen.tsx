@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ToastAndroid } from 'react-native';
-import { BlitzDB } from '../../api/BlitzDB';
+import BlitzDB from '../../api/BlitzDB';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import Text from '../../components/text/Text';
 import TeamBanner from './TeamBanner';
@@ -10,7 +10,7 @@ export default function TeamsScreen() {
     let teamList: JSX.Element[] = [];
 
     const onRefresh = async () => {
-        let success = await BlitzDB.downloadTeams();
+        let success = await BlitzDB.teams.downloadEvent(BlitzDB.event.id, () => { });
         if (!success)
             ToastAndroid.show("Failed to connect to TBA", 1000);
         else
@@ -18,14 +18,18 @@ export default function TeamsScreen() {
         setVersion(version + 1);
     };
 
-    if (BlitzDB.event)
-        if (BlitzDB.currentTeamIDs.length > 0)
-            for (let teamID of BlitzDB.currentTeamIDs)
+
+
+    if (BlitzDB.event.isLoaded) {
+        if (BlitzDB.event.teamIDs.length > 0)
+            for (let teamID of BlitzDB.event.teamIDs)
                 teamList.push(<TeamBanner teamID={teamID} key={teamID} />);
         else
             teamList.push(<Text key={1}>This event has no team data posted yet! You can try refreshing by pulling down.</Text>);
-    else
+    }
+    else {
         teamList.push(<Text key={1}>Team data has not been downloaded from TBA yet. Download is available under settings</Text>);
+    }
 
     return (
         <ScrollContainer onRefresh={onRefresh}>

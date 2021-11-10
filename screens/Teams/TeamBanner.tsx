@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/core";
 import React from "react";
 import { View } from "react-native";
-import { BlitzDB } from "../../api/BlitzDB";
+import BlitzDB from "../../api/BlitzDB";
 import StandardButton from "../../components/common/StandardButton";
 
 interface TeamBannerProps {
@@ -11,7 +11,7 @@ interface TeamBannerProps {
 export default function TeamBanner(props: TeamBannerProps) {
     const navigator = useNavigation();
 
-    const team = BlitzDB.getTeam(props.teamID);
+    const team = BlitzDB.teams.get(props.teamID);
     if (!team) {
         console.log("Could not find Team ID " + props.teamID);
         return null;

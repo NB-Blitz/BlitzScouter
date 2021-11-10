@@ -5,10 +5,10 @@ export type TextProps = Text['props'];
 
 export default function Subtitle(props: TextProps) {
     const { style, ...otherProps } = props;
-  
+
     return <Text style={[{
-                color: "#bbb",
-                fontSize: 15,
-                fontWeight: 'bold'
-            }, style]} {...otherProps} />;
+        color: "#bbb",
+        fontSize: 15,
+        fontWeight: 'bold'
+    }, style]} {...otherProps} />;
 }

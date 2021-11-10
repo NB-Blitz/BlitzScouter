@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { BlitzDB } from '../../../api/BlitzDB';
-import { ElementType, TemplateType } from '../../../api/DBModels';
+import { ElementType, TemplateType } from '../../../api/models/TemplateModels';
 import HorizontalBar from '../../../components/common/HorizontalBar';
 import Modal from '../../../components/common/Modal';
 import StandardButton from '../../../components/common/StandardButton';
@@ -19,11 +18,11 @@ export default function ElementChooserModal(props: ModalProps) {
         return null;
 
     const chooseElement = (type: ElementType) => {
-        BlitzDB.templates[props.type].push({
+        /*BlitzDB.templates[props.type].push({
             type: type,
             label: "Element",
             options: {}
-        });
+        });*/ // TODO: Re-Implement Template DB
 
         props.setVisible(false);
     }

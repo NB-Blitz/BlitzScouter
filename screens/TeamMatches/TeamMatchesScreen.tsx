@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/core";
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { BlitzDB } from "../../api/BlitzDB";
+import BlitzDB from "../../api/BlitzDB";
 import Text from "../../components/text/Text";
 import MatchBanner from "../Matches/MatchBanner";
 

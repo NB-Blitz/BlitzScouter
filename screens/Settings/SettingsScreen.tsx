@@ -1,7 +1,7 @@
 import * as Application from 'expo-application';
 import * as React from 'react';
-import { BlitzDB } from '../../api/BlitzDB';
-import { TemplateType } from '../../api/DBModels';
+import BlitzDB from '../../api/BlitzDB';
+import { TemplateType } from '../../api/models/TemplateModels';
 import HorizontalBar from '../../components/common/HorizontalBar';
 import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
@@ -27,7 +27,7 @@ export default function SettingsScreen() {
                     iconType={"cloud-download"}
                     title={"Re-Download Data"}
                     subtitle={"Re-downloads all the data from TBA"}
-                    onPress={() => { BlitzDB.downloadAll(BlitzDB.event ? BlitzDB.event.id : "", setDownloadStatus); }}
+                    onPress={() => { BlitzDB.downloadEvent(BlitzDB.event.id, setDownloadStatus); }}
                 />
                 : null}
 

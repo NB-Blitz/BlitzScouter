@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, ToastAndroid } from "react-native";
-import { BlitzDB } from "../../api/BlitzDB";
-import { TBA } from "../../api/TBA";
+import BlitzDB from "../../api/BlitzDB";
+import TBA from "../../api/TBA";
 import Button from "../../components/common/Button";
 import HorizontalBar from "../../components/common/HorizontalBar";
 import Modal from "../../components/common/Modal";
@@ -45,7 +45,7 @@ export default function YearModal(props: ModalProps) {
             yearsDisplay.push(
                 <Button
                     key={year}
-                    onPress={() => { BlitzDB.setYear(year); props.setVisible(false); }}
+                    onPress={() => { BlitzDB.event.setYear(year); props.setVisible(false); }}
                     style={styles.regionalButton}>
 
                     <Text style={styles.regionalText}>

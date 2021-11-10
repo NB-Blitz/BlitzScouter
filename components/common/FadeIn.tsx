@@ -1,11 +1,10 @@
-import * as React from 'react';
 import { useFocusEffect } from "@react-navigation/core";
+import * as React from 'react';
 import { Animated, View } from "react-native";
 
 export type ViewProps = View['props'];
 
-export default function FadeIn(props: ViewProps)
-{
+export default function FadeIn(props: ViewProps) {
     const { style, ...otherProps } = props;
     const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
@@ -26,10 +25,10 @@ export default function FadeIn(props: ViewProps)
     });
 
     return (<Animated.View
-                style={[{
-                    flex: 1,
-                    opacity: fadeAnim,
-                }, style]}
-                {...otherProps} />
+        style={[{
+            flex: 1,
+            opacity: fadeAnim,
+        }, style]}
+        {...otherProps} />
     );
 }

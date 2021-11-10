@@ -3,8 +3,8 @@ import { useNavigation } from "@react-navigation/core";
 import * as ImagePicker from 'expo-image-picker';
 import React from "react";
 import { Alert, Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
-import { BlitzDB } from "../../api/BlitzDB";
-import { TBA } from "../../api/TBA";
+import BlitzDB from "../../api/BlitzDB";
+import TBA from "../../api/TBA";
 import Button from "../../components/common/Button";
 import HorizontalBar from "../../components/common/HorizontalBar";
 import StandardButton from "../../components/common/StandardButton";
@@ -23,15 +23,15 @@ export default function TeamScreen({ route }: any) {
     const teamID = route.params.teamID;
 
     // Re-render on New Media
-    BlitzDB.eventEmitter.addListener("mediaUpdate", () => {
+    /*BlitzDB.eventEmitter.addListener("mediaUpdate", () => {
         BlitzDB.eventEmitter.removeCurrentListener();
         setVersion(version + 1);
         setPreviewIndex(-1);
-    });
+    });*/
 
     // Grab Team Data
-    let team = BlitzDB.getTeam(teamID);
-    if (!(team)) {
+    let team = BlitzDB.teams.get(teamID);
+    if (!team) {
         Alert.alert("Error", "There was an error grabbing the data from that team. Try re-downloading TBA data then try again.");
         return null;
     }
@@ -134,7 +134,7 @@ function addPhoto(teamID: string) {
         if (!result.base64)
             return;
 
-        BlitzDB.addTeamMedia(teamID, result.base64);
+        BlitzDB.teams.addMedia(teamID, result.base64);
     });
 }
 
@@ -152,7 +152,7 @@ function addFile(teamID: string) {
         if (!result.base64)
             return;
 
-        BlitzDB.addTeamMedia(teamID, result.base64);
+        BlitzDB.teams.addMedia(teamID, result.base64);
     });
 }
 

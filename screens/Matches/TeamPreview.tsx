@@ -2,7 +2,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 import * as React from 'react';
 import { Alert, Image, StyleSheet, View } from "react-native";
-import { BlitzDB } from '../../api/BlitzDB';
+import BlitzDB from '../../api/BlitzDB';
 import Button from '../../components/common/Button';
 import Text from '../../components/text/Text';
 
@@ -14,7 +14,7 @@ export default function TeamPreview(props: TeamThumbnailProps) {
     const navigator = useNavigation();
 
     // Grab Team Data
-    let team = BlitzDB.getTeam(props.teamID);
+    let team = BlitzDB.teams.get(props.teamID);
     if (!(team)) {
         Alert.alert("Error", "There was an error grabbing the data from that team. Try re-downloading TBA data then try again.");
         return null;

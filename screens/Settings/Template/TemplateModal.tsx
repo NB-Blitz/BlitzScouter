@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Alert } from 'react-native';
-import { BlitzDB } from '../../../api/BlitzDB';
-import { TemplateType } from '../../../api/DBModels';
+import { ElementData, TemplateType } from '../../../api/models/TemplateModels';
 import HorizontalBar from '../../../components/common/HorizontalBar';
 import Modal from '../../../components/common/Modal';
 import StandardButton from '../../../components/common/StandardButton';
@@ -32,7 +31,7 @@ export default function TemplateModal(props: ModalProps) {
 
     // Element Preview
     const stringType = StringTypes[props.type];
-    const template = BlitzDB.templates[props.type];
+    const template: ElementData[] = []; //BlitzDB.templates[props.type];
     let elementList: JSX.Element[] = [];
     if (template.length > 0) {
         for (let elementData of template) {
@@ -52,7 +51,7 @@ export default function TemplateModal(props: ModalProps) {
                 {
                     text: "Confirm",
                     onPress: () => {
-                        BlitzDB.templates[props.type] = [];
+                        //BlitzDB.templates[props.type] = [];
                         setVersion(version + 1);
                     }
                 },

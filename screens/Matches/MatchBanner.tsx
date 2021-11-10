@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/core";
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { BlitzDB } from "../../api/BlitzDB";
+import BlitzDB from "../../api/BlitzDB";
 import StandardButton from "../../components/common/StandardButton";
 
 interface MatchBannerProps {
@@ -11,7 +11,7 @@ interface MatchBannerProps {
 export default function MatchBanner(props: MatchBannerProps) {
     const navigator = useNavigation();
 
-    const match = BlitzDB.getMatch(props.matchID);
+    const match = BlitzDB.matches.get(props.matchID);
     if (!match)
         return null;
 

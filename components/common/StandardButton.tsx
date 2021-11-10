@@ -1,12 +1,9 @@
 import { FontAwesome } from '@expo/vector-icons';
 import * as React from 'react';
-import { ReactNode } from "react";
-import { StyleSheet, Modal as DefaultModal, View, ScrollView, TouchableOpacity, GestureResponderEvent, Image } from "react-native";
+import { GestureResponderEvent, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import Text from '../text/Text';
-import DarkBackground from "./DarkBackground";
 
-export interface ButtonProps
-{
+export interface ButtonProps {
     iconType?: React.ComponentProps<typeof FontAwesome>['name'];
     iconText?: string;
     iconData?: string;
@@ -16,31 +13,30 @@ export interface ButtonProps
     onPress: (event: GestureResponderEvent) => void;
 }
 
-export default function StandardButton(props: ButtonProps)
-{
+export default function StandardButton(props: ButtonProps) {
 
     return (
         <TouchableOpacity
             onPress={props.onPress}
             style={styles.button}>
-            
+
             {/*  Text Icon  */}
-            {props.iconText ? 
+            {props.iconText ?
                 <Text style={styles.buttonIconTXT}>{props.iconText}</Text>
-            : null}
+                : null}
 
             {/*  FA Icon  */}
             {props.iconType ?
                 <View style={styles.buttonIconFA} >
-                    <FontAwesome name={props.iconType} size={30} style={{color:"#fff"}} />
+                    <FontAwesome name={props.iconType} size={30} style={{ color: "#fff" }} />
                 </View>
-            : null}
+                : null}
 
             {/*  SVG Icon  */}
             {props.iconData ?
-                <Image style={styles.buttonIconSVG} fadeDuration={0} source={{uri:props.iconData}} />
-            : null}
-            
+                <Image style={styles.buttonIconSVG} fadeDuration={0} source={{ uri: props.iconData }} />
+                : null}
+
 
             {/*  Titles  */}
             <View>

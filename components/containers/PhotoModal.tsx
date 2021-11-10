@@ -1,29 +1,25 @@
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
 import { Alert, Dimensions, Image, Modal, StyleSheet, ToastAndroid, View } from "react-native";
-import { BlitzDB } from "../../api/BlitzDB";
+import BlitzDB from "../../api/BlitzDB";
 import Button from "../common/Button";
 import DarkBackground from "../common/DarkBackground";
 import Text from "../text/Text";
-import * as Sharing from 'expo-sharing';
 
-interface PhotoProps
-{
+interface PhotoProps {
     teamID: string;
     imageIndex: number;
     setImageIndex: (imageIndex: number) => void;
 }
 
 // TODO Photo Zoom, Delete, and Re-Arrange
-export default function PhotoModal(props: PhotoProps)
-{
+export default function PhotoModal(props: PhotoProps) {
     if (props.imageIndex < 0)
         return null;
 
     // Team
-    let team = BlitzDB.getTeam(props.teamID);
-    if (!(team))
-    {
+    let team = BlitzDB.teams.get(props.teamID);
+    if (!(team)) {
         Alert.alert("Error", "There was an error grabbing the data from that team. Try re-downloading TBA data then try again.");
         props.setImageIndex(-1);
         return null;
@@ -41,8 +37,8 @@ export default function PhotoModal(props: PhotoProps)
 
             <View style={styles.container}>
                 <DarkBackground isTransparent={false} />
-                <Image style={styles.image} source={{uri:mediaData}} />
-                
+                <Image style={styles.image} source={{ uri: mediaData }} />
+
                 <View style={styles.buttonBar}>
                     <Button
                         style={styles.button}
@@ -84,19 +80,18 @@ export default function PhotoModal(props: PhotoProps)
                         <Text style={styles.buttonText}>Delete</Text>
                     </Button>
                 </View>
-                
+
             </View>
         </Modal>
     );
 }
 
-function trashImage(teamID: string, imageIndex: number)
-{
-    Alert.alert( "Are you sure?", "Are you sure you want to delete this image?", 
+function trashImage(teamID: string, imageIndex: number) {
+    Alert.alert("Are you sure?", "Are you sure you want to delete this image?",
         [
             {
                 text: "Confirm",
-                onPress: () => { BlitzDB.removeTeamMedia(teamID, imageIndex); }
+                onPress: () => { /*BlitzDB.removeTeamMedia(teamID, imageIndex);*/ }
             },
             {
                 text: "Cancel",
@@ -106,13 +101,12 @@ function trashImage(teamID: string, imageIndex: number)
     );
 }
 
-function setThumbnail(teamID: string, imageIndex: number)
-{
-    Alert.alert( "Are you sure?", "Are you sure you want to set this as Team Thumbnail?", 
+function setThumbnail(teamID: string, imageIndex: number) {
+    Alert.alert("Are you sure?", "Are you sure you want to set this as Team Thumbnail?",
         [
             {
                 text: "Confirm",
-                onPress: () => { BlitzDB.swapTeamMedia(teamID, imageIndex, 0); }
+                onPress: () => { /*BlitzDB.swapTeamMedia(teamID, imageIndex, 0);*/ }
             },
             {
                 text: "Cancel",
@@ -122,13 +116,12 @@ function setThumbnail(teamID: string, imageIndex: number)
     );
 }
 
-function setRobot(teamID: string, imageIndex: number)
-{
-    Alert.alert( "Are you sure?", "Are you sure you want to set this as the Robot Image?", 
+function setRobot(teamID: string, imageIndex: number) {
+    Alert.alert("Are you sure?", "Are you sure you want to set this as the Robot Image?",
         [
             {
                 text: "Confirm",
-                onPress: () => { BlitzDB.swapTeamMedia(teamID, imageIndex); }
+                onPress: () => { /*BlitzDB.swapTeamMedia(teamID, imageIndex);*/ }
             },
             {
                 text: "Cancel",
@@ -138,11 +131,10 @@ function setRobot(teamID: string, imageIndex: number)
     );
 }
 
-function shareImage(mediaData: string)
-{
+function shareImage(mediaData: string) {
     // TODO Convert the storage medium for image data from sqlite to local device storage
     //Sharing.shareAsync(mediaData); // <-- Using the Expo Sharing Library
-    
+
     ToastAndroid.show("To be implemented!", ToastAndroid.SHORT);
 }
 
@@ -154,7 +146,7 @@ const styles = StyleSheet.create({
         left: 0,
         bottom: 0,
         right: 0
-        
+
     },
     image: {
         width: Dimensions.get('window').width,

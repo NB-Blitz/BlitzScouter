@@ -2,7 +2,7 @@ import LZString from 'lz-string';
 import * as React from 'react';
 import { Dimensions, Modal, StyleSheet, View } from 'react-native';
 import QRCode from 'react-qr-code';
-import { BlitzDB } from '../../api/BlitzDB';
+import BlitzDB from '../../api/BlitzDB';
 import DarkBackground from '../../components/common/DarkBackground';
 
 export interface ModalProps {

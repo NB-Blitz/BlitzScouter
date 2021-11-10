@@ -1,18 +1,16 @@
 import * as React from 'react';
 import { ReactNode } from "react";
-import { StyleSheet, Modal as DefaultModal, View, ScrollView } from "react-native";
+import { Modal as DefaultModal, ScrollView, StyleSheet, View } from "react-native";
 import Text from '../text/Text';
 import Button from './Button';
 import DarkBackground from "./DarkBackground";
 
-export interface ModalProps
-{
+export interface ModalProps {
     setVisible: (isVisible: boolean) => void;
     children: ReactNode;
 }
 
-export default function Modal(props: ModalProps)
-{
+export default function Modal(props: ModalProps) {
     return (
         <DefaultModal
             animationType="slide"
@@ -32,12 +30,12 @@ export default function Modal(props: ModalProps)
 
             <Button
                 style={styles.button}
-                onPress={() => {props.setVisible(false);}}>
+                onPress={() => { props.setVisible(false); }}>
 
                 <Text style={styles.buttonText}>
                     Return
                 </Text>
-                
+
             </Button>
         </DefaultModal>
     );

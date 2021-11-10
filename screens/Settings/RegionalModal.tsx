@@ -1,9 +1,9 @@
 import React from "react";
 import { Alert, StyleSheet } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { BlitzDB } from "../../api/BlitzDB";
-import { TBAEvent } from "../../api/DBModels";
-import { TBA } from "../../api/TBA";
+import BlitzDB from "../../api/BlitzDB";
+import { TBAEvent } from "../../api/models/TBAModels";
+import TBA from "../../api/TBA";
 import Button from "../../components/common/Button";
 import Modal from "../../components/common/Modal";
 import Subtitle from "../../components/text/Subtitle";
@@ -48,7 +48,7 @@ export default function RegionalModal(props: ModalProps) {
                 regionalsDisplay.push(
                     <Button
                         key={key}
-                        onPress={() => { BlitzDB.downloadAll(key, setDownloadStatus).then(() => { props.setVisible(false); }); }}
+                        onPress={() => { BlitzDB.downloadEvent(key, setDownloadStatus).then(() => { props.setVisible(false); }); }}
                         style={styles.regionalButton}>
 
                         <Text style={styles.regionalText}>

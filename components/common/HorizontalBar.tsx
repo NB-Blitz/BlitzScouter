@@ -3,8 +3,7 @@ import { View } from "react-native";
 
 export type ViewProps = View['props'];
 
-export default function HorizontalBar(props: ViewProps)
-{
+export default function HorizontalBar(props: ViewProps) {
     const { style, ...otherProps } = props;
 
     return (<View
@@ -14,7 +13,7 @@ export default function HorizontalBar(props: ViewProps)
             marginBottom: 15,
             marginTop: 15
         }, style]}
-        
+
         {...otherProps}
     />);
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { Alert, ScrollView, StyleSheet, View } from "react-native";
-import { BlitzDB } from "../../api/BlitzDB";
-import { TBA } from "../../api/TBA";
+import BlitzDB from "../../api/BlitzDB";
+import TBA from "../../api/TBA";
 import HorizontalBar from "../../components/common/HorizontalBar";
 import StandardButton from "../../components/common/StandardButton";
 import Subtitle from "../../components/text/Subtitle";
@@ -16,7 +16,7 @@ export default function MatchScreen({ route }: any) {
 
     // Grab Match Data
     const matchID = route.params.matchID;
-    const match = BlitzDB.getMatch(matchID);
+    const match = BlitzDB.matches.get(matchID);
     if (!(match)) {
         Alert.alert("Error", "There was an error grabbing the data from that match. Try re-downloading TBA data then try again.");
         return null;

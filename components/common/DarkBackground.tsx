@@ -1,15 +1,13 @@
 import * as React from 'react';
 import { StyleSheet, View } from "react-native";
 
-interface DarkBackgroundProps
-{
+interface DarkBackgroundProps {
     isTransparent: boolean;
 }
 
-export default function DarkBackground(props: DarkBackgroundProps)
-{
+export default function DarkBackground(props: DarkBackgroundProps) {
     return (
-        <View style={{...styles.background, opacity: props.isTransparent ? .6 : 1}} />
+        <View style={{ ...styles.background, opacity: props.isTransparent ? .6 : 1 }} />
     );
 }
 
