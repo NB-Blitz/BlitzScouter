@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/core';
 import * as Application from 'expo-application';
 import * as React from 'react';
 import BlitzDB from '../../api/BlitzDB';
@@ -5,24 +6,21 @@ import { TemplateType } from '../../api/models/TemplateModels';
 import HorizontalBar from '../../components/common/HorizontalBar';
 import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
+import NavTitle from '../../components/text/NavTitle';
 import Subtitle from '../../components/text/Subtitle';
 import DownloadingModal from './DownloadingModal';
-import RegionalModal from './RegionalModal';
-import TemplateModal from './Template/TemplateModal';
-import YearModal from './YearModal';
 
 export default function SettingsScreen() {
-    const [yearModalVisible, setYearModalVisible] = React.useState(false);
-    const [regionalModalVisible, setRegionalModalVisible] = React.useState(false);
-    const [pitTemplateModalVisible, setPitTemplateModalVisible] = React.useState(false);
-    const [matchTemplateModalVisible, setMatchTemplateModalVisible] = React.useState(false);
     const [downloadStatus, setDownloadStatus] = React.useState("");
+    const navigator = useNavigation();
 
     return (
         <ScrollContainer>
 
+            <NavTitle>Settings</NavTitle>
+
             {/* Data Buttons */}
-            {BlitzDB.event ?
+            {BlitzDB.event.isLoaded ?
                 <StandardButton
                     iconType={"cloud-download"}
                     title={"Re-Download Data"}
@@ -32,19 +30,13 @@ export default function SettingsScreen() {
                 : null}
 
             <StandardButton
-                iconType={"calendar"}
-                title={"Change Year"}
-                subtitle={"Changes the year for practice & testing"}
-                onPress={() => { setYearModalVisible(true); }} />
+                iconType={"location-pin"}
+                title={(BlitzDB.event.isLoaded ? "Change" : "Set") + " Regional"}
+                subtitle={"Downloads team/match data from TBA"}
+                onPress={() => { navigator.navigate("Year"); }} />
 
             <StandardButton
-                iconType={"map-marker"}
-                title={(BlitzDB.event ? "Change" : "Set") + " Regional"}
-                subtitle={"Downloads regional data from TBA"}
-                onPress={() => { setRegionalModalVisible(true); }} />
-
-            <StandardButton
-                iconType={"trash"}
+                iconType={"delete-outline"}
                 title={"Clear All Data"}
                 subtitle={"Wipes all data on your device"}
                 onPress={() => { BlitzDB.deleteAll(true); }} />
@@ -53,28 +45,24 @@ export default function SettingsScreen() {
 
             {/* Scouting Buttons */}
             <StandardButton
-                iconType={"pencil-square-o"}
+                iconType={"edit"}
                 title={"Edit Pit Scouting"}
                 subtitle={"Adjust the pit scouting template"}
-                onPress={() => { setPitTemplateModalVisible(true); }} />
+                onPress={() => { navigator.navigate("EditTemplate", { type: TemplateType.Pit }); }} />
             <StandardButton
-                iconType={"pencil-square-o"}
+                iconType={"edit"}
                 title={"Edit Match Scouting"}
                 subtitle={"Adjust the match scouting template"}
-                onPress={() => { setMatchTemplateModalVisible(true); }} />
+                onPress={() => { navigator.navigate("EditTemplate", { type: TemplateType.Match }); }} />
             <StandardButton
-                iconType={"user"}
+                iconType={"person-outline"}
                 title={"Assign Default Team"}
                 subtitle={"Assign the Default Team to Scout"}
-                onPress={() => { }} />
+                onPress={() => { /*navigator.navigate("DefaultTeam");*/ }} />
             <HorizontalBar />
             <Subtitle>Blitz Scouter v{Application.nativeApplicationVersion}</Subtitle>
 
             {/* Modals */}
-            <YearModal isVisible={yearModalVisible} setVisible={setYearModalVisible} />
-            <RegionalModal isVisible={regionalModalVisible} setVisible={setRegionalModalVisible} />
-            <TemplateModal type={TemplateType.Pit} setVisible={setPitTemplateModalVisible} isVisible={pitTemplateModalVisible} />
-            <TemplateModal type={TemplateType.Match} setVisible={setMatchTemplateModalVisible} isVisible={matchTemplateModalVisible} />
             <DownloadingModal status={downloadStatus} />
         </ScrollContainer>
     );

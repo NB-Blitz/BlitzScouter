@@ -53,8 +53,8 @@ export default class TeamDB {
      * @returns true if successful
      */
     async downloadMedia(teamID: string) {
-        let mediaList = await TBA.getTeamMedia(teamID);
-        if (!mediaList)
+        let mediaList = await TBA.getTeamMedia(teamID, BlitzDB.event.year);
+        if (mediaList == undefined)
             return false;
         mediaList.forEach(media => {
             let imageData: string | undefined;

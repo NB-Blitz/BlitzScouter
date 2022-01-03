@@ -1,52 +1,46 @@
+import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
-import { ElementType, TemplateType } from '../../../api/models/TemplateModels';
+import BlitzDB from '../../../api/BlitzDB';
+import { ElementType } from '../../../api/models/TemplateModels';
 import HorizontalBar from '../../../components/common/HorizontalBar';
-import Modal from '../../../components/common/Modal';
 import StandardButton from '../../../components/common/StandardButton';
+import ScrollContainer from '../../../components/containers/ScrollContainer';
 import Subtitle from '../../../components/text/Subtitle';
 import Title from '../../../components/text/Title';
 
-interface ModalProps {
-    isVisible: boolean;
-    setVisible: (isVisible: boolean) => void;
-    type: TemplateType;
-}
+export default function ElementChooserScreen({ route }: any) {
+    const navigator = useNavigation();
+    const templateType = route.params.type;
 
-export default function ElementChooserModal(props: ModalProps) {
-    // Default Behaviour
-    if (!props.isVisible)
-        return null;
-
-    const chooseElement = (type: ElementType) => {
-        /*BlitzDB.templates[props.type].push({
-            type: type,
-            label: "Element",
+    const chooseElement = (elementType: ElementType) => {
+        BlitzDB.templates.addElement(templateType, {
+            type: elementType,
+            label: "Default",
             options: {}
-        });*/ // TODO: Re-Implement Template DB
-
-        props.setVisible(false);
+        });
+        navigator.goBack();
     }
 
     return (
-        <Modal setVisible={props.setVisible} >
+        <ScrollContainer>
             <Title>Add Element</Title>
             <Subtitle>Choose an element to add:</Subtitle>
             <HorizontalBar />
 
             <StandardButton
-                iconType={"hashtag"}
+                iconType={"import-export"}
                 title={"Counter"}
                 subtitle={"Increment and decrement a number"}
                 onPress={() => { }} />
 
             <StandardButton
-                iconType={"check-square-o"}
+                iconType={"check-box"}
                 title={"Checkbox"}
                 subtitle={"A simple check or uncheck"}
                 onPress={() => { }} />
 
             <StandardButton
-                iconType={"pencil-square-o"}
+                iconType={"text-fields"}
                 title={"Textbox"}
                 subtitle={"Type in text or comments"}
                 onPress={() => { }} />
@@ -82,6 +76,7 @@ export default function ElementChooserModal(props: ModalProps) {
                 title={"Horizontal Rule"}
                 subtitle={"A divider to seperate sections"}
                 onPress={() => { chooseElement(ElementType.hr); }} />
-        </Modal>
+
+        </ScrollContainer>
     );
 }

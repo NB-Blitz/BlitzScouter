@@ -1,5 +1,4 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import TBA from "./TBA";
 
 const SAVE_KEY = "event-data";
 
@@ -35,7 +34,6 @@ export default class EventDB {
      */
     setYear(year: number) {
         this.year = year;
-        TBA.setYear(year);
     }
 
     /**
@@ -88,7 +86,5 @@ export default class EventDB {
         this.year = event.year as number;
         this.id = event.id as string;
         this.isLoaded = true;
-
-        TBA.setYear(this.year);
     }
 }

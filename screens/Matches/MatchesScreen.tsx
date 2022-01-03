@@ -2,6 +2,7 @@ import * as React from 'react';
 import { ToastAndroid } from 'react-native';
 import BlitzDB from '../../api/BlitzDB';
 import ScrollContainer from '../../components/containers/ScrollContainer';
+import NavTitle from '../../components/text/NavTitle';
 import Text from '../../components/text/Text';
 import MatchBanner from './MatchBanner';
 
@@ -25,13 +26,14 @@ export default function MatchesScreen() {
             for (let matchID of BlitzDB.event.matchIDs)
                 matchDisplay.push(<MatchBanner matchID={matchID} key={matchID} />);
         else
-            matchDisplay.push(<Text key={1}>This event has no match data posted yet! You can try refreshing by pulling down.</Text>);
+            matchDisplay.push(<Text key={1}>This event has no matches posted yet!{"\n"}Pull down to refresh data.</Text>);
     else
-        matchDisplay.push(<Text key={1}>Match data has not been downloaded from TBA yet. Download is available under settings</Text>);
+        matchDisplay.push(<Text key={1}>Download match data from the Blue Alliance under the settings tab.</Text>);
 
     // Return
     return (
         <ScrollContainer onRefresh={onRefresh}>
+            <NavTitle>Matches</NavTitle>
             {matchDisplay}
         </ScrollContainer>
     );

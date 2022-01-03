@@ -2,6 +2,7 @@ import * as React from 'react';
 import { ToastAndroid } from 'react-native';
 import BlitzDB from '../../api/BlitzDB';
 import ScrollContainer from '../../components/containers/ScrollContainer';
+import NavTitle from '../../components/text/NavTitle';
 import Text from '../../components/text/Text';
 import TeamBanner from './TeamBanner';
 
@@ -18,8 +19,6 @@ export default function TeamsScreen() {
         setVersion(version + 1);
     };
 
-
-
     if (BlitzDB.event.isLoaded) {
         if (BlitzDB.event.teamIDs.length > 0)
             for (let teamID of BlitzDB.event.teamIDs)
@@ -33,6 +32,7 @@ export default function TeamsScreen() {
 
     return (
         <ScrollContainer onRefresh={onRefresh}>
+            <NavTitle>Teams</NavTitle>
             {teamList}
         </ScrollContainer>
     );

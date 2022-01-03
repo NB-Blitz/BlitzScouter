@@ -10,7 +10,7 @@
         "splash": {
             "image": "./assets/images/splash.png",
             "resizeMode": "contain",
-            "backgroundColor": "#1e1e1e"
+            "backgroundColor": "#141416"
         },
         "updates": {
             "fallbackToCacheTimeout": 0
@@ -28,6 +28,8 @@
                 "foregroundImage": "./assets/images/icon.png",
                 "backgroundColor": "#1e1e1e"
             },
+            "primaryColor": "#856a00",
+            "color": "#856a00",
             "package": "com.nbblitz.blitzscouter",
             "versionCode": 1
         },

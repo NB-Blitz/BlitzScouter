@@ -23,19 +23,20 @@ export default function ScrollContainer(props: ScrollContainerProps) {
     return (
         <FadeIn>
             <ScrollView
+                bounces={true}
                 style={{
                     marginTop: 0,
                     paddingLeft: 20,
                     paddingRight: 20,
-                    backgroundColor: "#0a0a0a"
                 }}
                 refreshControl={
                     props.onRefresh ? <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} /> : undefined
-                }
-            >
+                }>
+
                 <View style={{ marginTop: 10 }}>
                     {props.children}
                 </View>
+
             </ScrollView>
         </FadeIn>
     );

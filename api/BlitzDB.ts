@@ -3,10 +3,12 @@ import EventDB from "./EventDB";
 import MatchDB from "./MatchDB";
 import Match from "./models/Match";
 import TeamDB from "./TeamDB";
+import TemplateDB from "./TemplateDB";
 export default class BlitzDB {
     static teams: TeamDB = new TeamDB();
     static matches: MatchDB = new MatchDB();
     static event: EventDB = new EventDB();
+    static templates: TemplateDB = new TemplateDB();
 
     /**
      * Downloads all event data from the Blue Alliance
@@ -49,6 +51,7 @@ export default class BlitzDB {
         await this.teams.save();
         await this.matches.save();
         await this.event.save();
+        await this.templates.save();
     }
 
     /**
@@ -88,6 +91,7 @@ export default class BlitzDB {
         await this.teams.load();
         await this.matches.load();
         await this.event.load();
+        await this.templates.load();
     }
 
     /**

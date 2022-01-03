@@ -8,7 +8,6 @@ import TBA from "../../api/TBA";
 import Button from "../../components/common/Button";
 import HorizontalBar from "../../components/common/HorizontalBar";
 import StandardButton from "../../components/common/StandardButton";
-import PhotoModal from "../../components/containers/PhotoModal";
 import Subtitle from "../../components/text/Subtitle";
 import Title from "../../components/text/Title";
 
@@ -17,7 +16,6 @@ export interface TeamProps {
 }
 
 export default function TeamScreen({ route }: any) {
-    const [previewIndex, setPreviewIndex] = React.useState(-1);
     const [version, setVersion] = React.useState(0);
     const navigator = useNavigation();
     const teamID = route.params.teamID;
@@ -43,7 +41,7 @@ export default function TeamScreen({ route }: any) {
         mediaList.push(
             <Button
                 style={styles.imageButton}
-                onPress={() => { setPreviewIndex(i); }}
+                onPress={() => { navigator.navigate("Media", { teamID: teamID, imageIndex: i }); }}
                 key={Math.random()}>
                 <Image style={styles.thumbnail} source={{ uri: imageData }} key={Math.random()} />
             </Button>
@@ -92,29 +90,25 @@ export default function TeamScreen({ route }: any) {
                 <HorizontalBar />
 
                 <StandardButton
-                    iconType={"binoculars"}
+                    iconType={"explore"}
                     title={"Scout Team"}
                     subtitle={"Pit scout this team"}
                     onPress={() => { }} />
 
-                <StandardButton
+
+                {/*<StandardButton
                     iconType={"list"}
                     title={"List Matches"}
                     subtitle={"List the matches Team " + team.number + " is in"}
-                    onPress={() => { navigator.navigate("TeamMatches", { teamID }) }} />
+                    onPress={() => { navigator.navigate("TeamMatches", { teamID }) }} />*/}
 
                 <StandardButton
-                    iconType={"globe"}
+                    iconType={"open-in-browser"}
                     title={"View on TBA"}
                     subtitle={"View Team " + team.number + " on The Blue Alliance"}
                     onPress={() => { team ? TBA.openTeam(team.number) : null }} />
 
                 <HorizontalBar />
-
-                <PhotoModal
-                    teamID={teamID}
-                    imageIndex={previewIndex}
-                    setImageIndex={setPreviewIndex} />
             </View>
         </ScrollView>
     );
@@ -169,7 +163,8 @@ const styles = StyleSheet.create({
     },
     thumbnail: {
         height: 200,
-        width: 200
+        width: 200,
+        borderRadius: 1
     },
     imageButton: {
         height: 200,

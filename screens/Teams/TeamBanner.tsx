@@ -22,7 +22,7 @@ export default function TeamBanner(props: TeamBannerProps) {
 
             <StandardButton
                 iconData={team.media.length > 0 ? team.media[0] : undefined}
-                iconType={team.media.length > 0 ? undefined : "ban"}
+                iconType={team.media.length > 0 ? undefined : "do-not-disturb"}
                 title={team.name}
                 subtitle={team.number.toString()}
                 onPress={() => { navigator.navigate("Team", { teamID: team.id }) }} />

@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/core";
 import React from "react";
 import { Alert, StyleSheet } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -5,30 +6,21 @@ import BlitzDB from "../../api/BlitzDB";
 import { TBAEvent } from "../../api/models/TBAModels";
 import TBA from "../../api/TBA";
 import Button from "../../components/common/Button";
-import Modal from "../../components/common/Modal";
-import Subtitle from "../../components/text/Subtitle";
+import ScrollContainer from "../../components/containers/ScrollContainer";
 import Text from "../../components/text/Text";
-import Title from "../../components/text/Title";
 import DownloadingModal from "./DownloadingModal";
 
-interface ModalProps {
-    isVisible: boolean;
-    setVisible: (isVisible: boolean) => void;
-}
-
-export default function RegionalModal(props: ModalProps) {
+export default function RegionalScreen({ route }: any) {
     const [searchTerm, updateSearch] = React.useState("");
     const [regionalList, updateRegionals] = React.useState([] as TBAEvent[]);
     const [downloadStatus, setDownloadStatus] = React.useState("");
-
-    // Default Behaviour
-    if (!props.isVisible)
-        return null;
+    const navigator = useNavigation();
+    const year = route.params.year;
 
     // Generate List
     let regionalsDisplay: JSX.Element[] = [];
-    if (regionalList.length <= 0 && props.isVisible) {
-        TBA.getEvents().then((events) => {
+    if (regionalList.length <= 0) {
+        TBA.getEvents(year).then((events) => {
             if (events)
                 updateRegionals(events);
         }).catch(() => {
@@ -48,7 +40,7 @@ export default function RegionalModal(props: ModalProps) {
                 regionalsDisplay.push(
                     <Button
                         key={key}
-                        onPress={() => { BlitzDB.downloadEvent(key, setDownloadStatus).then(() => { props.setVisible(false); }); }}
+                        onPress={() => { BlitzDB.event.setYear(year); BlitzDB.downloadEvent(key, setDownloadStatus).then(() => { navigator.goBack(); navigator.goBack(); }); }}
                         style={styles.regionalButton}>
 
                         <Text style={styles.regionalText}>
@@ -62,11 +54,8 @@ export default function RegionalModal(props: ModalProps) {
     }
 
     // Display Data
-
     return (
-        <Modal setVisible={props.setVisible}>
-            <Title>Set Regional</Title>
-            <Subtitle>Select the upcoming regional:</Subtitle>
+        <ScrollContainer>
             <TextInput
                 placeholder="Search..."
                 placeholderTextColor="#fff"
@@ -76,7 +65,7 @@ export default function RegionalModal(props: ModalProps) {
             {regionalsDisplay}
 
             <DownloadingModal status={downloadStatus} />
-        </Modal>
+        </ScrollContainer>
     );
 }
 

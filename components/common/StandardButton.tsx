@@ -1,10 +1,10 @@
-import { FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import * as React from 'react';
-import { GestureResponderEvent, Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { GestureResponderEvent, Image, StyleSheet, TouchableNativeFeedback, View } from "react-native";
 import Text from '../text/Text';
 
 export interface ButtonProps {
-    iconType?: React.ComponentProps<typeof FontAwesome>['name'];
+    iconType?: React.ComponentProps<typeof MaterialIcons>['name'];
     iconText?: string;
     iconData?: string;
 
@@ -16,35 +16,40 @@ export interface ButtonProps {
 export default function StandardButton(props: ButtonProps) {
 
     return (
-        <TouchableOpacity
-            onPress={props.onPress}
-            style={styles.button}>
+        <TouchableNativeFeedback
+            useForeground={false}
+            background={TouchableNativeFeedback.Ripple('#696969', false)}
+            onPress={props.onPress}>
 
-            {/*  Text Icon  */}
-            {props.iconText ?
-                <Text style={styles.buttonIconTXT}>{props.iconText}</Text>
-                : null}
+            <View style={styles.button}>
+                {/*  Text Icon  */}
+                {props.iconText ?
+                    <Text style={styles.buttonIconTXT}>{props.iconText}</Text>
+                    : null}
 
-            {/*  FA Icon  */}
-            {props.iconType ?
-                <View style={styles.buttonIconFA} >
-                    <FontAwesome name={props.iconType} size={30} style={{ color: "#fff" }} />
+                {/*  FA Icon  */}
+                {props.iconType ?
+                    <View style={styles.buttonIconFA} >
+                        <MaterialIcons name={props.iconType} size={30} style={{ color: "#fff" }} />
+                    </View>
+                    : null}
+
+                {/*  SVG Icon  */}
+                {props.iconData ?
+                    <Image style={styles.buttonIconSVG} fadeDuration={0} source={{ uri: props.iconData }} />
+                    : null}
+
+
+                {/*  Titles  */}
+                <View>
+                    <Text style={styles.buttonTitle} numberOfLines={1}>{props.title}</Text>
+                    <Text style={styles.buttonSubtitle}>{props.subtitle}</Text>
                 </View>
-                : null}
-
-            {/*  SVG Icon  */}
-            {props.iconData ?
-                <Image style={styles.buttonIconSVG} fadeDuration={0} source={{ uri: props.iconData }} />
-                : null}
-
-
-            {/*  Titles  */}
-            <View>
-                <Text style={styles.buttonTitle}>{props.title}</Text>
-                <Text style={styles.buttonSubtitle}>{props.subtitle}</Text>
             </View>
 
-        </TouchableOpacity>
+
+
+        </TouchableNativeFeedback>
     );
 }
 
@@ -55,6 +60,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
         alignSelf: 'stretch',
         padding: 10,
+        marginBottom: 5,
+        backgroundColor: "#1b1b1b",
+        borderRadius: 5
     },
     buttonTitle: {
         fontSize: 18
@@ -63,25 +71,24 @@ const styles = StyleSheet.create({
         color: "#bbb"
     },
     buttonIconFA: {
-        marginRight: 10,
-        width: 40,
+        marginRight: 12,
+        width: 45,
         alignItems: 'center',
         justifyContent: 'center'
     },
     buttonIconSVG: {
-        width: 40,
-        height: 40,
-        marginRight: 10,
-        resizeMode: 'stretch'
+        width: 45,
+        height: 45,
+        marginRight: 12,
+        resizeMode: 'stretch',
+        borderRadius: 1
     },
     buttonIconTXT: {
         fontSize: 20,
         fontWeight: "bold",
         textAlign: "center",
         paddingTop: 5,
-        marginRight: 10,
-        marginLeft: -10,
-        width: 35,
-        height: 35,
+        marginRight: 12,
+        width: 45,
     }
 });

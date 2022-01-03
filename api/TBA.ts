@@ -3,18 +3,8 @@ import { TBAEvent, TBAMatch, TBAMedia, TBAStatus, TBATeam } from './models/TBAMo
 const API_KEY = "i90dAcKHXvQ9havypHJKeGY8O1tfymFpaW1Po3RGYpvoMTRVwtiUsUFaLmstCDp3";
 const URL_PREFIX = "https://www.thebluealliance.com/api/v3/";
 const URL_SUFFIX = "?X-TBA-Auth-Key=" + API_KEY;
-const DEFAULT_YEAR = 2020;
 
 export default class TBA {
-    static currentYear = DEFAULT_YEAR;
-
-    /**
-     * Sets the current year
-     * @param year - Year to set to
-     */
-    static setYear(year: number) {
-        TBA.currentYear = year;
-    }
 
     /**
      * Fetches all matches at a given event
@@ -29,8 +19,8 @@ export default class TBA {
      * Fetches all events in a current year
      * @returns An array of TBAEvent
      */
-    static async getEvents() {
-        return TBA._fetch<TBAEvent[]>("events/" + TBA.currentYear);
+    static async getEvents(year: number) {
+        return TBA._fetch<TBAEvent[]>("events/" + year);
     }
 
     /**
@@ -48,8 +38,8 @@ export default class TBA {
      * @param teamID - ID of the team
      * @returns An array of TBAMedia
      */
-    static getTeamMedia(teamID: string) {
-        return TBA._fetch<TBAMedia[]>("team/" + teamID + "/media/" + TBA.currentYear);
+    static getTeamMedia(teamID: string, year: number) {
+        return TBA._fetch<TBAMedia[]>("team/" + teamID + "/media/" + year);
     }
 
     /**
@@ -65,7 +55,7 @@ export default class TBA {
      * @param teamNumber - Number of the team
      */
     static openTeam(teamNumber: number) {
-        Linking.openURL("https://www.thebluealliance.com/team/" + teamNumber + "/" + TBA.currentYear);
+        Linking.openURL("https://www.thebluealliance.com/team/" + teamNumber);
     }
 
     /**

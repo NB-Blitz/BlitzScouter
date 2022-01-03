@@ -40,13 +40,13 @@ export default function MatchScreen({ route }: any) {
                 <HorizontalBar />
 
                 <StandardButton
-                    iconType={"binoculars"}
+                    iconType={"explore"}
                     title={"Scout Match"}
                     subtitle={"Scout this match"}
                     onPress={() => { }} />
 
                 <StandardButton
-                    iconType={"globe"}
+                    iconType={"open-in-browser"}
                     title={"View on TBA"}
                     subtitle={"View this Match on The Blue Alliance"}
                     onPress={() => { match ? TBA.openMatch(match.id) : null }} />

@@ -1,4 +1,4 @@
-import { FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 import * as React from 'react';
 import { Alert, Image, StyleSheet, View } from "react-native";
@@ -34,8 +34,8 @@ export default function TeamPreview(props: TeamThumbnailProps) {
     else {
         mediaIcon = (
             <View style={styles.thumbnail}>
-                <FontAwesome
-                    name="ban"
+                <MaterialIcons
+                    name="block"
                     size={50}
                     color={"#aaa"} />
             </View>
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "#444",
         marginRight: 15,
+        borderRadius: 5
     },
     teamName: {
         fontSize: 18,
