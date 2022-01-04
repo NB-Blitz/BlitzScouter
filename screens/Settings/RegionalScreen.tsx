@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/core";
 import React from "react";
-import { Alert, StyleSheet } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import BlitzDB from "../../api/BlitzDB";
 import { TBAEvent } from "../../api/models/TBAModels";
@@ -43,7 +43,7 @@ export default function RegionalScreen({ route }: any) {
                         onPress={() => { BlitzDB.event.setYear(year); BlitzDB.downloadEvent(key, setDownloadStatus).then(() => { navigator.goBack(); navigator.goBack(); }); }}
                         style={styles.regionalButton}>
 
-                        <Text style={styles.regionalText}>
+                        <Text style={styles.regionalText} numberOfLines={1}>
                             {regional.name}
                         </Text>
 
@@ -55,21 +55,29 @@ export default function RegionalScreen({ route }: any) {
 
     // Display Data
     return (
-        <ScrollContainer>
+        <View style={styles.container}>
+
             <TextInput
                 placeholder="Search..."
                 placeholderTextColor="#fff"
                 style={styles.textInput}
                 onChangeText={(text) => { updateSearch(text.toLowerCase()) }}
             />
-            {regionalsDisplay}
 
-            <DownloadingModal status={downloadStatus} />
-        </ScrollContainer>
+            <ScrollContainer>
+                {regionalsDisplay}
+                <DownloadingModal status={downloadStatus} />
+            </ScrollContainer>
+        </View>
+
     );
 }
 
 const styles = StyleSheet.create({
+    container: {
+        width: "100%",
+        height: "100%"
+    },
     regionalButton: {
         padding: 8,
         marginLeft: 4,
@@ -84,7 +92,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 10,
         marginBottom: 10,
-        marginTop: 10
+        marginTop: 10,
+        marginLeft: 20,
+        marginRight: 20
     },
     loadingText: {
         textAlign: "center",

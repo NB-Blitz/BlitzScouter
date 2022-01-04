@@ -7,6 +7,7 @@
         "icon": "./assets/images/icon.png",
         "scheme": "blitz",
         "userInterfaceStyle": "light",
+        "primaryColor": "#856a00",
         "splash": {
             "image": "./assets/images/splash.png",
             "resizeMode": "contain",
@@ -28,8 +29,6 @@
                 "foregroundImage": "./assets/images/icon.png",
                 "backgroundColor": "#1e1e1e"
             },
-            "primaryColor": "#856a00",
-            "color": "#856a00",
             "package": "com.nbblitz.blitzscouter",
             "versionCode": 1
         },

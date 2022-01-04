@@ -44,16 +44,18 @@ export default function SettingsScreen() {
             <HorizontalBar />
 
             {/* Scouting Buttons */}
+            {/*
             <StandardButton
                 iconType={"edit"}
                 title={"Edit Pit Scouting"}
                 subtitle={"Adjust the pit scouting template"}
-                onPress={() => { navigator.navigate("EditTemplate", { type: TemplateType.Pit }); }} />
+                onPress={() => { navigator.navigate("EditTemplate", { templateType: TemplateType.Pit }); }} />
+            */}
             <StandardButton
                 iconType={"edit"}
                 title={"Edit Match Scouting"}
                 subtitle={"Adjust the match scouting template"}
-                onPress={() => { navigator.navigate("EditTemplate", { type: TemplateType.Match }); }} />
+                onPress={() => { navigator.navigate("EditTemplate", { templateType: TemplateType.Match }); }} />
             <StandardButton
                 iconType={"person-outline"}
                 title={"Assign Default Team"}

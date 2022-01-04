@@ -1,19 +1,43 @@
 import React from "react";
-import { ElementData, ElementType } from "../../api/models/TemplateModels";
+import { StyleSheet } from "react-native";
+import { ElementProps, ElementType } from "../../api/models/TemplateModels";
+import CheckboxElement from "./CheckboxElement";
+import CounterElement from "./CounterElement";
 import HRElement from "./HRElement";
 import SubtitleElement from "./SubtitleElement";
+import TextBoxElement from "./TextBoxElement";
 import TextElement from "./TextElement";
 import TitleElement from "./TitleElement";
 
-export default function ScoutingElement(props: { data: ElementData }) {
+export default function ScoutingElement(props: ElementProps) {
+    let element: JSX.Element | undefined;
     switch (props.data.type) {
         case ElementType.title:
-            return (<TitleElement data={props.data} />);
+            element = (<TitleElement {...props} />);
+            break;
         case ElementType.subtitle:
-            return (<SubtitleElement data={props.data} />);
+            element = (<SubtitleElement {...props} />);
+            break;
         case ElementType.text:
-            return (<TextElement data={props.data} />);
+            element = (<TextElement {...props} />);
+            break;
         case ElementType.hr:
-            return (<HRElement data={props.data} />);
+            element = (<HRElement {...props} />);
+            break;
+        case ElementType.counter:
+            element = (<CounterElement {...props} />);
+            break;
+        case ElementType.checkbox:
+            element = (<CheckboxElement {...props} />);
+            break;
+        case ElementType.textbox:
+            element = (<TextBoxElement {...props} />);
+            break;
     }
+    return element;
 }
+
+
+const styles = StyleSheet.create({
+
+});

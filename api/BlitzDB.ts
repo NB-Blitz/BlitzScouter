@@ -1,14 +1,17 @@
+import EventEmitter from "eventemitter3";
 import { Alert } from "react-native";
 import EventDB from "./EventDB";
 import MatchDB from "./MatchDB";
 import Match from "./models/Match";
 import TeamDB from "./TeamDB";
 import TemplateDB from "./TemplateDB";
+
 export default class BlitzDB {
     static teams: TeamDB = new TeamDB();
     static matches: MatchDB = new MatchDB();
     static event: EventDB = new EventDB();
-    static templates: TemplateDB = new TemplateDB();
+    static matchTemplate: TemplateDB = new TemplateDB("matchtemplate-data");
+    static eventEmitter = new EventEmitter();
 
     /**
      * Downloads all event data from the Blue Alliance
@@ -51,7 +54,7 @@ export default class BlitzDB {
         await this.teams.save();
         await this.matches.save();
         await this.event.save();
-        await this.templates.save();
+        await this.matchTemplate.save();
     }
 
     /**
@@ -91,7 +94,7 @@ export default class BlitzDB {
         await this.teams.load();
         await this.matches.load();
         await this.event.load();
-        await this.templates.load();
+        await this.matchTemplate.load();
     }
 
     /**
@@ -116,5 +119,16 @@ export default class BlitzDB {
             this.matches.deleteAll();
             this.event.deleteAll();
         }
+    }
+
+    /**
+     * Generates a random identifier for objects
+     * @returns identifying string of alphanumeric characters
+     */
+    static generateID(size = 2) {
+        let id = "";
+        for (let i = 0; i < size; i++)
+            id += Math.random().toString(36).slice(2);
+        return id;
     }
 }

@@ -1,6 +1,8 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Alert, ScrollView, StyleSheet, View } from "react-native";
 import BlitzDB from "../../api/BlitzDB";
+import { TemplateType } from "../../api/models/TemplateModels";
 import TBA from "../../api/TBA";
 import HorizontalBar from "../../components/common/HorizontalBar";
 import StandardButton from "../../components/common/StandardButton";
@@ -13,6 +15,7 @@ export interface MatchProps {
 }
 
 export default function MatchScreen({ route }: any) {
+    const navigator = useNavigation();
 
     // Grab Match Data
     const matchID = route.params.matchID;
@@ -43,7 +46,7 @@ export default function MatchScreen({ route }: any) {
                     iconType={"explore"}
                     title={"Scout Match"}
                     subtitle={"Scout this match"}
-                    onPress={() => { }} />
+                    onPress={() => { navigator.navigate("Scout", { templateType: TemplateType.Match }); }} />
 
                 <StandardButton
                     iconType={"open-in-browser"}

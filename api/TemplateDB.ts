@@ -1,73 +1,83 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ElementData, ScoutingTemplate, TemplateType } from "./models/TemplateModels";
-
-const SAVE_KEY = "template-data";
-const StringTypes = [
-    "Pit",
-    "Match"
-];
+import React, { useEffect } from "react";
+import BlitzDB from "./BlitzDB";
+import { ElementData, ScoutingTemplate } from "./models/TemplateModels";
 
 /**
  * Handles scouting / pit scouting templates
  */
 export default class TemplateDB {
-    pitTemplate: ScoutingTemplate = [];
-    matchTemplate: ScoutingTemplate = [];
+    template: ScoutingTemplate = [];
+    saveKey: string;
+
+    constructor(saveKey: string) {
+        this.saveKey = saveKey;
+    }
 
     /**
      * Adds an element to a scouting template
-     * @param templateType - Template to append to
      * @param element - Element to append
      */
-    addElement(templateType: TemplateType, element: ElementData) {
-        if (templateType === TemplateType.Match)
-            this.matchTemplate.push(element);
-        else
-            this.pitTemplate.push(element);
+    addElement(element: ElementData) {
+        this.template.push(element);
+        this.save();
     }
 
     /**
-     * Gets the cooresponding template to the type
-     * @param templateType - Type of template
-     * @returns Template of that type
+     * Sets all data of an element
+     * @param element - Element to set
      */
-    getTemplate(templateType: TemplateType) {
-        if (templateType === TemplateType.Match)
-            return this.matchTemplate;
+    setElement(element: ElementData) {
+        let index = this.template.findIndex(e => e.id === element.id);
+        if (index >= 0)
+            this.template[index] = element;
         else
-            return this.pitTemplate;
+            console.error("Could not find element of id:" + element.id)
     }
 
     /**
-     * Gets a string representation of the template type
-     * @param templateType - Type of template
-     * @returns String representation of the type (Ex: "Pit" or "Match")
+     * Replaces the current template
+     * @param template - Replacement template
      */
-    getTemplateString(templateType: TemplateType) {
-        return StringTypes[templateType];
+    setTemplate(template: ScoutingTemplate) {
+        this.template = template;
+    }
+
+    /**
+     * Subscribes to a template as a react hook
+     * @returns React Hook of the template
+     */
+    useTemplate() {
+        const [version, setVersion] = React.useState(0);
+
+        useEffect(() => {
+            function onTemplateChange() {
+                setVersion(v => v + 1);
+            }
+
+            BlitzDB.eventEmitter.addListener("template", onTemplateChange);
+            return () => { BlitzDB.eventEmitter.removeListener("template", onTemplateChange); }
+        }, []);
+
+        return this.template;
     }
 
     /**
      * Saves all template data
      */
     async save() {
-        let templateData = {
-            match: this.matchTemplate,
-            pit: this.pitTemplate
-        };
-        let jsonTemplates = JSON.stringify(templateData);
-        await AsyncStorage.setItem(SAVE_KEY, jsonTemplates);
+        let jsonTemplates = JSON.stringify(this.template);
+        await AsyncStorage.setItem(this.saveKey, jsonTemplates);
+        BlitzDB.eventEmitter.emit("template");
     }
 
     /**
      * Loads all template data
      */
     async load() {
-        let jsonTemplates = await AsyncStorage.getItem(SAVE_KEY);
+        let jsonTemplates = await AsyncStorage.getItem(this.saveKey);
         if (!jsonTemplates)
             return;
-        let templates = JSON.parse(jsonTemplates);
-        this.pitTemplate = templates.pit;
-        this.matchTemplate = templates.match;
+        this.template = JSON.parse(jsonTemplates);
     }
 }

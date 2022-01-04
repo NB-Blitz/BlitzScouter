@@ -2,9 +2,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import BlitzDB from '../../../api/BlitzDB';
-import { ElementData } from '../../../api/models/TemplateModels';
+import Button from '../../../components/common/Button';
 import HorizontalBar from '../../../components/common/HorizontalBar';
 import ScrollContainer from '../../../components/containers/ScrollContainer';
 import ScoutingElement from '../../../components/elements/ScoutingElement';
@@ -13,61 +12,66 @@ import Text from '../../../components/text/Text';
 import Title from '../../../components/text/Title';
 
 export default function EditTemplateScreen({ route }: any) {
-    const [version, setVersion] = React.useState(0);
+    const templateType = route.params.templateType;
+    const template = BlitzDB.matchTemplate.useTemplate();
     const navigator = useNavigation();
-    const templateType = route.params.type;
+
+    // Delete Event
+    const onDeleteEvent = () => {
+        Alert.alert("Are you sure?", "This will wipe this entire template from your device. Are you sure you want to continue?", [{
+            text: "Confirm",
+            onPress: () => {
+                BlitzDB.matchTemplate.setTemplate([]);
+            }
+        },
+        { text: "Cancel", style: "cancel" }], { cancelable: true });
+    };
+
+    // Delete Button
+    React.useLayoutEffect(() => {
+        navigator.setOptions({
+            headerRight: () => (
+                <Button onPress={onDeleteEvent}>
+                    <MaterialIcons name="delete-outline" size={25} color={"#ffffff"} />
+                </Button>
+            )
+        });
+    });
+
+    // Save on Exit
+    React.useEffect(() => {
+        navigator.addListener("beforeRemove", (e) => {
+            BlitzDB.matchTemplate.save();
+        });
+    });
+
 
     // Element Preview
-    const stringType = BlitzDB.templates.getTemplateString(templateType);
-    const template: ElementData[] = BlitzDB.templates.getTemplate(templateType);
     let elementList: JSX.Element[] = [];
     if (template.length > 0) {
-        for (let elementData of template) {
-            elementList.push(
-                <ScoutingElement data={elementData} key={Math.random()} />
-            );
-        }
+        elementList = template.map(element => <ScoutingElement data={element} isEditable={true} key={Math.random()} />)
     }
     else {
-        elementList.push(<Text key={"0"}>There are no elements yet. Add an element to scout below.</Text>);
-    }
-
-    // Clear Behaviour
-    const clearTemplate = () => {
-        Alert.alert("Are you sure?", "This will delete all elements in this template. Are you sure you want to continue?",
-            [
-                {
-                    text: "Confirm",
-                    onPress: () => {
-                        //BlitzDB.templates[props.type] = [];
-                        setVersion(version + 1);
-                    }
-                },
-                { text: "Cancel", style: "cancel" }
-            ], { cancelable: true }
-        );
+        elementList = [<Text key={"0"}>There are no elements yet. Add an element to scout below.</Text>];
     }
 
     return (
         <View style={styles.parentView}>
             <ScrollContainer>
-
                 <Title>Edit Template</Title>
-                <Subtitle>{stringType} Scouting</Subtitle>
-
+                <Subtitle>Match Scouting</Subtitle>
                 <HorizontalBar />
 
                 {elementList}
-
-                <HorizontalBar />
-
             </ScrollContainer>
 
-            <View style={styles.addButton}>
-                <TouchableOpacity onPress={() => { navigator.navigate("ElementChooser", { type: templateType }); }}>
-                    <MaterialIcons name="add" size={30} style={{ color: "#000000" }} />
-                </TouchableOpacity>
-            </View>
+            <Button
+                style={styles.addButton}
+                onPress={() => { navigator.navigate("ElementChooser", { templateType: templateType }); }}>
+
+                <MaterialIcons name="add" size={30} style={{ color: "#000000" }} />
+
+            </Button>
         </View>
     );
 }

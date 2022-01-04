@@ -1,4 +1,4 @@
-import { FontAwesome } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/core";
 import * as ImagePicker from 'expo-image-picker';
 import React from "react";
@@ -58,28 +58,18 @@ export default function TeamScreen({ route }: any) {
                     <Button
                         style={styles.imageButton}
                         onPress={async () => { addPhoto(teamID) }}>
-                        <FontAwesome
-                            size={20}
-                            name={"plus"}
-                            color={"white"}
-                            style={{ marginRight: 3 }} />
-                        <FontAwesome
-                            size={30}
-                            name={"camera"}
+                        <MaterialIcons
+                            size={40}
+                            name={"add-a-photo"}
                             color={"white"} />
                     </Button>
 
                     <Button
                         style={styles.imageButton}
                         onPress={async () => { addFile(teamID) }}>
-                        <FontAwesome
-                            size={20}
-                            name={"plus"}
-                            color={"white"}
-                            style={{ marginRight: 3 }} />
-                        <FontAwesome
-                            size={30}
-                            name={"folder"}
+                        <MaterialIcons
+                            size={40}
+                            name={"add-photo-alternate"}
                             color={"white"} />
                     </Button>
                 </ScrollView>
@@ -106,7 +96,7 @@ export default function TeamScreen({ route }: any) {
                     iconType={"open-in-browser"}
                     title={"View on TBA"}
                     subtitle={"View Team " + team.number + " on The Blue Alliance"}
-                    onPress={() => { team ? TBA.openTeam(team.number) : null }} />
+                    onPress={() => { team ? TBA.openTeam(team.number, BlitzDB.event.year) : null }} />
 
                 <HorizontalBar />
             </View>

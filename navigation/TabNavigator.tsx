@@ -50,7 +50,7 @@ export default function TabNavigator() {
             <Tab.Screen
                 name="Teams"
                 component={TeamsScreen}
-                options={{ tabBarIcon: (props) => { return (<MaterialIcons name="people-outline" {...props} />) } }}
+                options={{ tabBarIcon: (props) => { return (<MaterialIcons name="people-alt" {...props} />) } }}
             />
             <Tab.Screen
                 name="Sharing"

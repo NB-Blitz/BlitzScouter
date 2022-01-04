@@ -10,12 +10,13 @@ import Title from '../../../components/text/Title';
 
 export default function ElementChooserScreen({ route }: any) {
     const navigator = useNavigation();
-    const templateType = route.params.type;
+    const templateType = route.params.templateType;
 
     const chooseElement = (elementType: ElementType) => {
-        BlitzDB.templates.addElement(templateType, {
+        BlitzDB.matchTemplate.addElement({
+            id: BlitzDB.generateID(),
             type: elementType,
-            label: "Default",
+            label: "",
             options: {}
         });
         navigator.goBack();
@@ -31,25 +32,19 @@ export default function ElementChooserScreen({ route }: any) {
                 iconType={"import-export"}
                 title={"Counter"}
                 subtitle={"Increment and decrement a number"}
-                onPress={() => { }} />
+                onPress={() => { chooseElement(ElementType.counter); }} />
 
             <StandardButton
                 iconType={"check-box"}
                 title={"Checkbox"}
                 subtitle={"A simple check or uncheck"}
-                onPress={() => { }} />
+                onPress={() => { chooseElement(ElementType.checkbox); }} />
 
             <StandardButton
                 iconType={"text-fields"}
                 title={"Textbox"}
                 subtitle={"Type in text or comments"}
-                onPress={() => { }} />
-
-            <StandardButton
-                iconType={"star"}
-                title={"5-Star Rating"}
-                subtitle={"Similar to reviews"}
-                onPress={() => { }} />
+                onPress={() => { chooseElement(ElementType.textbox); }} />
 
             <HorizontalBar />
 
@@ -62,7 +57,7 @@ export default function ElementChooserScreen({ route }: any) {
             <StandardButton
                 iconText={"S"}
                 title={"Subtitle"}
-                subtitle={"A title or section for scouters"}
+                subtitle={"A sub-title or section for scouters"}
                 onPress={() => { chooseElement(ElementType.subtitle); }} />
 
             <StandardButton
@@ -72,7 +67,7 @@ export default function ElementChooserScreen({ route }: any) {
                 onPress={() => { chooseElement(ElementType.text); }} />
 
             <StandardButton
-                iconText={"-"}
+                iconType={"horizontal-rule"}
                 title={"Horizontal Rule"}
                 subtitle={"A divider to seperate sections"}
                 onPress={() => { chooseElement(ElementType.hr); }} />

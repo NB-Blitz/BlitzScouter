@@ -54,8 +54,8 @@ export default class TBA {
      * Opens a team in a new browser window
      * @param teamNumber - Number of the team
      */
-    static openTeam(teamNumber: number) {
-        Linking.openURL("https://www.thebluealliance.com/team/" + teamNumber);
+    static openTeam(teamNumber: number, year: number) {
+        Linking.openURL("https://www.thebluealliance.com/team/" + teamNumber + "/" + year);
     }
 
     /**
