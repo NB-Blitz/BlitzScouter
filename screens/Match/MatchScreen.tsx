@@ -1,39 +1,18 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { Alert, ScrollView, StyleSheet, View } from "react-native";
-import BlitzDB from "../../api/BlitzDB";
-import { TemplateType } from "../../api/models/TemplateModels";
+import { ScrollView, StyleSheet, View } from "react-native";
 import TBA from "../../api/TBA";
 import HorizontalBar from "../../components/common/HorizontalBar";
 import StandardButton from "../../components/common/StandardButton";
 import Subtitle from "../../components/text/Subtitle";
 import Title from "../../components/text/Title";
+import useMatch from "../../hooks/useMatch";
 import TeamPreview from "../Matches/TeamPreview";
-
-export interface MatchProps {
-    matchID: string;
-}
 
 export default function MatchScreen({ route }: any) {
     const navigator = useNavigation();
+    const [match, setMatch] = useMatch(route.params.matchID);
 
-    // Grab Match Data
-    const matchID = route.params.matchID;
-    const match = BlitzDB.matches.get(matchID);
-    if (!(match)) {
-        Alert.alert("Error", "There was an error grabbing the data from that match. Try re-downloading TBA data then try again.");
-        return null;
-    }
-
-    // Grab Team List
-    let redTeams = [];
-    let blueTeams = [];
-    for (let teamID of match.blueTeamIDs)
-        blueTeams.push(<TeamPreview teamID={teamID} key={teamID} />);
-    for (let teamID of match.redTeamIDs)
-        redTeams.push(<TeamPreview teamID={teamID} key={teamID} />);
-
-    // Return Modal
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -46,7 +25,7 @@ export default function MatchScreen({ route }: any) {
                     iconType={"explore"}
                     title={"Scout Match"}
                     subtitle={"Scout this match"}
-                    onPress={() => { navigator.navigate("Scout", { templateType: TemplateType.Match }); }} />
+                    onPress={() => { /*navigator.navigate("Scout", { templateType: TemplateType.Match });*/ }} />
 
                 <StandardButton
                     iconType={"open-in-browser"}
@@ -60,7 +39,7 @@ export default function MatchScreen({ route }: any) {
 
                 <ScrollView horizontal={true}>
                     <View>
-                        {redTeams}
+                        {match.redTeamIDs.map(teamID => <TeamPreview teamID={teamID} key={teamID} />)}
                     </View>
                 </ScrollView>
 
@@ -70,7 +49,7 @@ export default function MatchScreen({ route }: any) {
 
                 <ScrollView horizontal={true}>
                     <View>
-                        {blueTeams}
+                        {match.blueTeamIDs.map(teamID => <TeamPreview teamID={teamID} key={teamID} />)}
                     </View>
                 </ScrollView>
 

@@ -1,16 +1,17 @@
-import { TemplateType } from "../api/models/TemplateModels";
 
 // Params
 export type RootNavParamList = {
     Drawer: undefined,
     Match: { matchID: string },
     Team: { teamID: string },
-    Media: { teamID: string, imageIndex: number },
-    Scout: { templateType: TemplateType }
+    Media: { mediaPath: string },
     Year: undefined,
     Regional: { year: number },
+    /*
     EditTemplate: { templateType: TemplateType },
-    ElementChooser: { templateType: TemplateType }
+    ElementChooser: { templateType: TemplateType },
+    Scout: { templateType: TemplateType }
+    */
 };
 
 // Default

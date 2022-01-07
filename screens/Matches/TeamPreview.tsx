@@ -1,33 +1,22 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 import * as React from 'react';
-import { Alert, Image, StyleSheet, View } from "react-native";
-import BlitzDB from '../../api/BlitzDB';
+import { Image, StyleSheet, View } from "react-native";
 import Button from '../../components/common/Button';
 import Text from '../../components/text/Text';
+import useTeam from '../../hooks/useTeam';
 
-interface TeamThumbnailProps {
-    teamID: string
-}
 
-export default function TeamPreview(props: TeamThumbnailProps) {
+export default function TeamPreview(props: { teamID: string }) {
     const navigator = useNavigation();
+    const [team, setTeam] = useTeam(props.teamID);
 
-    // Grab Team Data
-    let team = BlitzDB.teams.get(props.teamID);
-    if (!(team)) {
-        Alert.alert("Error", "There was an error grabbing the data from that team. Try re-downloading TBA data then try again.");
-        return null;
-    }
-
-    // Grab Team Media
     let mediaIcon: JSX.Element;
-    if (team.media.length > 0) {
-        let preview = team.media[team.media.length - 1];
+    if (team.mediaPaths.length > 0) {
         mediaIcon = (
             <Image
                 style={styles.thumbnail}
-                source={{ uri: preview }}
+                source={{ uri: team.mediaPaths[team.mediaPaths.length - 1] }}
                 key={Math.random()} />
         );
     }
@@ -42,11 +31,10 @@ export default function TeamPreview(props: TeamThumbnailProps) {
         );
     }
 
-
     return (
         <Button
             style={styles.container}
-            onPress={() => { navigator.navigate("Team", { teamID: team ? team.id : "" }) }} >
+            onPress={() => { navigator.navigate("Team", { teamID: team.id }) }} >
 
             {mediaIcon}
 

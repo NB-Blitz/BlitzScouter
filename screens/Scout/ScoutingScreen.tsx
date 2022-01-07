@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import BlitzDB from '../../api/BlitzDB';
 import Button from '../../components/common/Button';
 import HorizontalBar from '../../components/common/HorizontalBar';
 import ScrollContainer from '../../components/containers/ScrollContainer';

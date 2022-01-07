@@ -2,7 +2,6 @@ import LZString from 'lz-string';
 import * as React from 'react';
 import { Dimensions, Modal, StyleSheet, View } from 'react-native';
 import QRCode from 'react-qr-code';
-import BlitzDB from '../../api/BlitzDB';
 import DarkBackground from '../../components/common/DarkBackground';
 
 export interface ModalProps {
@@ -17,7 +16,7 @@ export default function ExportQRModal(props: ModalProps) {
 
     const windowSize = Dimensions.get("window");
     const qrSize = Math.min(windowSize.width, windowSize.height);
-    const commentData = BlitzDB.exportComments();
+    const commentData = ""; // BlitzDB.exportComments();
     const compressedData = LZString.compress(commentData);
 
     return (

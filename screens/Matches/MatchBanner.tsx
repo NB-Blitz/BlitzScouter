@@ -1,19 +1,12 @@
 import { useNavigation } from "@react-navigation/core";
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import BlitzDB from "../../api/BlitzDB";
 import StandardButton from "../../components/common/StandardButton";
+import useMatch from "../../hooks/useMatch";
 
-interface MatchBannerProps {
-    matchID: string;
-}
-
-export default function MatchBanner(props: MatchBannerProps) {
+export default function MatchBanner(props: { matchID: string }) {
     const navigator = useNavigation();
-
-    const match = BlitzDB.matches.get(props.matchID);
-    if (!match)
-        return null;
+    const [match, setMatch] = useMatch(props.matchID);
 
     return (
         <View>
@@ -27,23 +20,5 @@ export default function MatchBanner(props: MatchBannerProps) {
 }
 
 const styles = StyleSheet.create({
-    button: {
-        flexDirection: "row",
-        justifyContent: "flex-start"
-    },
-    buttonTitle: {
-        fontSize: 18
-    },
-    buttonSubtitle: {
-        color: "#bbb"
-    },
-    matchThumbnail: {
-        fontSize: 20,
-        fontWeight: "bold",
-        marginRight: 10,
-        width: 35,
-        height: 35,
-        paddingTop: 5,
-        textAlign: "center"
-    }
+
 });

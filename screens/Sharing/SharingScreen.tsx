@@ -4,11 +4,9 @@ import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
 import ExportQRModal from './ExportQRModal';
-import ImportQRModal from './ImportQRModal';
 
 export default function SharingScreen() {
     const [isExportQRVisible, setExportQRVisible] = React.useState(false);
-    const [isImportQRVisible, setImportQRVisible] = React.useState(false);
 
     return (
         <ScrollContainer>
@@ -23,12 +21,11 @@ export default function SharingScreen() {
                 subtitle={"Export Scouting Data"}
                 onPress={() => { setExportQRVisible(true); }} />
 
-            <ImportQRModal isVisible={isImportQRVisible} setVisible={setImportQRVisible} />
             <StandardButton
                 iconType={"camera-alt"}
                 title={"Scan QRCode"}
                 subtitle={"Import Scouting Data"}
-                onPress={() => { setImportQRVisible(true); }} />
+                onPress={() => { }} />
             <HorizontalBar />
 
             {/* File Formats */}

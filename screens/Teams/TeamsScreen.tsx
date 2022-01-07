@@ -1,39 +1,37 @@
 import * as React from 'react';
-import { ToastAndroid } from 'react-native';
-import BlitzDB from '../../api/BlitzDB';
+import { Platform, ToastAndroid } from 'react-native';
+import { DownloadTeams } from '../../api/TBAAdapter';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
 import Text from '../../components/text/Text';
+import useEvent from '../../hooks/useEvent';
 import TeamBanner from './TeamBanner';
 
 export default function TeamsScreen() {
-    const [version, setVersion] = React.useState(0);
-    let teamList: JSX.Element[] = [];
+    const [event, setEvent] = useEvent();
 
     const onRefresh = async () => {
-        let success = await BlitzDB.teams.downloadEvent(BlitzDB.event.id, () => { });
-        if (!success)
+        const teamIDs = await DownloadTeams(event.id, () => { });
+        if (teamIDs) {
+            setEvent({
+                id: event.id,
+                matchIDs: event.matchIDs,
+                teamIDs,
+                year: event.year
+            });
+        }
+        else if (Platform.OS === "android") {
             ToastAndroid.show("Failed to connect to TBA", 1000);
-        else
-            ToastAndroid.show("Updated team data", 1000);
-        setVersion(version + 1);
+        }
     };
-
-    if (BlitzDB.event.isLoaded) {
-        if (BlitzDB.event.teamIDs.length > 0)
-            for (let teamID of BlitzDB.event.teamIDs)
-                teamList.push(<TeamBanner teamID={teamID} key={teamID} />);
-        else
-            teamList.push(<Text key={1}>This event has no team data posted yet! You can try refreshing by pulling down.</Text>);
-    }
-    else {
-        teamList.push(<Text key={1}>Team data has not been downloaded from TBA yet. Download is available under settings</Text>);
-    }
 
     return (
         <ScrollContainer onRefresh={onRefresh}>
             <NavTitle>Teams</NavTitle>
-            {teamList}
+            {event.teamIDs.length > 0 ?
+                event.teamIDs.map((teamID) => <TeamBanner teamID={teamID} key={teamID} />) :
+                <Text>Team data has not been downloaded from TBA yet. Download is available under the settings tab.</Text>
+            }
         </ScrollContainer>
     );
 }

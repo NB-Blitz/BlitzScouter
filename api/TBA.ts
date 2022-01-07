@@ -1,5 +1,5 @@
 import { Linking } from 'react-native';
-import { TBAEvent, TBAMatch, TBAMedia, TBAStatus, TBATeam } from './models/TBAModels';
+import { TBAEvent, TBAMatch, TBAMedia, TBAStatus, TBATeam } from '../types/TBAModels';
 const API_KEY = "i90dAcKHXvQ9havypHJKeGY8O1tfymFpaW1Po3RGYpvoMTRVwtiUsUFaLmstCDp3";
 const URL_PREFIX = "https://www.thebluealliance.com/api/v3/";
 const URL_SUFFIX = "?X-TBA-Auth-Key=" + API_KEY;
@@ -54,8 +54,8 @@ export default class TBA {
      * Opens a team in a new browser window
      * @param teamNumber - Number of the team
      */
-    static openTeam(teamNumber: number, year: number) {
-        Linking.openURL("https://www.thebluealliance.com/team/" + teamNumber + "/" + year);
+    static openTeam(teamNumber: number, year?: number) {
+        Linking.openURL("https://www.thebluealliance.com/team/" + teamNumber + "/" + (year ? year : ""));
     }
 
     /**
@@ -110,6 +110,6 @@ export default class TBA {
             }, 5000);
         })
 
-        return Promise.race<Promise<Type | undefined>>([fetchPromise, timeoutPromise]);
+        return Promise.race<Type | undefined>([fetchPromise, timeoutPromise]);
     }
 }

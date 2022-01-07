@@ -1,63 +1,97 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/core";
+import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import React from "react";
-import { Alert, Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
-import BlitzDB from "../../api/BlitzDB";
+import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
 import TBA from "../../api/TBA";
 import Button from "../../components/common/Button";
 import HorizontalBar from "../../components/common/HorizontalBar";
 import StandardButton from "../../components/common/StandardButton";
 import Subtitle from "../../components/text/Subtitle";
 import Title from "../../components/text/Title";
-
-export interface TeamProps {
-    teamID: string;
-}
+import useTeam from "../../hooks/useTeam";
 
 export default function TeamScreen({ route }: any) {
-    const [version, setVersion] = React.useState(0);
     const navigator = useNavigation();
-    const teamID = route.params.teamID;
+    const [team, setTeam] = useTeam(route.params.teamID);
 
-    // Re-render on New Media
-    /*BlitzDB.eventEmitter.addListener("mediaUpdate", () => {
-        BlitzDB.eventEmitter.removeCurrentListener();
-        setVersion(version + 1);
-        setPreviewIndex(-1);
-    });*/
-
-    // Grab Team Data
-    let team = BlitzDB.teams.get(teamID);
-    if (!team) {
-        Alert.alert("Error", "There was an error grabbing the data from that team. Try re-downloading TBA data then try again.");
-        return null;
+    const generateID = () => {
+        return team.id + "_" + Math.random().toString(36).slice(2);
     }
 
-    // Grab Team Media
-    let mediaList: JSX.Element[] = [];
-    for (let i = 0; i < team.media.length; i++) {
-        let imageData = team.media[i];
-        mediaList.push(
-            <Button
-                style={styles.imageButton}
-                onPress={() => { navigator.navigate("Media", { teamID: teamID, imageIndex: i }); }}
-                key={Math.random()}>
-                <Image style={styles.thumbnail} source={{ uri: imageData }} key={Math.random()} />
-            </Button>
-        );
+    const takePhoto = async () => {
+        const path = FileSystem.documentDirectory + generateID() + ".png";
+        const cameraResult = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: .5,
+            base64: true
+        });
+
+        if (cameraResult.cancelled || !cameraResult.base64)
+            return;
+
+        await FileSystem.writeAsStringAsync(path, cameraResult.base64, {
+            encoding: FileSystem.EncodingType.Base64,
+        });
+
+        let mediaPaths = team.mediaPaths;
+        mediaPaths.push(path);
+        setTeam({
+            id: team.id,
+            name: team.name,
+            number: team.number,
+            mediaPaths
+        });
     }
 
-    // Return Modal
+    const uploadPhoto = async () => {
+        const path = FileSystem.documentDirectory + generateID() + ".png";
+        const cameraResult = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: .5,
+            base64: true
+        });
+
+        if (cameraResult.cancelled || !cameraResult.base64)
+            return;
+
+        await FileSystem.writeAsStringAsync(path, cameraResult.base64, {
+            encoding: FileSystem.EncodingType.Base64,
+        });
+
+        let mediaPaths = team.mediaPaths;
+        mediaPaths.push(path);
+        setTeam({
+            id: team.id,
+            name: team.name,
+            number: team.number,
+            mediaPaths
+        });
+    }
+
     return (
         <ScrollView>
             <View style={styles.container}>
                 <ScrollView style={styles.media} horizontal={true}>
-                    {mediaList}
+                    {team.mediaPaths.map((mediaPath, index) =>
+                        <Button
+                            style={styles.imageButton}
+                            onPress={() => { navigator.navigate("Media", { mediaPath }); }}
+                            key={Math.random()}>
+
+                            <Image style={styles.thumbnail} source={{ uri: mediaPath }} key={index} />
+
+                        </Button>
+                    )}
 
                     <Button
                         style={styles.imageButton}
-                        onPress={async () => { addPhoto(teamID) }}>
+                        onPress={async () => { takePhoto(); }}>
                         <MaterialIcons
                             size={40}
                             name={"add-a-photo"}
@@ -66,7 +100,7 @@ export default function TeamScreen({ route }: any) {
 
                     <Button
                         style={styles.imageButton}
-                        onPress={async () => { addFile(teamID) }}>
+                        onPress={async () => { uploadPhoto(); }}>
                         <MaterialIcons
                             size={40}
                             name={"add-photo-alternate"}
@@ -85,59 +119,16 @@ export default function TeamScreen({ route }: any) {
                     subtitle={"Pit scout this team"}
                     onPress={() => { }} />
 
-
-                {/*<StandardButton
-                    iconType={"list"}
-                    title={"List Matches"}
-                    subtitle={"List the matches Team " + team.number + " is in"}
-                    onPress={() => { navigator.navigate("TeamMatches", { teamID }) }} />*/}
-
                 <StandardButton
                     iconType={"open-in-browser"}
                     title={"View on TBA"}
                     subtitle={"View Team " + team.number + " on The Blue Alliance"}
-                    onPress={() => { team ? TBA.openTeam(team.number, BlitzDB.event.year) : null }} />
+                    onPress={() => { team ? TBA.openTeam(team.number) : null }} />
 
                 <HorizontalBar />
             </View>
         </ScrollView>
     );
-}
-
-function addPhoto(teamID: string) {
-    return ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: .5,
-
-        base64: true
-    }).then(result => {
-        if (result.cancelled)
-            return;
-        if (!result.base64)
-            return;
-
-        BlitzDB.teams.addMedia(teamID, result.base64);
-    });
-}
-
-function addFile(teamID: string) {
-    return ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: .5,
-
-        base64: true
-    }).then(result => {
-        if (result.cancelled)
-            return;
-        if (!result.base64)
-            return;
-
-        BlitzDB.teams.addMedia(teamID, result.base64);
-    });
 }
 
 const styles = StyleSheet.create({

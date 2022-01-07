@@ -25,7 +25,7 @@ const SEASON_NAMES = [
     "Toroid Terror",
     "Ladder Logic",
     "Double Trouble",
-    "Co-operation FIRST",    // 2000
+    "Co-operation FIRST",   // 2000
     "Diabolical Dynamics",
     "Zone Zeal",
     "Shark Attack",
@@ -54,16 +54,17 @@ export default function YearScreen() {
     const [maxYear, setMaxYear] = React.useState(0);
     const navigator = useNavigation();
 
+
+    TBA.getServerStatus().then((status) => {
+        if (status)
+            setMaxYear(status.max_season);
+        else
+            ToastAndroid.show("Failed to connect to TBA", 1000);
+    });
+
     // Generate List
     let yearsDisplay: JSX.Element[] = [];
     if (maxYear <= INIT_YEAR) {
-        TBA.getServerStatus().then((status) => {
-            if (status)
-                setMaxYear(status.max_season);
-            else
-                ToastAndroid.show("Failed to connect to TBA", 1000);
-        })
-
         yearsDisplay.push(
             <Text style={styles.loadingText} key={1}>
                 Loading All Seasons...
