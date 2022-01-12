@@ -9,12 +9,14 @@ import ScoutingElement from '../../../components/elements/ScoutingElement';
 import Subtitle from '../../../components/text/Subtitle';
 import Text from '../../../components/text/Text';
 import Title from '../../../components/text/Title';
+import { PaletteContext } from '../../../context/PaletteContext';
 import useTemplate from '../../../hooks/useTemplate';
 import { ElementData, TemplateType } from '../../../types/TemplateTypes';
 
 const TEMPLATE_NAMES = ["Pit", "Match"];
 
 export default function EditTemplateScreen({ route }: any) {
+    const paletteContext = React.useContext(PaletteContext);
     const navigator = useNavigation();
     const templateType = route.params.templateType as TemplateType;
     const [template, setTemplate] = useTemplate(templateType);
@@ -49,7 +51,7 @@ export default function EditTemplateScreen({ route }: any) {
         navigator.setOptions({
             headerRight: () => (
                 <Button onPress={onDeleteEvent}>
-                    <MaterialIcons name="delete-outline" size={25} color={"#ffffff"} />
+                    <MaterialIcons name="delete-outline" size={25} color={paletteContext.palette.textPrimary} />
                 </Button>
             )
         });
@@ -78,10 +80,10 @@ export default function EditTemplateScreen({ route }: any) {
             </ScrollContainer>
 
             <Button
-                style={styles.addButton}
+                style={[styles.addButton, { backgroundColor: paletteContext.palette.navigationSelected }]}
                 onPress={() => { navigator.navigate("ElementChooser", { templateType: templateType }); }}>
 
-                <MaterialIcons name="add" size={30} style={{ color: "#000000" }} />
+                <MaterialIcons name="add" size={30} style={{ color: paletteContext.palette.navigationTextSelected }} />
 
             </Button>
         </View>
@@ -107,8 +109,5 @@ const styles = StyleSheet.create({
         bottom: 40,
         right: 25,
         padding: 10,
-
-        backgroundColor: "#c89f00",
-        color: "#000000"
     }
 });

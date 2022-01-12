@@ -7,10 +7,12 @@ import { DownloadEvent } from "../../api/TBAAdapter";
 import Button from "../../components/common/Button";
 import ScrollContainer from "../../components/containers/ScrollContainer";
 import Text from "../../components/text/Text";
+import { PaletteContext } from "../../context/PaletteContext";
 import { TBAEvent } from "../../types/TBAModels";
 import DownloadingModal from "./DownloadingModal";
 
 export default function RegionalScreen({ route }: any) {
+    const paletteContext = React.useContext(PaletteContext);
     const navigator = useNavigation();
     const [searchTerm, updateSearch] = React.useState("");
     const [regionalList, updateRegionals] = React.useState([] as TBAEvent[]);
@@ -50,9 +52,9 @@ export default function RegionalScreen({ route }: any) {
                     <Button
                         key={key}
                         onPress={() => { downloadEvent(key); }}
-                        style={styles.regionalButton} >
+                        style={[styles.regionalButton]} >
 
-                        <Text style={styles.regionalText} numberOfLines={1}>
+                        <Text style={[styles.regionalText, { color: paletteContext.palette.textPrimary }]} numberOfLines={1}>
                             {regional.name}
                         </Text>
 
@@ -68,8 +70,8 @@ export default function RegionalScreen({ route }: any) {
 
             <TextInput
                 placeholder="Search..."
-                placeholderTextColor="#fff"
-                style={styles.textInput}
+                placeholderTextColor={paletteContext.palette.textSecondary}
+                style={[styles.textInput, { color: paletteContext.palette.textPrimary, backgroundColor: paletteContext.palette.button }]}
                 onChangeText={(text) => { updateSearch(text.toLowerCase()) }}
             />
 
@@ -96,8 +98,6 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     textInput: {
-        color: "#fff",
-        backgroundColor: "#222222",
         borderRadius: 10,
         padding: 10,
         marginBottom: 10,

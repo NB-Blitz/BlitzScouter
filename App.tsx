@@ -1,10 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { PaletteProvider } from './context/PaletteContext';
 import useCachedResources from './hooks/useCachedResources';
 import RootNavigator from './navigation/RootNavigator';
 
-export default function App() {
+function App() {
     const isLoadingComplete = useCachedResources();
 
     if (!isLoadingComplete) {
@@ -20,4 +21,12 @@ export default function App() {
             </SafeAreaProvider >
         );
     }
+}
+
+export default function AppContainer() {
+    return (
+        <PaletteProvider>
+            <App />
+        </PaletteProvider>
+    );
 }

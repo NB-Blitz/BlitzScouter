@@ -88,7 +88,8 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontSize: 12,
-        marginTop: 1
+        marginTop: 1,
+        color: "#fff"
     },
     buttonBar: {
         position: "absolute",

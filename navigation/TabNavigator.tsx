@@ -2,6 +2,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { BottomTabBarButtonProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as React from 'react';
 import { TouchableNativeFeedback, View } from 'react-native';
+import { PaletteContext } from '../context/PaletteContext';
 import MatchesScreen from '../screens/Matches/MatchesScreen';
 import SettingsScreen from '../screens/Settings/SettingsScreen';
 import SharingScreen from '../screens/Sharing/SharingScreen';
@@ -9,11 +10,13 @@ import TeamsScreen from '../screens/Teams/TeamsScreen';
 
 const Tab = createBottomTabNavigator();
 export default function TabNavigator() {
+    const paletteContext = React.useContext(PaletteContext);
+
     const buttonNativeFeedback = ({ children, style, ...props }: BottomTabBarButtonProps) => (
         <TouchableNativeFeedback
             {...props}
             useForeground={false}
-            background={TouchableNativeFeedback.Ripple('#856a00', false)}>
+            background={TouchableNativeFeedback.Ripple(paletteContext.palette.background, false)}>
             <View style={style}>{children}</View>
         </TouchableNativeFeedback>
     );
@@ -27,10 +30,10 @@ export default function TabNavigator() {
             }}
             screenOptions={{
                 headerShown: false,
-                tabBarActiveBackgroundColor: "#c89f00",
-                tabBarInactiveBackgroundColor: "#2d2e30",
-                tabBarActiveTintColor: "#000000",
-                tabBarInactiveTintColor: "#ffffff",
+                tabBarActiveBackgroundColor: paletteContext.palette.navigationSelected,
+                tabBarInactiveBackgroundColor: paletteContext.palette.navigation,
+                tabBarActiveTintColor: paletteContext.palette.navigationTextSelected,
+                tabBarInactiveTintColor: paletteContext.palette.navigationText,
                 tabBarStyle: {
                     height: 60
                 },

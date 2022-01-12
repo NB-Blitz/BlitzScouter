@@ -7,10 +7,12 @@ import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
 import Subtitle from '../../components/text/Subtitle';
+import { DARK_PALETTE, PaletteContext } from '../../context/PaletteContext';
 import { clearStorage } from '../../hooks/useStorage';
 import { TemplateType } from '../../types/TemplateTypes';
 
 export default function SettingsScreen() {
+    const paletteContext = React.useContext(PaletteContext);
     const navigator = useNavigation();
 
     const clearData = () => {
@@ -43,6 +45,12 @@ export default function SettingsScreen() {
                 title={"Set Active Regional"}
                 subtitle={"Downloads team/match data from TBA"}
                 onPress={() => { navigator.navigate("Year"); }} />
+
+            <StandardButton
+                iconType={"delete-outline"}
+                title={"Clear Theme Data"}
+                subtitle={"Wipes the theme from your device"}
+                onPress={() => { paletteContext.setPalette(DARK_PALETTE); }} />
 
             <StandardButton
                 iconType={"delete-outline"}

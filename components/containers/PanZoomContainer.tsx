@@ -1,7 +1,7 @@
 import React from "react";
-import { View } from "react-native";
+import { Dimensions, View } from "react-native";
 import { PanGestureHandler, PanGestureHandlerGestureEvent, PinchGestureHandler, PinchGestureHandlerGestureEvent } from "react-native-gesture-handler";
-import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
+import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 
 export type ViewProps = View['props'];
 
@@ -12,6 +12,9 @@ export default function PanZoomContainer(props: ViewProps) {
     const endPan = { x: useSharedValue(0), y: useSharedValue(0) };
     const startZoom = useSharedValue(1);
     const endZoom = useSharedValue(1);
+
+    const deviceWidth = Dimensions.get('window').width;
+    const deviceHeight = Dimensions.get('window').height;
 
     // Handler
     const panGestureHandler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({
@@ -25,6 +28,7 @@ export default function PanZoomContainer(props: ViewProps) {
         onEnd: (event, ctx) => {
             startPan.x.value = endPan.x.value;
             startPan.y.value = endPan.y.value;
+
         }
     });
     const zoomGestureHandler = useAnimatedGestureHandler<PinchGestureHandlerGestureEvent>({
@@ -35,7 +39,12 @@ export default function PanZoomContainer(props: ViewProps) {
             endZoom.value = startZoom.value * event.scale;
         },
         onEnd: (event, ctx) => {
-            startZoom.value = endZoom.value;
+            if (endZoom.value < 1) {
+                startZoom.value = withSpring(1);
+                endZoom.value = withSpring(1);
+            } else {
+                startZoom.value = endZoom.value;
+            }
         }
     });
 
@@ -47,13 +56,13 @@ export default function PanZoomContainer(props: ViewProps) {
     });
     const zoomStyle = useAnimatedStyle(() => {
         return {
-            transform: [{ scale: endZoom.value }],
+            transform: [{ scale: endZoom.value }]
         };
     });
 
     return (
         <PinchGestureHandler onGestureEvent={zoomGestureHandler} ref={pinchRef}>
-            <Animated.View style={[zoomStyle]}>
+            <Animated.View style={[zoomStyle, { height: deviceHeight }]}>
                 <PanGestureHandler onGestureEvent={panGestureHandler} simultaneousHandlers={pinchRef}>
                     <Animated.View style={panStyle} {...props} />
                 </PanGestureHandler>

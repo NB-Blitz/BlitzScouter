@@ -1,6 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import * as React from 'react';
 import { GestureResponderEvent, Image, StyleSheet, TouchableNativeFeedback, View } from "react-native";
+import { PaletteContext } from '../../context/PaletteContext';
 import Text from '../text/Text';
 
 export interface ButtonProps {
@@ -14,23 +15,23 @@ export interface ButtonProps {
 }
 
 export default function StandardButton(props: ButtonProps) {
-
+    const paletteContext = React.useContext(PaletteContext);
     return (
         <TouchableNativeFeedback
             useForeground={false}
             background={TouchableNativeFeedback.Ripple('#696969', false)}
             onPress={props.onPress}>
 
-            <View style={styles.button}>
+            <View style={[styles.button, { backgroundColor: paletteContext.palette.button }]}>
                 {/*  Text Icon  */}
                 {props.iconText ?
-                    <Text style={styles.buttonIconTXT}>{props.iconText}</Text>
+                    <Text style={[styles.buttonIconTXT, { color: paletteContext.palette.textPrimary }]}>{props.iconText}</Text>
                     : null}
 
                 {/*  FA Icon  */}
                 {props.iconType ?
                     <View style={styles.buttonIconFA} >
-                        <MaterialIcons name={props.iconType} size={30} style={{ color: "#fff" }} />
+                        <MaterialIcons name={props.iconType} size={30} style={{ color: paletteContext.palette.textPrimary }} />
                     </View>
                     : null}
 
@@ -42,8 +43,8 @@ export default function StandardButton(props: ButtonProps) {
 
                 {/*  Titles  */}
                 <View>
-                    <Text style={styles.buttonTitle} numberOfLines={1}>{props.title}</Text>
-                    <Text style={styles.buttonSubtitle}>{props.subtitle}</Text>
+                    <Text style={[styles.buttonTitle, { color: paletteContext.palette.textPrimary }]} numberOfLines={1}>{props.title}</Text>
+                    <Text style={{ color: paletteContext.palette.textSecondary }}>{props.subtitle}</Text>
                 </View>
             </View>
 
@@ -62,14 +63,10 @@ const styles = StyleSheet.create({
         padding: 10,
         paddingRight: 65,
         marginBottom: 5,
-        backgroundColor: "#1b1b1b",
         borderRadius: 5
     },
     buttonTitle: {
         fontSize: 18
-    },
-    buttonSubtitle: {
-        color: "#bbb"
     },
     buttonIconFA: {
         marginRight: 12,

@@ -2,6 +2,7 @@ import { DarkTheme, NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from 'react';
 import MediaScreen from "../components/containers/MediaScreen";
+import { PaletteContext } from "../context/PaletteContext";
 import DefaultTeamScreen from "../screens/DefaultTeam/DefaultTeamScreen";
 import TeamSelectScreen from "../screens/DefaultTeam/TeamSelectScreen";
 import MatchScreen from "../screens/Match/MatchScreen";
@@ -18,14 +19,15 @@ import TabNavigator from "./TabNavigator";
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
+    const paletteContext = React.useContext(PaletteContext);
     return (
         <NavigationContainer theme={DarkTheme}>
             <Stack.Navigator
                 screenOptions={{
-                    contentStyle: { backgroundColor: "#141416" },
+                    contentStyle: { backgroundColor: paletteContext.palette.background },
                     animation: "slide_from_right",
                     title: "",
-                    headerStyle: { backgroundColor: "#141416" }
+                    headerStyle: { backgroundColor: paletteContext.palette.background }
                 }}>
 
                 <Stack.Screen name="Drawer" component={TabNavigator} options={{ headerShown: false }} />

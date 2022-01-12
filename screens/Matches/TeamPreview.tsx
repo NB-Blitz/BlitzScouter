@@ -4,17 +4,16 @@ import * as React from 'react';
 import { Image, StyleSheet, View } from "react-native";
 import Button from '../../components/common/Button';
 import Text from '../../components/text/Text';
+import { PaletteContext } from '../../context/PaletteContext';
 import useStats from '../../hooks/useStats';
 import useTeam from '../../hooks/useTeam';
-import useTemplate from '../../hooks/useTemplate';
-import { TemplateType } from '../../types/TemplateTypes';
 
 
 export default function TeamPreview(props: { teamID: string }) {
+    const paletteContext = React.useContext(PaletteContext);
     const navigator = useNavigation();
     const [team, setTeam] = useTeam(props.teamID);
     const stats = useStats(props.teamID);
-    const [matchTemplate] = useTemplate(TemplateType.Match);
 
     let mediaIcon: JSX.Element;
     if (team.mediaPaths.length > 0) {
@@ -31,7 +30,7 @@ export default function TeamPreview(props: { teamID: string }) {
                 <MaterialIcons
                     name="block"
                     size={50}
-                    color={"#aaa"} />
+                    color={paletteContext.palette.textPrimary} />
             </View>
         );
     }
@@ -44,16 +43,16 @@ export default function TeamPreview(props: { teamID: string }) {
                 {mediaIcon}
 
                 <View style={styles.subContainer}>
-                    <Text style={styles.title}>{team.name}</Text>
-                    <Text style={styles.subtitle}>{team.number}</Text>
+                    <Text style={[styles.title, { color: paletteContext.palette.textPrimary }]}>{team.name}</Text>
+                    <Text style={[styles.subtitle, { color: paletteContext.palette.textSecondary }]}>{team.number}</Text>
 
                 </View>
             </Button>
 
             {stats.map((element, index) =>
                 <View key={index} style={styles.subContainer}>
-                    <Text style={styles.title}>{element.label}</Text>
-                    <Text style={styles.subtitle}>{element.average}</Text>
+                    <Text style={[styles.title, { color: paletteContext.palette.textPrimary }]}>{element.label}</Text>
+                    <Text style={[styles.subtitle, { color: paletteContext.palette.textSecondary }]}>{element.average}</Text>
                 </View>
             )}
         </View>
@@ -98,7 +97,6 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     subtitle: {
-        color: "#bbb",
         fontWeight: "bold",
         textAlign: "center"
     },
