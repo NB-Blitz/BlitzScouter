@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
 import { Alert } from "react-native";
 import { putStorage } from "../hooks/useStorage";
@@ -6,7 +7,6 @@ import { TBAMatch } from "../types/TBAModels";
 import TBA from "./TBA";
 
 const MATCH_TYPES = ["qm", "qf", "sf", "f"];
-const BASE64_PREFIX = "data:image/png;base64, ";
 
 export async function DownloadEvent(eventID: string, callback: (status: string) => void) {
 
@@ -18,7 +18,7 @@ export async function DownloadEvent(eventID: string, callback: (status: string) 
         return callback("");
 
     // Teams
-    const teamIDs = await DownloadTeams(eventID, teamNumber => {
+    const teamIDs = await DownloadTeams(eventID, true, teamNumber => {
         callback("Downloading Team " + teamNumber + "...");
     });
     if (teamIDs === undefined)
@@ -30,7 +30,7 @@ export async function DownloadEvent(eventID: string, callback: (status: string) 
         year: parseInt(eventID.substring(0, 4)),
         matchIDs,
         teamIDs,
-    })
+    });
     Alert.alert("Success", "Successfully downloaded data from The Blue Alliance.");
 }
 
@@ -92,15 +92,14 @@ export async function DownloadMatches(eventID: string, callback: (matchNumber: n
             number: match.match_number,
             compLevel: match.comp_level,
             blueTeamIDs: match.alliances.blue.team_keys,
-            redTeamIDs: match.alliances.red.team_keys,
-            comment: ""
+            redTeamIDs: match.alliances.red.team_keys
         })
     });
 
     return matchIDs;
 }
 
-export async function DownloadTeams(eventID: string, callback: (teamNumber: number) => void) {
+export async function DownloadTeams(eventID: string, downloadMedia: boolean, callback: (teamNumber: number) => void) {
     const tbaTeams = await TBA.getTeams(eventID);
     if (!tbaTeams)
         return undefined;
@@ -115,12 +114,21 @@ export async function DownloadTeams(eventID: string, callback: (teamNumber: numb
         callback(team.team_number);
         teamIDs.push(team.key);
 
-        const mediaPaths = await DownloadMedia(team.key, year);
+        let mediaPaths: string[] = [];
+        if (downloadMedia)
+            mediaPaths = await DownloadMedia(team.key, year);
+        else {
+            const currentTeam = await AsyncStorage.getItem(team.key);
+            if (currentTeam !== null)
+                mediaPaths = JSON.parse(currentTeam).mediaPaths;
+        }
+
         await putStorage<Team>(team.key, {
             id: team.key,
             name: team.nickname,
             number: team.team_number,
-            mediaPaths
+            mediaPaths,
+            scoutingData: []
         });
     }
 

@@ -7,11 +7,14 @@ import StandardButton from "../../components/common/StandardButton";
 import Subtitle from "../../components/text/Subtitle";
 import Title from "../../components/text/Title";
 import useMatch from "../../hooks/useMatch";
+import useTemplate from "../../hooks/useTemplate";
+import { TemplateType } from "../../types/TemplateTypes";
 import TeamPreview from "../Matches/TeamPreview";
 
 export default function MatchScreen({ route }: any) {
     const navigator = useNavigation();
     const [match, setMatch] = useMatch(route.params.matchID);
+    const [template, setTemplate] = useTemplate(TemplateType.Match);
 
     return (
         <ScrollView>
@@ -21,11 +24,13 @@ export default function MatchScreen({ route }: any) {
 
                 <HorizontalBar />
 
-                <StandardButton
-                    iconType={"explore"}
-                    title={"Scout Match"}
-                    subtitle={"Scout this match"}
-                    onPress={() => { /*navigator.navigate("Scout", { templateType: TemplateType.Match });*/ }} />
+                {template.length > 0 ?
+                    <StandardButton
+                        iconType={"explore"}
+                        title={"Scout Match"}
+                        subtitle={"Scout this match"}
+                        onPress={() => { navigator.navigate("TeamSelect", { matchID: match.id }); }} />
+                    : undefined}
 
                 <StandardButton
                     iconType={"open-in-browser"}

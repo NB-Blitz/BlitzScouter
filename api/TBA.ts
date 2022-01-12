@@ -1,9 +1,10 @@
 import { Linking } from 'react-native';
 import { TBAEvent, TBAMatch, TBAMedia, TBAStatus, TBATeam } from '../types/TBAModels';
+
 const API_KEY = "i90dAcKHXvQ9havypHJKeGY8O1tfymFpaW1Po3RGYpvoMTRVwtiUsUFaLmstCDp3";
 const URL_PREFIX = "https://www.thebluealliance.com/api/v3/";
 const URL_SUFFIX = "?X-TBA-Auth-Key=" + API_KEY;
-
+const TIMEOUT = 8000; // ms
 export default class TBA {
 
     /**
@@ -107,7 +108,7 @@ export default class TBA {
         let timeoutPromise = new Promise<Type | undefined>((resolve, reject) => {
             setTimeout(() => {
                 resolve(undefined);
-            }, 5000);
+            }, TIMEOUT);
         })
 
         return Promise.race<Type | undefined>([fetchPromise, timeoutPromise]);

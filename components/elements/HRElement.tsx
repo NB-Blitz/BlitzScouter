@@ -1,5 +1,5 @@
 import React from "react";
-import { ElementProps } from "../../api/models/TemplateModels";
+import { ElementProps } from "../../types/TemplateTypes";
 import HorizontalBar from "../common/HorizontalBar";
 
 export default function HRElement(props: ElementProps) {

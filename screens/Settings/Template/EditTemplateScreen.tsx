@@ -2,7 +2,6 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-import BlitzDB from '../../../api/BlitzDB';
 import Button from '../../../components/common/Button';
 import HorizontalBar from '../../../components/common/HorizontalBar';
 import ScrollContainer from '../../../components/containers/ScrollContainer';
@@ -10,22 +9,40 @@ import ScoutingElement from '../../../components/elements/ScoutingElement';
 import Subtitle from '../../../components/text/Subtitle';
 import Text from '../../../components/text/Text';
 import Title from '../../../components/text/Title';
+import useTemplate from '../../../hooks/useTemplate';
+import { ElementData, TemplateType } from '../../../types/TemplateTypes';
+
+const TEMPLATE_NAMES = ["Pit", "Match"];
 
 export default function EditTemplateScreen({ route }: any) {
-    const templateType = route.params.templateType;
-    const template = BlitzDB.matchTemplate.useTemplate();
     const navigator = useNavigation();
+    const templateType = route.params.templateType as TemplateType;
+    const [template, setTemplate] = useTemplate(templateType);
 
     // Delete Event
     const onDeleteEvent = () => {
         Alert.alert("Are you sure?", "This will wipe this entire template from your device. Are you sure you want to continue?", [{
             text: "Confirm",
             onPress: () => {
-                BlitzDB.matchTemplate.setTemplate([]);
+                setTemplate([]);
             }
         },
         { text: "Cancel", style: "cancel" }], { cancelable: true });
     };
+
+    const onRemove = (element: ElementData) => {
+        const newTemplate = template.filter((e) => e.id !== element.id);
+        setTemplate(newTemplate);
+    }
+
+    // Edit Event
+    const onChange = (element: ElementData) => {
+        const index = template.findIndex(e => e.id === element.id);
+        if (index >= 0) {
+            template[index] = element;
+            setTemplate(template);
+        }
+    }
 
     // Delete Button
     React.useLayoutEffect(() => {
@@ -38,31 +55,26 @@ export default function EditTemplateScreen({ route }: any) {
         });
     });
 
-    // Save on Exit
-    React.useEffect(() => {
-        navigator.addListener("beforeRemove", (e) => {
-            BlitzDB.matchTemplate.save();
-        });
-    });
-
-
-    // Element Preview
-    let elementList: JSX.Element[] = [];
-    if (template.length > 0) {
-        elementList = template.map(element => <ScoutingElement data={element} isEditable={true} key={Math.random()} />)
-    }
-    else {
-        elementList = [<Text key={"0"}>There are no elements yet. Add an element to scout below.</Text>];
-    }
-
     return (
         <View style={styles.parentView}>
             <ScrollContainer>
                 <Title>Edit Template</Title>
-                <Subtitle>Match Scouting</Subtitle>
+                <Subtitle>{TEMPLATE_NAMES[templateType]} Scouting</Subtitle>
                 <HorizontalBar />
 
-                {elementList}
+                {template.length > 0 ? template.map(element =>
+                    <ScoutingElement
+                        data={element}
+                        isEditable={true}
+                        onChange={onChange}
+                        onRemove={onRemove}
+                        key={element.id} />
+                ) :
+                    <Text key={"0"}>There are no elements yet. Add an element to scout below.</Text>
+                }
+
+                <View style={{ height: 150 }} />
+
             </ScrollContainer>
 
             <Button

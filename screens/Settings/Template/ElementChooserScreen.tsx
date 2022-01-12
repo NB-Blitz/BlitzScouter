@@ -1,24 +1,27 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
-import BlitzDB from '../../../api/BlitzDB';
-import { ElementType } from '../../../api/models/TemplateModels';
 import HorizontalBar from '../../../components/common/HorizontalBar';
 import StandardButton from '../../../components/common/StandardButton';
 import ScrollContainer from '../../../components/containers/ScrollContainer';
 import Subtitle from '../../../components/text/Subtitle';
 import Title from '../../../components/text/Title';
+import useTemplate from '../../../hooks/useTemplate';
+import { ElementType, TemplateType } from '../../../types/TemplateTypes';
 
 export default function ElementChooserScreen({ route }: any) {
     const navigator = useNavigation();
-    const templateType = route.params.templateType;
+    const templateType = route.params.templateType as TemplateType;
+    const [template, setTemplate] = useTemplate(templateType);
 
-    const chooseElement = (elementType: ElementType) => {
-        BlitzDB.matchTemplate.addElement({
-            id: BlitzDB.generateID(),
+    const chooseElement = async (elementType: ElementType) => {
+        template.push({
+            id: Math.random().toString(36).slice(2),
             type: elementType,
             label: "",
-            options: {}
+            options: {},
+            value: undefined
         });
+        await setTemplate(template);
         navigator.goBack();
     }
 

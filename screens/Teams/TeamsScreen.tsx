@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, ToastAndroid } from 'react-native';
+import { ActivityIndicator, Platform, ToastAndroid } from 'react-native';
 import { DownloadTeams } from '../../api/TBAAdapter';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
@@ -9,29 +9,37 @@ import TeamBanner from './TeamBanner';
 
 export default function TeamsScreen() {
     const [event, setEvent] = useEvent();
+    const isLoaded = true; // TODO: Update this to check if the event is loaded
 
     const onRefresh = async () => {
-        const teamIDs = await DownloadTeams(event.id, () => { });
+        if (Platform.OS !== "android")
+            return;
+        const teamIDs = await DownloadTeams(event.id, false, () => { });
         if (teamIDs) {
-            setEvent({
+            await setEvent({
                 id: event.id,
                 matchIDs: event.matchIDs,
                 teamIDs,
                 year: event.year
             });
+            ToastAndroid.show("Successfully updated from TBA", 1000);
         }
-        else if (Platform.OS === "android") {
+        else {
             ToastAndroid.show("Failed to connect to TBA", 1000);
         }
     };
 
     return (
-        <ScrollContainer onRefresh={onRefresh}>
+        <ScrollContainer onRefresh={onRefresh} key={event.id}>
             <NavTitle>Teams</NavTitle>
             {event.teamIDs.length > 0 ?
                 event.teamIDs.map((teamID) => <TeamBanner teamID={teamID} key={teamID} />) :
-                <Text>Team data has not been downloaded from TBA yet. Download is available under the settings tab.</Text>
+                isLoaded ?
+                    <Text>There is no team data yet. Download it under the settings tab.</Text> :
+                    <ActivityIndicator size="large" color="#ffffff" />
             }
+
+
         </ScrollContainer>
     );
 }

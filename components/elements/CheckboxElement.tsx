@@ -1,23 +1,21 @@
 import Checkbox from 'expo-checkbox';
 import React from "react";
 import { StyleSheet, TextInput, Vibration, View } from "react-native";
-import BlitzDB from '../../api/BlitzDB';
-import { ElementProps } from "../../api/models/TemplateModels";
+import { ElementProps } from '../../types/TemplateTypes';
 import Text from '../text/Text';
 
 export default function CheckboxElement(props: ElementProps) {
     let elementData = props.data;
     const defaultValue = elementData.options.defaultValue;
-    const [isChecked, setChecked] = React.useState(defaultValue ? defaultValue as boolean : false);
+    const [isChecked, setChecked] = React.useState(defaultValue === undefined ? defaultValue as boolean : false);
 
     const changeChecked = (isChecked: boolean) => {
-        setChecked(isChecked);
 
-        // Edit
-        if (props.isEditable) {
+        // Value
+        setChecked(isChecked);
+        elementData.value = isChecked;
+        if (props.isEditable)
             elementData.options.defaultValue = isChecked;
-            BlitzDB.matchTemplate.setElement(elementData);
-        }
 
         // Vibrate
         if (isChecked)
@@ -27,12 +25,13 @@ export default function CheckboxElement(props: ElementProps) {
 
         // Callback
         if (props.onChange)
-            props.onChange(isChecked);
+            props.onChange(elementData);
     }
 
     const changeText = (text: string) => {
         elementData.label = text;
-        BlitzDB.matchTemplate.setElement(elementData);
+        if (props.onChange)
+            props.onChange(elementData);
     };
 
     return (
@@ -45,7 +44,7 @@ export default function CheckboxElement(props: ElementProps) {
             {props.isEditable ?
                 <TextInput
                     defaultValue={elementData.label}
-                    placeholder="Checkbox Name"
+                    placeholder="Name"
                     placeholderTextColor="#bbb"
                     onChangeText={changeText}
                     style={styles.textInput}></TextInput>
@@ -68,7 +67,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 5,
         marginLeft: 10,
-        fontSize: 20
+        fontSize: 20,
+        flex: 1
     },
     title: {
         textAlign: "left",
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     checkbox: {
-        marginLeft: 15,
+        marginLeft: 5,
         marginTop: 2,
         transform: [{ scaleX: 2 }, { scaleY: 2 }]
     }

@@ -2,7 +2,7 @@ import { Event } from "../types/DBTypes";
 import useStorage, { getStorage } from "./useStorage";
 
 const DEFAULT_EVENT = {
-    id: "",
+    id: "bogus",
     matchIDs: [],
     teamIDs: [],
     year: 0
@@ -14,7 +14,6 @@ const DEFAULT_EVENT = {
  */
 export default function useEvent(): [Event, (event: Event) => Promise<void>] {
     const [eventData, setEventData] = useStorage<Event>("current-event", DEFAULT_EVENT);
-
     return [eventData, setEventData];
 }
 

@@ -4,12 +4,17 @@ import * as React from 'react';
 import { Image, StyleSheet, View } from "react-native";
 import Button from '../../components/common/Button';
 import Text from '../../components/text/Text';
+import useStats from '../../hooks/useStats';
 import useTeam from '../../hooks/useTeam';
+import useTemplate from '../../hooks/useTemplate';
+import { TemplateType } from '../../types/TemplateTypes';
 
 
 export default function TeamPreview(props: { teamID: string }) {
     const navigator = useNavigation();
     const [team, setTeam] = useTeam(props.teamID);
+    const stats = useStats(props.teamID);
+    const [matchTemplate] = useTemplate(TemplateType.Match);
 
     let mediaIcon: JSX.Element;
     if (team.mediaPaths.length > 0) {
@@ -32,18 +37,26 @@ export default function TeamPreview(props: { teamID: string }) {
     }
 
     return (
-        <Button
-            style={styles.container}
-            onPress={() => { navigator.navigate("Team", { teamID: team.id }) }} >
+        <View style={styles.container}>
+            <Button style={styles.button}
+                onPress={() => { navigator.navigate("Team", { teamID: team.id }) }} >
 
-            {mediaIcon}
+                {mediaIcon}
 
-            <View style={styles.subContainer}>
-                <Text style={styles.teamName}>{team.name}</Text>
-                <Text style={styles.teamDesc}>{team.number}</Text>
+                <View style={styles.subContainer}>
+                    <Text style={styles.title}>{team.name}</Text>
+                    <Text style={styles.subtitle}>{team.number}</Text>
 
-            </View>
-        </Button>
+                </View>
+            </Button>
+
+            {stats.map((element, index) =>
+                <View key={index} style={styles.subContainer}>
+                    <Text style={styles.title}>{element.label}</Text>
+                    <Text style={styles.subtitle}>{element.average}</Text>
+                </View>
+            )}
+        </View>
     );
 }
 
@@ -53,8 +66,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         height: 200
     },
+    button: {
+        flexDirection: "row"
+    },
     subContainer: {
-        width: "100%"
+        marginRight: 20,
+        width: 120,
+        justifyContent: "center",
+        alignItems: "center"
     },
     background: {
         position: "absolute",
@@ -73,14 +92,14 @@ const styles = StyleSheet.create({
         marginRight: 15,
         borderRadius: 5
     },
-    teamName: {
+    title: {
         fontSize: 18,
         fontWeight: "bold",
-        textAlign: "left",
-        width: 100
+        textAlign: "center"
     },
-    teamDesc: {
+    subtitle: {
         color: "#bbb",
-        fontWeight: "bold"
+        fontWeight: "bold",
+        textAlign: "center"
     },
 });

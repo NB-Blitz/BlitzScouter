@@ -1,12 +1,12 @@
+import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import HorizontalBar from '../../components/common/HorizontalBar';
 import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
-import ExportQRModal from './ExportQRModal';
 
 export default function SharingScreen() {
-    const [isExportQRVisible, setExportQRVisible] = React.useState(false);
+    const navigator = useNavigation();
 
     return (
         <ScrollContainer>
@@ -14,18 +14,17 @@ export default function SharingScreen() {
             <NavTitle>Sharing</NavTitle>
 
             {/* QR Codes */}
-            <ExportQRModal isVisible={isExportQRVisible} setVisible={setExportQRVisible} />
             <StandardButton
                 iconType={"qr-code"}
                 title={"Show QRCode"}
                 subtitle={"Export Scouting Data"}
-                onPress={() => { setExportQRVisible(true); }} />
+                onPress={() => { navigator.navigate("ExportQR"); }} />
 
             <StandardButton
                 iconType={"camera-alt"}
                 title={"Scan QRCode"}
                 subtitle={"Import Scouting Data"}
-                onPress={() => { }} />
+                onPress={() => { navigator.navigate("ImportQR"); }} />
             <HorizontalBar />
 
             {/* File Formats */}

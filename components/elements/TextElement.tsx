@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, TextInput } from "react-native";
-import BlitzDB from "../../api/BlitzDB";
-import { ElementProps } from "../../api/models/TemplateModels";
+import { ElementProps } from "../../types/TemplateTypes";
 import Text from "../text/Text";
 
 export default function TextElement(props: ElementProps) {
@@ -9,7 +8,8 @@ export default function TextElement(props: ElementProps) {
     if (props.isEditable) {
         const onEdit = (text: string) => {
             elementData.label = text;
-            BlitzDB.matchTemplate.setElement(elementData);
+            if (props.onChange)
+                props.onChange(elementData);
         }
 
         return (

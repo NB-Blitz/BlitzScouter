@@ -9,12 +9,15 @@ import Button from "../../components/common/Button";
 import HorizontalBar from "../../components/common/HorizontalBar";
 import StandardButton from "../../components/common/StandardButton";
 import Subtitle from "../../components/text/Subtitle";
+import Text from "../../components/text/Text";
 import Title from "../../components/text/Title";
+import useStats from "../../hooks/useStats";
 import useTeam from "../../hooks/useTeam";
 
 export default function TeamScreen({ route }: any) {
     const navigator = useNavigation();
     const [team, setTeam] = useTeam(route.params.teamID);
+    const stats = useStats(team.id);
 
     const generateID = () => {
         return team.id + "_" + Math.random().toString(36).slice(2);
@@ -43,7 +46,8 @@ export default function TeamScreen({ route }: any) {
             id: team.id,
             name: team.name,
             number: team.number,
-            mediaPaths
+            mediaPaths,
+            scoutingData: team.scoutingData
         });
     }
 
@@ -70,7 +74,20 @@ export default function TeamScreen({ route }: any) {
             id: team.id,
             name: team.name,
             number: team.number,
-            mediaPaths
+            mediaPaths,
+            scoutingData: team.scoutingData
+        });
+    }
+
+    const deletePhoto = async (path: string) => {
+        let mediaPaths = team.mediaPaths;
+        mediaPaths.splice(mediaPaths.indexOf(path), 1);
+        setTeam({
+            id: team.id,
+            name: team.name,
+            number: team.number,
+            mediaPaths,
+            scoutingData: team.scoutingData
         });
     }
 
@@ -81,7 +98,7 @@ export default function TeamScreen({ route }: any) {
                     {team.mediaPaths.map((mediaPath, index) =>
                         <Button
                             style={styles.imageButton}
-                            onPress={() => { navigator.navigate("Media", { mediaPath }); }}
+                            onPress={() => { navigator.navigate("Media", { mediaPath, onDelete: deletePhoto }); }}
                             key={Math.random()}>
 
                             <Image style={styles.thumbnail} source={{ uri: mediaPath }} key={index} />
@@ -126,6 +143,32 @@ export default function TeamScreen({ route }: any) {
                     onPress={() => { team ? TBA.openTeam(team.number) : null }} />
 
                 <HorizontalBar />
+
+                <View style={styles.statsContainer}>
+                    {stats.length > 0 ?
+                        <View style={styles.statContainer}>
+                            <View style={styles.valueContainer}>
+                                <Text style={styles.statHeader}>Min</Text>
+                                <Text style={styles.statHeader}>Avg</Text>
+                                <Text style={styles.statHeader}>Max</Text>
+                            </View>
+                        </View>
+                        :
+                        null
+                    }
+
+                    {stats.map((stat, index) =>
+                        <View style={styles.statContainer} key={index}>
+                            <Text style={styles.statLabel}>{stat.label}</Text>
+                            <View style={styles.valueContainer}>
+                                <Text style={styles.statValue}>{stat.min}</Text>
+                                <Text style={styles.statValue}>{stat.average}</Text>
+                                <Text style={styles.statValue}>{stat.max}</Text>
+                            </View>
+                        </View>
+                    )}
+                </View>
+
             </View>
         </ScrollView>
     );
@@ -154,4 +197,38 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         backgroundColor: "#444"
     },
+
+    statLabel: {
+        fontWeight: "bold",
+        fontSize: 18
+    },
+    statType: {
+        color: "#bbb"
+    },
+    statValue: {
+        color: "#bbb",
+        fontSize: 16,
+        textAlign: "center",
+        width: 50
+    },
+    statHeader: {
+        fontSize: 16,
+        textAlign: "center",
+        fontWeight: "bold",
+        width: 50
+    },
+    valueContainer: {
+        flexDirection: "row",
+        justifyContent: "flex-end",
+        flex: 1,
+    },
+    statContainer: {
+        flexDirection: "row",
+        flex: 1,
+        padding: 10,
+    },
+    statsContainer: {
+        backgroundColor: "#1b1b1b",
+        borderRadius: 5,
+    }
 });

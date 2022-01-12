@@ -1,3 +1,5 @@
+import { ScoutingData } from "./TemplateTypes";
+
 export interface Event {
     id: string;
     teamIDs: string[];
@@ -10,6 +12,7 @@ export interface Team {
     name: string;
     number: number;
     mediaPaths: string[];
+    scoutingData: ScoutingData[];
 }
 
 export interface Match {
@@ -20,7 +23,6 @@ export interface Match {
     compLevel: string;
     blueTeamIDs: string[];
     redTeamIDs: string[];
-    comment: string;
 }
 
 export interface Media {

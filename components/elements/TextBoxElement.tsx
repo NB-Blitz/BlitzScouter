@@ -1,19 +1,28 @@
 import React from "react";
 import { StyleSheet, TextInput } from "react-native";
-import BlitzDB from "../../api/BlitzDB";
-import { ElementProps } from "../../api/models/TemplateModels";
+import { ElementProps } from "../../types/TemplateTypes";
 
 export default function TextBoxElement(props: ElementProps) {
     let elementData = props.data;
 
+    // Default Value
+    if (elementData.value === undefined && props.onChange) {
+        elementData.value = "";
+        props.onChange(elementData);
+    }
+
+    // On Edit
     const onEdit = (text: string) => {
         elementData.label = text;
-        BlitzDB.matchTemplate.setElement(elementData);
+        if (props.onChange)
+            props.onChange(elementData);
     };
 
+    // On Scout
     const onScoutingEdit = (text: string) => {
+        elementData.value = text;
         if (props.onChange)
-            props.onChange(text);
+            props.onChange(elementData);
     }
 
     return (

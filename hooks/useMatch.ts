@@ -9,7 +9,7 @@ const DEFAULT_MATCH = {
     compLevel: "",
     blueTeamIDs: [],
     redTeamIDs: [],
-    comment: ""
+    scoutingData: []
 } as Match;
 
 /**

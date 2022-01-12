@@ -1,30 +1,59 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import Button from '../../components/common/Button';
 import HorizontalBar from '../../components/common/HorizontalBar';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import ScoutingElement from '../../components/elements/ScoutingElement';
 import Text from '../../components/text/Text';
+import useTeam from '../../hooks/useTeam';
+import useTemplate from '../../hooks/useTemplate';
+import { ElementData, ScoutingData } from '../../types/TemplateTypes';
 
 export default function ScoutingScreen({ route }: any) {
-    const template = BlitzDB.matchTemplate.useTemplate();
     const navigator = useNavigation();
+    const [template, setTemplate] = useTemplate(route.params.templateType);
+    const [team, setTeam] = useTeam(route.params.targetID);
 
-    // Element Preview
-    let elementList: JSX.Element[] = [];
-    elementList = template.map(element => <ScoutingElement data={element} isEditable={false} key={Math.random()} />)
+    console.log(team);
+
+    const onChange = (element: ElementData) => {
+        const index = template.findIndex(e => e.id === element.id);
+        if (index >= 0)
+            template[index] = element;
+    }
+
+    const onSubmit = () => {
+        let data: ScoutingData = {
+            values: []
+        };
+        for (let element of template) {
+            if (element.value !== undefined)
+                data.values.push(element.value);
+        }
+        team.scoutingData.push(data);
+        setTeam(team);
+        navigator.goBack();
+        navigator.goBack();
+        Alert.alert("Success", "Data has been saved to storage");
+    }
 
     return (
         <View style={styles.parentView}>
             <ScrollContainer>
-                {elementList}
+                {template.map((element, index) =>
+                    <ScoutingElement
+                        data={element}
+                        isEditable={false}
+                        key={index}
+                        onChange={onChange} />
+                )}
 
                 <HorizontalBar />
 
                 <Button
                     style={styles.submitButton}
-                    onPress={() => { }}>
+                    onPress={onSubmit}>
 
                     <Text style={styles.buttonText}>Submit</Text>
 

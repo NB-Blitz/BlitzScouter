@@ -1,17 +1,36 @@
 import { useNavigation } from '@react-navigation/core';
 import * as Application from 'expo-application';
 import * as React from 'react';
+import { Alert } from 'react-native';
 import HorizontalBar from '../../components/common/HorizontalBar';
 import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
 import Subtitle from '../../components/text/Subtitle';
 import { clearStorage } from '../../hooks/useStorage';
-import DownloadingModal from './DownloadingModal';
+import { TemplateType } from '../../types/TemplateTypes';
 
 export default function SettingsScreen() {
-    const [downloadStatus, setDownloadStatus] = React.useState("");
     const navigator = useNavigation();
+
+    const clearData = () => {
+        Alert.alert("Are you sure?", "This will delete all team, event, match, and scouting data on your device.",
+            [
+                {
+                    text: "Confirm",
+                    onPress: () => {
+                        clearStorage().then(() => {
+                            Alert.alert("Success!", "All scouting data has been cleared");
+                        });
+                    }
+                },
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                }
+            ], { cancelable: true }
+        );
+    }
 
     return (
         <ScrollContainer>
@@ -29,33 +48,30 @@ export default function SettingsScreen() {
                 iconType={"delete-outline"}
                 title={"Clear All Data"}
                 subtitle={"Wipes all data on your device"}
-                onPress={() => { clearStorage(); }} />
+                onPress={() => { clearData(); }} />
 
             <HorizontalBar />
 
             {/* Scouting Buttons */}
-            {/*
             <StandardButton
                 iconType={"edit"}
                 title={"Edit Pit Scouting"}
                 subtitle={"Adjust the pit scouting template"}
                 onPress={() => { navigator.navigate("EditTemplate", { templateType: TemplateType.Pit }); }} />
-            */}
             <StandardButton
                 iconType={"edit"}
                 title={"Edit Match Scouting"}
                 subtitle={"Adjust the match scouting template"}
-                onPress={() => { /*navigator.navigate("EditTemplate", { templateType: TemplateType.Match });*/ }} />
+                onPress={() => { navigator.navigate("EditTemplate", { templateType: TemplateType.Match }); }} />
             <StandardButton
                 iconType={"person-outline"}
                 title={"Assign Default Team"}
                 subtitle={"Assign the Default Team to Scout"}
-                onPress={() => { /*navigator.navigate("DefaultTeam");*/ }} />
+                onPress={() => { navigator.navigate("DefaultTeam"); }} />
+
             <HorizontalBar />
             <Subtitle>Blitz Scouter v{Application.nativeApplicationVersion}</Subtitle>
 
-            {/* Modals */}
-            <DownloadingModal status={downloadStatus} />
         </ScrollContainer>
     );
 }

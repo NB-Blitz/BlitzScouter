@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import EventEmitter from "eventemitter3";
+import * as FileSystem from 'expo-file-system';
 import { useEffect, useState } from "react";
 
 const eventEmitter = new EventEmitter();
@@ -20,7 +21,9 @@ export default function useStorage<Type>(id: string, defaultValue: Type): [Type,
         if (jsonData)
             setData(JSON.parse(jsonData) as Type);
     };
-    useEffect(() => { getData(); }, [version]);
+    useEffect(() => {
+        getData();
+    }, [id, version, setData]);
 
     // Save Data
     const saveData = async (value: Type) => {
@@ -30,13 +33,15 @@ export default function useStorage<Type>(id: string, defaultValue: Type): [Type,
         eventEmitter.emit(id);
     }
     useEffect(() => {
-        function handleDataChange() {
+        const handleDataChange = () => {
             setVersion(v => v + 1);
         }
 
         eventEmitter.addListener(id, handleDataChange);
-        return () => { eventEmitter.removeListener(id, handleDataChange); }
-    }, []);
+        return () => {
+            eventEmitter.removeListener(id, handleDataChange);
+        };
+    }, [id, setVersion]);
 
     return [data, saveData];
 }
@@ -67,8 +72,18 @@ export async function getStorage<Type>(id: string) {
  * Removes all keys from AsyncStorage
  */
 export async function clearStorage() {
+    // AsyncStorage
     const keys = await AsyncStorage.getAllKeys();
     await AsyncStorage.clear();
-    for (let key of keys)
+    for (let key of keys) {
+        console.log(key);
         eventEmitter.emit(key);
+    }
+
+    // FileSystem
+    const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory ? FileSystem.documentDirectory : "");
+    for (let file of files) {
+        console.log(file);
+        await FileSystem.deleteAsync(FileSystem.documentDirectory + file);
+    }
 }

@@ -1,9 +1,9 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Vibration, View } from "react-native";
-import BlitzDB from "../../api/BlitzDB";
-import { ElementProps } from "../../api/models/TemplateModels";
+import { StyleSheet, TextInput, Vibration, View } from "react-native";
+import { ElementProps } from "../../types/TemplateTypes";
 import Button from "../common/Button";
+import Text from "../text/Text";
 import Title from "../text/Title";
 
 export default function CounterElement(props: ElementProps) {
@@ -11,20 +11,24 @@ export default function CounterElement(props: ElementProps) {
     const defaultValue = elementData.options.defaultValue;
     const [value, setValue] = React.useState(defaultValue ? defaultValue as number : 0);
 
+    // Default Value
+    if (elementData.value === undefined && props.onChange) {
+        elementData.value = value;
+        props.onChange(elementData);
+    }
+
     // Value State Change
     const changeValue = (delta: number) => {
-        // Update
+
+        // Value
         let newValue = value;
         if (value + delta >= 0) {
             newValue += delta;
             setValue(newValue);
+            elementData.value = newValue;
         }
-
-        // Edit
-        if (props.isEditable) {
+        if (props.isEditable)
             elementData.options.defaultValue = newValue;
-            BlitzDB.matchTemplate.setElement(elementData);
-        }
 
         // Vibrate
         if (delta > 0)
@@ -34,12 +38,19 @@ export default function CounterElement(props: ElementProps) {
 
         // Callback
         if (props.onChange)
-            props.onChange(newValue);
+            props.onChange(elementData);
     }
+
+    const changeText = (text: string) => {
+        elementData.label = text;
+        if (props.onChange)
+            props.onChange(elementData);
+    };
+
 
     return (
         <View style={styles.container}>
-            <Title style={styles.title}>{value}</Title>
+            <Title style={styles.counter}>{value}</Title>
             <Button
                 style={[styles.button, { backgroundColor: "#1ccc43" }]}
                 onPress={() => { changeValue(1); }}>
@@ -54,14 +65,24 @@ export default function CounterElement(props: ElementProps) {
                 <MaterialIcons name="remove" size={30} style={{ color: "#ffffff" }} />
 
             </Button>
+
+            {props.isEditable ?
+                <TextInput
+                    defaultValue={elementData.label}
+                    placeholder="Name"
+                    placeholderTextColor="#bbb"
+                    onChangeText={changeText}
+                    style={styles.textInput}></TextInput>
+                :
+                <Text style={styles.title}>{elementData.label}</Text>
+            }
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: "row",
-        justifyContent: "space-evenly"
+        flexDirection: "row"
     },
     textInput: {
         color: "#fff",
@@ -69,18 +90,26 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 5,
         margin: 5,
-        fontSize: 15
+        fontSize: 15,
+        flex: 1
     },
     title: {
+        fontWeight: "bold",
+        marginTop: 15,
+        marginLeft: 20,
+        fontSize: 20
+    },
+    counter: {
         width: 50,
         textAlign: "center"
     },
     button: {
         height: 50,
-        width: 100,
+        width: 70,
         borderRadius: 5,
-        paddingLeft: 35,
-        margin: 5,
+        paddingLeft: 20,
+        marginLeft: 5,
+        marginTop: 5,
 
         flexDirection: "row",
         justifyContent: "flex-start",

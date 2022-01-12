@@ -1,11 +1,12 @@
 import { Team } from "../types/DBTypes";
-import useStorage from "./useStorage";
+import useStorage, { getStorage } from "./useStorage";
 
 const DEFAULT_TEAM = {
     id: "",
     name: "",
     number: 0,
-    mediaPaths: []
+    mediaPaths: [],
+    scoutingData: []
 } as Team;
 
 /**
@@ -16,4 +17,8 @@ const DEFAULT_TEAM = {
 export default function useTeam(teamID: string): [Team, (team: Team) => Promise<void>] {
     const [teamData, setTeamData] = useStorage<Team>(teamID, DEFAULT_TEAM);
     return [teamData, setTeamData];
+}
+
+export async function getTeam(teamID: string) {
+    return await getStorage<Team>(teamID);
 }

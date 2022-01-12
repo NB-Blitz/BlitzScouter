@@ -1,6 +1,8 @@
+import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet } from "react-native";
-import { ElementProps, ElementType } from "../../api/models/TemplateModels";
+import { StyleSheet, View } from "react-native";
+import { ElementProps, ElementType } from "../../types/TemplateTypes";
+import Button from "../common/Button";
 import CheckboxElement from "./CheckboxElement";
 import CounterElement from "./CounterElement";
 import HRElement from "./HRElement";
@@ -34,10 +36,41 @@ export default function ScoutingElement(props: ElementProps) {
             element = (<TextBoxElement {...props} />);
             break;
     }
-    return element;
+
+
+    const onRemove = () => {
+        if (props.onRemove)
+            props.onRemove(props.data);
+    }
+
+    return (
+        <View>
+            <View style={{
+                paddingRight: 50,
+                minHeight: 50,
+                justifyContent: "center",
+            }}>
+
+                {element}
+
+            </View>
+
+            {props.isEditable && props.onRemove ?
+                <View style={styles.deleteButton}>
+                    <Button onPress={onRemove}>
+                        <MaterialIcons name="delete-outline" size={25} color={"#ffffff"} />
+                    </Button>
+                </View>
+                : null}
+        </View>
+    );
 }
 
-
 const styles = StyleSheet.create({
-
+    deleteButton: {
+        position: "absolute",
+        right: 0,
+        top: 0,
+        padding: 10
+    }
 });

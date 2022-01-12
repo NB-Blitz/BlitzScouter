@@ -4,9 +4,16 @@ import { View } from "react-native";
 import StandardButton from "../../components/common/StandardButton";
 import useTeam from "../../hooks/useTeam";
 
-export default function TeamBanner(props: { teamID: string }) {
+export default function TeamBanner(props: { teamID: string, onClick?: (teamID: string) => void }) {
     const navigator = useNavigation();
     const [team, setTeam] = useTeam(props.teamID);
+
+    const onClick = () => {
+        if (props.onClick)
+            props.onClick(team.id);
+        else
+            navigator.navigate("Team", { teamID: team.id });
+    }
 
     return (
         <View>
@@ -15,7 +22,7 @@ export default function TeamBanner(props: { teamID: string }) {
                 iconType={team.mediaPaths.length > 0 ? undefined : "do-not-disturb"}
                 title={team.name}
                 subtitle={team.number.toString()}
-                onPress={() => { navigator.navigate("Team", { teamID: team.id }) }} />
+                onPress={onClick} />
         </View>
     );
 }

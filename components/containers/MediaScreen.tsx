@@ -1,4 +1,5 @@
 import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import * as Sharing from 'expo-sharing';
 import React from "react";
 import { Alert, Dimensions, Image, StyleSheet, View } from "react-native";
@@ -9,6 +10,9 @@ import PanZoomContainer from "./PanZoomContainer";
 
 export default function MediaScreen({ route }: any) {
     const mediaPath = route.params.mediaPath;
+    const onDelete = route.params.onDelete;
+    const navigator = useNavigation();
+    // TODO: React Navigation callback warnings
 
     const shareImage = () => {
         Sharing.shareAsync(mediaPath);
@@ -19,7 +23,10 @@ export default function MediaScreen({ route }: any) {
             [
                 {
                     text: "Confirm",
-                    onPress: () => { }
+                    onPress: () => {
+                        onDelete(mediaPath);
+                        navigator.goBack();
+                    }
                 },
                 {
                     text: "Cancel",
