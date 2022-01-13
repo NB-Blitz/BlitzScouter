@@ -1,12 +1,10 @@
 import { useNavigation } from '@react-navigation/core';
-import * as Application from 'expo-application';
 import * as React from 'react';
 import { Alert } from 'react-native';
 import HorizontalBar from '../../components/common/HorizontalBar';
 import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
-import Subtitle from '../../components/text/Subtitle';
 import { DARK_PALETTE, PaletteContext } from '../../context/PaletteContext';
 import { clearStorage } from '../../hooks/useStorage';
 import { TemplateType } from '../../types/TemplateTypes';
@@ -42,8 +40,8 @@ export default function SettingsScreen() {
             {/* Data Buttons */}
             <StandardButton
                 iconType={"location-pin"}
-                title={"Set Active Regional"}
-                subtitle={"Downloads team/match data from TBA"}
+                title={"Change Regional"}
+                subtitle={"Downloads event data from TBA"}
                 onPress={() => { navigator.navigate("Year"); }} />
 
             <StandardButton
@@ -51,12 +49,6 @@ export default function SettingsScreen() {
                 title={"Clear Theme Data"}
                 subtitle={"Wipes the theme from your device"}
                 onPress={() => { paletteContext.setPalette(DARK_PALETTE); }} />
-
-            <StandardButton
-                iconType={"delete-outline"}
-                title={"Clear All Data"}
-                subtitle={"Wipes all data on your device"}
-                onPress={() => { clearData(); }} />
 
             <HorizontalBar />
 
@@ -74,11 +66,22 @@ export default function SettingsScreen() {
             <StandardButton
                 iconType={"person-outline"}
                 title={"Assign Default Team"}
-                subtitle={"Assign the Default Team to Scout"}
+                subtitle={"Assign the default team to scout"}
                 onPress={() => { navigator.navigate("DefaultTeam"); }} />
 
             <HorizontalBar />
-            <Subtitle>Blitz Scouter v{Application.nativeApplicationVersion}</Subtitle>
+
+            <StandardButton
+                iconType={"delete-outline"}
+                title={"Clear All Data"}
+                subtitle={"Wipes all data on your device"}
+                onPress={() => { clearData(); }} />
+
+            <StandardButton
+                iconType={"info-outline"}
+                title={"About"}
+                subtitle={"App version and developer details"}
+                onPress={() => { navigator.navigate("About"); }} />
 
         </ScrollContainer>
     );

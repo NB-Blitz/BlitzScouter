@@ -13,7 +13,7 @@ export default function TeamSelectScreen({ route }: any) {
     const [match, setMatch] = useMatch(route.params.matchID);
 
     const onClick = (teamID: string) => {
-        navigator.navigate("Scout", { targetID: teamID, templateType: TemplateType.Match });
+        navigator.navigate("Scout", { teamID: teamID, matchID: route.params.matchID, templateType: TemplateType.Match });
     }
 
     return (

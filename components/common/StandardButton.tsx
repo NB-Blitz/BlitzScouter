@@ -70,16 +70,17 @@ const styles = StyleSheet.create({
     },
     buttonIconFA: {
         marginRight: 12,
-        width: 45,
+        width: 50,
         alignItems: 'center',
         justifyContent: 'center'
     },
     buttonIconSVG: {
-        width: 45,
-        height: 45,
+        width: 60,
+        height: 60,
+        margin: -10,
         marginRight: 12,
-        resizeMode: 'stretch',
-        borderRadius: 1
+        borderTopLeftRadius: 1,
+        borderBottomLeftRadius: 1,
     },
     buttonIconTXT: {
         fontSize: 20,
@@ -87,6 +88,6 @@ const styles = StyleSheet.create({
         textAlign: "center",
         paddingTop: 5,
         marginRight: 12,
-        width: 45,
+        width: 50,
     }
 });

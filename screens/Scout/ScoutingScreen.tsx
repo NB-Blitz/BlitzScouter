@@ -13,9 +13,7 @@ import { ElementData, ScoutingData } from '../../types/TemplateTypes';
 export default function ScoutingScreen({ route }: any) {
     const navigator = useNavigation();
     const [template, setTemplate] = useTemplate(route.params.templateType);
-    const [team, setTeam] = useTeam(route.params.targetID);
-
-    console.log(team);
+    const [team, setTeam] = useTeam(route.params.teamID);
 
     const onChange = (element: ElementData) => {
         const index = template.findIndex(e => e.id === element.id);
@@ -25,6 +23,7 @@ export default function ScoutingScreen({ route }: any) {
 
     const onSubmit = () => {
         let data: ScoutingData = {
+            matchID: route.params.matchID,
             values: []
         };
         for (let element of template) {

@@ -19,6 +19,8 @@ export default function TeamScreen({ route }: any) {
     const [team, setTeam] = useTeam(route.params.teamID);
     const stats = useStats(team.id);
 
+    console.log(stats);
+
     const generateID = () => {
         return team.id + "_" + Math.random().toString(36).slice(2);
     }

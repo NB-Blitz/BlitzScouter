@@ -31,5 +31,6 @@ export interface ElementProps {
 export type ScoutingTemplate = ElementData[];
 
 export interface ScoutingData {
+    matchID: string;
     values: (number | boolean | string)[]
 }

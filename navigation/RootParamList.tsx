@@ -11,10 +11,11 @@ export type RootNavParamList = {
     EditTemplate: { templateType: TemplateType },
     ElementChooser: { templateType: TemplateType },
     TeamSelect: { matchID: string },
-    Scout: { targetID: string, templateType: TemplateType },
+    Scout: { teamID: string, matchID: string, templateType: TemplateType },
     DefaultTeam: undefined,
     ExportQR: undefined,
-    ImportQR: undefined
+    ImportQR: undefined,
+    About: undefined
 };
 
 // Default

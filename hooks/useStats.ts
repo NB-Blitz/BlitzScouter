@@ -12,8 +12,8 @@ export interface TeamMetric {
 }
 
 export default function useStats(teamID: string) {
-    const [team, setTeam] = useTeam(teamID);
-    const [template, setTemplate] = useTemplate(TemplateType.Match);
+    const [team] = useTeam(teamID);
+    const [template] = useTemplate(TemplateType.Match);
     const [teamStats, setTeamStats] = useState<TeamStats>([] as TeamStats);
 
     useEffect(() => {

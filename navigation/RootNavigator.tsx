@@ -7,6 +7,7 @@ import DefaultTeamScreen from "../screens/DefaultTeam/DefaultTeamScreen";
 import TeamSelectScreen from "../screens/DefaultTeam/TeamSelectScreen";
 import MatchScreen from "../screens/Match/MatchScreen";
 import ScoutingScreen from "../screens/Scout/ScoutingScreen";
+import AboutScreen from "../screens/Settings/AboutScreen";
 import RegionalScreen from "../screens/Settings/RegionalScreen";
 import EditTemplateScreen from "../screens/Settings/Template/EditTemplateScreen";
 import ElementChooserScreen from "../screens/Settings/Template/ElementChooserScreen";
@@ -43,6 +44,7 @@ export default function RootNavigator() {
                 <Stack.Screen name="DefaultTeam" component={DefaultTeamScreen} />
                 <Stack.Screen name="ExportQR" component={ExportQRScreen} />
                 <Stack.Screen name="ImportQR" component={ImportQRScreen} />
+                <Stack.Screen name="About" component={AboutScreen} />
 
             </Stack.Navigator>
         </NavigationContainer>
