@@ -76,7 +76,7 @@ export default class TBA {
         /*
             https://github.com/whatwg/fetch/issues/180
 
-            TL;DR; fetch doesn't include a request timeout by default.
+            TL;DR: fetch doesn't include a request timeout by default.
             While this solution does introduce memory leaks, there
             is no other option until a better solution is implemented.
         */

@@ -48,7 +48,7 @@ export default function AboutScreen() {
             <HorizontalBar />
 
             <Text>
-                Made with <MaterialIcons name="favorite" color={paletteContext.palette.navigationSelected} size={14} /> by Team 5148, New Berlin Blitz
+                Made with <MaterialIcons name="favorite" color={"#ed0000"} size={14} /> by Team 5148, New Berlin Blitz
             </Text>
             <Text style={{ color: paletteContext.palette.textSecondary, marginTop: 5 }}>
                 https://team5148.org/

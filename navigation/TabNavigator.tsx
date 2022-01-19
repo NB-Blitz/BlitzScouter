@@ -9,6 +9,7 @@ import SharingScreen from '../screens/Sharing/SharingScreen';
 import TeamsScreen from '../screens/Teams/TeamsScreen';
 
 const Tab = createBottomTabNavigator();
+
 export default function TabNavigator() {
     const paletteContext = React.useContext(PaletteContext);
 
@@ -16,7 +17,7 @@ export default function TabNavigator() {
         <TouchableNativeFeedback
             {...props}
             useForeground={false}
-            background={TouchableNativeFeedback.Ripple(paletteContext.palette.background, false)}>
+            background={TouchableNativeFeedback.Ripple(paletteContext.palette.navigation, false)}>
             <View style={style}>{children}</View>
         </TouchableNativeFeedback>
     );
@@ -42,7 +43,7 @@ export default function TabNavigator() {
                     marginTop: -8
                 },
                 unmountOnBlur: false,
-                tabBarButton: buttonNativeFeedback,
+                tabBarButton: buttonNativeFeedback
             }}>
 
             <Tab.Screen

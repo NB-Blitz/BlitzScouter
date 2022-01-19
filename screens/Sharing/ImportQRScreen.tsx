@@ -1,14 +1,17 @@
 import { BarCodeEvent, BarCodeScanner } from 'expo-barcode-scanner';
+import LZString from 'lz-string';
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useDecompressedData } from '../../hooks/useCompressedData';
+import { useDataImporter } from '../../hooks/useCompressedData';
 
 export default function ImportQRScreen() {
-    const [importCompressedData] = useDecompressedData();
+    const importJsonData = useDataImporter();
 
     const onScan = async (e: BarCodeEvent) => {
         const compressedData = e.data;
-        importCompressedData(compressedData);
+        const jsonData = LZString.decompressFromEncodedURIComponent(compressedData);
+        if (jsonData)
+            importJsonData(jsonData);
     };
 
     return (

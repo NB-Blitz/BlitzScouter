@@ -1,15 +1,16 @@
 import * as React from 'react';
-import { ActivityIndicator, Platform, ToastAndroid } from 'react-native';
+import { ActivityIndicator, Platform, ToastAndroid, View } from 'react-native';
 import { DownloadTeams } from '../../api/TBAAdapter';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
 import Text from '../../components/text/Text';
+import { PaletteContext } from '../../context/PaletteContext';
 import useEvent from '../../hooks/useEvent';
 import TeamBanner from './TeamBanner';
 
 export default function TeamsScreen() {
+    const paletteContext = React.useContext(PaletteContext);
     const [event, setEvent] = useEvent();
-    const isLoaded = true; // TODO: Update this to check if the event is loaded
 
     const onRefresh = async () => {
         if (Platform.OS !== "android")
@@ -29,17 +30,21 @@ export default function TeamsScreen() {
         }
     };
 
-    return (
-        <ScrollContainer onRefresh={onRefresh} key={event.id}>
-            <NavTitle>Teams</NavTitle>
-            {event.teamIDs.length > 0 ?
-                event.teamIDs.map((teamID) => <TeamBanner teamID={teamID} key={teamID} />) :
-                isLoaded ?
-                    <Text>There is no team data yet. Download it under the settings tab.</Text> :
-                    <ActivityIndicator size="large" color="#ffffff" />
-            }
-
-
-        </ScrollContainer>
-    );
+    if (event.id === "bogus")
+        return (
+            <View style={{ alignSelf: "center", marginTop: 80 }}>
+                <ActivityIndicator color={paletteContext.palette.textPrimary} size={40} />
+            </View>
+        );
+    else
+        return (
+            <ScrollContainer onRefresh={onRefresh} key={event.id}>
+                <NavTitle>Teams</NavTitle>
+                {event.teamIDs.length <= 0 ?
+                    <Text>This event has no teams posted yet. Pull down to refresh.</Text>
+                    :
+                    event.teamIDs.map((teamID) => <TeamBanner teamID={teamID} key={teamID} />)
+                }
+            </ScrollContainer>
+        );
 }

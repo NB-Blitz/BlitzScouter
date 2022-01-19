@@ -1,13 +1,17 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import * as React from 'react';
 import { GestureResponderEvent, Image, StyleSheet, TouchableNativeFeedback, View } from "react-native";
+import tbalamp from "../../assets/images/tba_lamp.png";
 import { PaletteContext } from '../../context/PaletteContext';
 import Text from '../text/Text';
+
 
 export interface ButtonProps {
     iconType?: React.ComponentProps<typeof MaterialIcons>['name'];
     iconText?: string;
     iconData?: string;
+    iconColor?: string;
+    iconTba?: boolean;
 
     title: string;
     subtitle: string;
@@ -40,6 +44,16 @@ export default function StandardButton(props: ButtonProps) {
                     <Image style={styles.buttonIconSVG} fadeDuration={0} source={{ uri: props.iconData }} />
                     : null}
 
+                {/*  Color Icon  */}
+                {props.iconColor ?
+                    <View style={[styles.buttonIconColor, { backgroundColor: props.iconColor }]} />
+                    : null}
+
+                {/*  TBA Icon  */}
+                {props.iconTba ?
+                    <Image style={styles.buttonIconTBA} fadeDuration={0} source={tbalamp} height={50} width={50} />
+                    : null}
+
 
                 {/*  Titles  */}
                 <View>
@@ -62,14 +76,14 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         padding: 10,
         paddingRight: 65,
-        marginBottom: 5,
+        marginBottom: 8,
         borderRadius: 5
     },
     buttonTitle: {
         fontSize: 18
     },
     buttonIconFA: {
-        marginRight: 12,
+        marginRight: 14,
         width: 50,
         alignItems: 'center',
         justifyContent: 'center'
@@ -78,16 +92,30 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
         margin: -10,
-        marginRight: 12,
-        borderTopLeftRadius: 1,
-        borderBottomLeftRadius: 1,
+        marginRight: 14,
+        borderTopLeftRadius: 5,
+        borderBottomLeftRadius: 5,
     },
     buttonIconTXT: {
         fontSize: 20,
         fontWeight: "bold",
         textAlign: "center",
         paddingTop: 5,
-        marginRight: 12,
+        marginRight: 14,
         width: 50,
-    }
+    },
+    buttonIconTBA: {
+        paddingTop: 5,
+        marginRight: 14 + 15,
+        marginLeft: 15,
+        width: 20,
+        height: 32
+    },
+    buttonIconColor: {
+        width: 45,
+        height: 45,
+        marginRight: 14,
+        borderTopLeftRadius: 1,
+        borderBottomLeftRadius: 1,
+    },
 });

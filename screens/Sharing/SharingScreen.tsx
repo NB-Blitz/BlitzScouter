@@ -1,16 +1,44 @@
 import { useNavigation } from '@react-navigation/native';
+import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 import * as React from 'react';
 import HorizontalBar from '../../components/common/HorizontalBar';
 import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
+import { useDataImporter, useJsonData } from '../../hooks/useCompressedData';
 
 export default function SharingScreen() {
     const navigator = useNavigation();
+    const data = useJsonData();
+    const importJsonData = useDataImporter();
+
+    const exportJson = async () => {
+        const path = FileSystem.documentDirectory + "data.json";
+        await FileSystem.writeAsStringAsync(path, data, { encoding: FileSystem.EncodingType.UTF8 });
+        Sharing.shareAsync(path);
+    }
+
+    const importJson = async () => {
+        const result = await DocumentPicker.getDocumentAsync({ type: 'application/json', copyToCacheDirectory: true });
+        if (result.type === "success") {
+            /*
+                https://github.com/expo/expo/issues/14335
+
+                TL;DR: result.uri is not the correct file path.
+                The following code is a workaround for this issue.
+            */
+            const fileName = result.uri.split("/").pop();
+            const path = FileSystem.cacheDirectory + 'DocumentPicker/' + fileName;
+
+            const jsonData = await FileSystem.readAsStringAsync(path, { encoding: FileSystem.EncodingType.UTF8 });
+            importJsonData(jsonData);
+        }
+    }
 
     return (
         <ScrollContainer>
-
             <NavTitle>Sharing</NavTitle>
 
             {/* QR Codes */}
@@ -18,7 +46,7 @@ export default function SharingScreen() {
                 iconType={"qr-code"}
                 title={"Show QRCode"}
                 subtitle={"Export Scouting Data"}
-                onPress={() => { navigator.navigate("ExportQR"); }} />
+                onPress={() => { navigator.navigate("ExportQR", { data }); }} />
 
             <StandardButton
                 iconType={"camera-alt"}
@@ -29,47 +57,25 @@ export default function SharingScreen() {
 
             {/* File Formats */}
             <StandardButton
-                iconType={"table-rows"}
-                title={"Save to CSV"}
+                iconType={"code"}
+                title={"Save to JSON"}
                 subtitle={"Export Scouting Data"}
-                onPress={() => { }} />
+                onPress={() => { exportJson(); }} />
 
             <StandardButton
-                iconType={"insert-drive-file"}
+                iconType={"code"}
+                title={"Import JSON"}
+                subtitle={"Import Scouting Data"}
+                onPress={() => { importJson(); }} />
+
+            {/*<StandardButton
+                iconType={"inventory"}
                 title={"Save to ZIP"}
                 subtitle={"Export Images"}
                 onPress={() => { }} />
-            <HorizontalBar />
-
-            {/* Cloud Save */}
-            {/*
-            <StandardButton
-                iconType={"cloud-upload"}
-                title={"Upload to Cloud"}
-                subtitle={"Export Everything"} 
-                onPress={() => {}} />
-            
-            <StandardButton
-                iconType={"cloud-download"}
-                title={"Download from Cloud"}
-                subtitle={"Import Everything"} 
-                onPress={() => {}} />
-            <HorizontalBar />
-            */}
-
-            {/* Hardware Sync */}
-            <StandardButton
-                iconType={"usb"}
-                title={"Export to USB Drive"}
-                subtitle={"Export Everything"}
-                onPress={() => { }} />
-            <StandardButton
-                iconType={"usb"}
-                title={"Import from USB Drive"}
-                subtitle={"Import Everything"}
-                onPress={() => { }} />
 
             <HorizontalBar />
+
             <StandardButton
                 iconType={"nfc"}
                 title={"Export to NFC"}
@@ -85,13 +91,13 @@ export default function SharingScreen() {
             <StandardButton
                 iconType={"bluetooth"}
                 title={"Export to Bluetooth"}
-                subtitle={"Export Everything"}
+                subtitle={"Export Scouting Data"}
                 onPress={() => { }} />
             <StandardButton
                 iconType={"bluetooth"}
                 title={"Import from Bluetooth"}
-                subtitle={"Import Everything"}
-                onPress={() => { }} />
+                subtitle={"Import Scouting Data"}
+                onPress={() => { }} />*/}
 
         </ScrollContainer>
     );

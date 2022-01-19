@@ -1,10 +1,11 @@
+import LZString from 'lz-string';
 import * as React from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import QRCode from 'react-qr-code';
-import { useCompressedData } from '../../hooks/useCompressedData';
 
-export default function ExportQRScreen() {
-    const data = useCompressedData();
+export default function ExportQRScreen({ route }: any) {
+    const jsonData = route.params.data;
+    const compressedData = LZString.compressToEncodedURIComponent(jsonData);
 
     const windowSize = Dimensions.get("window");
     const qrSize = Math.min(windowSize.width, windowSize.height);
@@ -12,10 +13,9 @@ export default function ExportQRScreen() {
     return (
 
         <View style={styles.container}>
-
             <QRCode
-                value={data}
                 size={qrSize}
+                value={compressedData}
                 bgColor="black"
                 fgColor="white"
             />
@@ -25,12 +25,8 @@ export default function ExportQRScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        position: "absolute",
-        justifyContent: "center",
+        flex: 1,
         backgroundColor: "black",
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0
+        justifyContent: "center",
     }
 });

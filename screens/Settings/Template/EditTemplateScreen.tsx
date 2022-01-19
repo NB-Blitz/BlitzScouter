@@ -50,7 +50,7 @@ export default function EditTemplateScreen({ route }: any) {
     React.useLayoutEffect(() => {
         navigator.setOptions({
             headerRight: () => (
-                <Button onPress={onDeleteEvent}>
+                <Button onPress={onDeleteEvent} style={styles.trashButton}>
                     <MaterialIcons name="delete-outline" size={25} color={paletteContext.palette.textPrimary} />
                 </Button>
             )
@@ -94,6 +94,10 @@ const styles = StyleSheet.create({
     parentView: {
         height: "100%",
         width: "100%"
+    },
+    trashButton: {
+        alignSelf: "flex-end",
+        margin: 11
     },
     addButton: {
         height: 50,

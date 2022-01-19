@@ -3,28 +3,18 @@ import React, { useEffect } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import TBA from "../../api/TBA";
-import { DownloadEvent } from "../../api/TBAAdapter";
 import Button from "../../components/common/Button";
 import ScrollContainer from "../../components/containers/ScrollContainer";
 import Text from "../../components/text/Text";
 import { PaletteContext } from "../../context/PaletteContext";
 import { TBAEvent } from "../../types/TBAModels";
-import DownloadingModal from "./DownloadingModal";
 
 export default function RegionalScreen({ route }: any) {
     const paletteContext = React.useContext(PaletteContext);
     const navigator = useNavigation();
     const [searchTerm, updateSearch] = React.useState("");
     const [regionalList, updateRegionals] = React.useState([] as TBAEvent[]);
-    const [downloadStatus, setDownloadStatus] = React.useState("");
     const year = route.params.year;
-
-    const downloadEvent = (eventID: string) => {
-        DownloadEvent(eventID, setDownloadStatus).then(() => {
-            navigator.goBack();
-            navigator.goBack();
-        });
-    }
 
     useEffect(() => {
         TBA.getEvents(year).then((events) => {
@@ -51,7 +41,7 @@ export default function RegionalScreen({ route }: any) {
                 regionalsDisplay.push(
                     <Button
                         key={key}
-                        onPress={() => { downloadEvent(key); }}
+                        onPress={() => { navigator.navigate("Download", { eventID: key }); }}
                         style={[styles.regionalButton]} >
 
                         <Text style={[styles.regionalText, { color: paletteContext.palette.textPrimary }]} numberOfLines={1}>
@@ -77,7 +67,6 @@ export default function RegionalScreen({ route }: any) {
 
             <ScrollContainer>
                 {regionalsDisplay}
-                <DownloadingModal status={downloadStatus} />
             </ScrollContainer>
         </View>
 

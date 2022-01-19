@@ -19,8 +19,6 @@ export default function TeamScreen({ route }: any) {
     const [team, setTeam] = useTeam(route.params.teamID);
     const stats = useStats(team.id);
 
-    console.log(stats);
-
     const generateID = () => {
         return team.id + "_" + Math.random().toString(36).slice(2);
     }
@@ -139,7 +137,7 @@ export default function TeamScreen({ route }: any) {
                     onPress={() => { }} />
 
                 <StandardButton
-                    iconType={"open-in-browser"}
+                    iconTba={true}
                     title={"View on TBA"}
                     subtitle={"View Team " + team.number + " on The Blue Alliance"}
                     onPress={() => { team ? TBA.openTeam(team.number) : null }} />

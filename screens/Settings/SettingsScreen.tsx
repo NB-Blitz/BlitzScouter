@@ -1,17 +1,19 @@
 import { useNavigation } from '@react-navigation/core';
 import * as React from 'react';
-import { Alert } from 'react-native';
+import { Alert, ToastAndroid } from 'react-native';
 import HorizontalBar from '../../components/common/HorizontalBar';
 import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
 import { DARK_PALETTE, PaletteContext } from '../../context/PaletteContext';
+import useEvent from '../../hooks/useEvent';
 import { clearStorage } from '../../hooks/useStorage';
 import { TemplateType } from '../../types/TemplateTypes';
 
 export default function SettingsScreen() {
     const paletteContext = React.useContext(PaletteContext);
     const navigator = useNavigation();
+    const [event] = useEvent();
 
     const clearData = () => {
         Alert.alert("Are you sure?", "This will delete all team, event, match, and scouting data on your device.",
@@ -37,7 +39,40 @@ export default function SettingsScreen() {
 
             <NavTitle>Settings</NavTitle>
 
-            {/* Data Buttons */}
+            <StandardButton
+                iconType={"format-paint"}
+                title={"Edit Palette"}
+                subtitle={"Customizes the app's color palette"}
+                onPress={() => { navigator.navigate("Palette"); }} />
+
+            <StandardButton
+                iconType={"format-color-reset"}
+                title={"Reset Palette"}
+                subtitle={"Resets the palette to default"}
+                onPress={() => { paletteContext.setPalette(DARK_PALETTE); ToastAndroid.show("Palette Reset!", ToastAndroid.SHORT); }} />
+
+            <HorizontalBar />
+
+            {/* Scouting Buttons */}
+            <StandardButton
+                iconType={"edit"}
+                title={"Edit Match Scouting"}
+                subtitle={"Adjust the match scouting template"}
+                onPress={() => { navigator.navigate("EditTemplate", { templateType: TemplateType.Match }); }} />
+            {/*
+            <StandardButton
+                iconType={"edit"}
+                title={"Edit Pit Scouting"}
+                subtitle={"Adjust the pit scouting template"}
+            onPress={() => { navigator.navigate("EditTemplate", { templateType: TemplateType.Pit }); }} />
+            <StandardButton
+                iconType={"person-outline"}
+                title={"Assign Default Team"}
+                subtitle={"Assign the default team to scout"}
+                onPress={() => { navigator.navigate("DefaultTeam"); }} />*/}
+
+            <HorizontalBar />
+
             <StandardButton
                 iconType={"location-pin"}
                 title={"Change Regional"}
@@ -45,31 +80,10 @@ export default function SettingsScreen() {
                 onPress={() => { navigator.navigate("Year"); }} />
 
             <StandardButton
-                iconType={"delete-outline"}
-                title={"Clear Theme Data"}
-                subtitle={"Wipes the theme from your device"}
-                onPress={() => { paletteContext.setPalette(DARK_PALETTE); }} />
-
-            <HorizontalBar />
-
-            {/* Scouting Buttons */}
-            <StandardButton
-                iconType={"edit"}
-                title={"Edit Pit Scouting"}
-                subtitle={"Adjust the pit scouting template"}
-                onPress={() => { navigator.navigate("EditTemplate", { templateType: TemplateType.Pit }); }} />
-            <StandardButton
-                iconType={"edit"}
-                title={"Edit Match Scouting"}
-                subtitle={"Adjust the match scouting template"}
-                onPress={() => { navigator.navigate("EditTemplate", { templateType: TemplateType.Match }); }} />
-            <StandardButton
-                iconType={"person-outline"}
-                title={"Assign Default Team"}
-                subtitle={"Assign the default team to scout"}
-                onPress={() => { navigator.navigate("DefaultTeam"); }} />
-
-            <HorizontalBar />
+                iconType={"file-download"}
+                title={"Re-Download Event"}
+                subtitle={"Downloads event data from TBA"}
+                onPress={() => { navigator.navigate("Download", { eventID: event.id }); }} />
 
             <StandardButton
                 iconType={"delete-outline"}

@@ -33,7 +33,7 @@ export default function MatchScreen({ route }: any) {
                     : undefined}
 
                 <StandardButton
-                    iconType={"open-in-browser"}
+                    iconTba={true}
                     title={"View on TBA"}
                     subtitle={"View this Match on The Blue Alliance"}
                     onPress={() => { match ? TBA.openMatch(match.id) : null }} />

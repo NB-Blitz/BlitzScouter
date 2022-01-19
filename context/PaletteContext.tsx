@@ -24,15 +24,21 @@ export const LIGHT_PALETTE: Palette = {
 };
 
 export const PaletteContext = React.createContext({
-    palette: {} as Palette,
+    palette: {} as any,
     setPalette: (newTheme: Palette) => { }
 });
 
 export function PaletteProvider(props: { children: React.ReactNode }) {
     const [palette, setPalette] = React.useState(DARK_PALETTE);
+    const [version, setVersion] = React.useState(0);
+
+    const setPaletteFromContext = (newPalette: Palette) => {
+        setPalette(newPalette);
+        setVersion(v => v + 1);
+    }
 
     return (
-        <PaletteContext.Provider value={{ palette, setPalette }}>
+        <PaletteContext.Provider value={{ palette, setPalette: setPaletteFromContext }}>
             {props.children}
         </PaletteContext.Provider>
     )

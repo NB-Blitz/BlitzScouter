@@ -5,28 +5,22 @@ import { PaletteProvider } from './context/PaletteContext';
 import useCachedResources from './hooks/useCachedResources';
 import RootNavigator from './navigation/RootNavigator';
 
-function App() {
+export default function App() {
     const isLoadingComplete = useCachedResources();
 
     if (!isLoadingComplete) {
         return null;
     } else {
         return (
-            <SafeAreaProvider>
-                <StatusBar
-                    animated={true}
-                    backgroundColor="#141416"
-                    style='light' />
-                <RootNavigator />
-            </SafeAreaProvider >
+            <PaletteProvider>
+                <SafeAreaProvider>
+                    <StatusBar
+                        animated={true}
+                        backgroundColor="#141416"
+                        style='light' />
+                    <RootNavigator />
+                </SafeAreaProvider >
+            </PaletteProvider>
         );
     }
-}
-
-export default function AppContainer() {
-    return (
-        <PaletteProvider>
-            <App />
-        </PaletteProvider>
-    );
 }

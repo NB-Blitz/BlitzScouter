@@ -8,7 +8,7 @@ import TBA from "./TBA";
 
 const MATCH_TYPES = ["qm", "qf", "sf", "f"];
 
-export async function DownloadEvent(eventID: string, callback: (status: string) => void) {
+export async function DownloadEvent(eventID: string, includeMedia: boolean, callback: (status: string) => void) {
 
     // Matches
     const matchIDs = await DownloadMatches(eventID, matchNumber => {
@@ -18,19 +18,20 @@ export async function DownloadEvent(eventID: string, callback: (status: string) 
         return callback("");
 
     // Teams
-    const teamIDs = await DownloadTeams(eventID, true, teamNumber => {
+    const teamIDs = await DownloadTeams(eventID, includeMedia, teamNumber => {
         callback("Downloading Team " + teamNumber + "...");
     });
     if (teamIDs === undefined)
         return callback("");
 
     // Event
-    putStorage<Event>("current-event", {
+    await putStorage<Event>("current-event", {
         id: eventID,
         year: parseInt(eventID.substring(0, 4)),
         matchIDs,
         teamIDs,
     });
+    await putStorage("onboard", true);
     Alert.alert("Success", "Successfully downloaded data from The Blue Alliance.");
 }
 

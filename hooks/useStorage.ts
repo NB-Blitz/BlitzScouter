@@ -20,6 +20,8 @@ export default function useStorage<Type>(id: string, defaultValue: Type): [Type,
         const jsonData = await AsyncStorage.getItem(id);
         if (jsonData)
             setData(JSON.parse(jsonData) as Type);
+        else
+            setData(defaultValue);
     };
     useEffect(() => {
         getData();
@@ -74,9 +76,8 @@ export async function getStorage<Type>(id: string) {
 export async function clearStorage() {
     // AsyncStorage
     const keys = await AsyncStorage.getAllKeys();
-    await AsyncStorage.clear();
     for (let key of keys) {
-        console.log(key);
+        await AsyncStorage.removeItem(key);
         eventEmitter.emit(key);
     }
 
