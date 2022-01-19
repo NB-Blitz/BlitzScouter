@@ -1,4 +1,4 @@
-![Blitz Scouter](https://i.imgur.com/47DqYax.png "Blitz Scouter")
+![Blitz Scouter](https://i.imgur.com/eANWZcA.png "Blitz Scouter")
 
 # Features
 - Easy to use
