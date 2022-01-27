@@ -11,7 +11,6 @@ export default function ExportQRScreen({ route }: any) {
     const qrSize = Math.min(windowSize.width, windowSize.height);
 
     return (
-
         <View style={styles.container}>
             <QRCode
                 size={qrSize}

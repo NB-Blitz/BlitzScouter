@@ -3,7 +3,10 @@ import { TemplateType } from "../types/TemplateTypes";
 import useTeam from "./useTeam";
 import useTemplate from "./useTemplate";
 
-export type TeamStats = TeamMetric[];
+export type TeamStats = {
+    id: string,
+    metrics: TeamMetric[]
+};
 export interface TeamMetric {
     label: string,
     average: number,
@@ -14,14 +17,17 @@ export interface TeamMetric {
 export default function useStats(teamID: string) {
     const [team] = useTeam(teamID);
     const [template] = useTemplate(TemplateType.Match);
-    const [teamStats, setTeamStats] = useState<TeamStats>([] as TeamStats);
+    const [teamStats, setTeamStats] = useState<TeamStats>({} as TeamStats);
 
     useEffect(() => {
         if (team.scoutingData.length === 0 || template.length === 0) {
             return;
         }
 
-        let newStats: TeamStats = [];
+        let newStats: TeamStats = {
+            id: team.id,
+            metrics: []
+        };
 
         template.forEach(element => {
             if (typeof element.value === "number") {
@@ -32,22 +38,22 @@ export default function useStats(teamID: string) {
                     min: Number.MAX_SAFE_INTEGER
                 };
 
-                newStats.push(metric);
+                newStats.metrics.push(metric);
             }
         });
 
         team.scoutingData.forEach(scout => {
             scout.values.forEach((value, index) => {
                 if (typeof value === "number") {
-                    newStats[index].average += value;
-                    newStats[index].max = Math.max(newStats[index].max, value);
-                    newStats[index].min = Math.min(newStats[index].min, value);
+                    newStats.metrics[index].average += value;
+                    newStats.metrics[index].max = Math.max(newStats.metrics[index].max, value);
+                    newStats.metrics[index].min = Math.min(newStats.metrics[index].min, value);
                 }
             });
         });
 
-        newStats.forEach((stat, index) => {
-            newStats[index].average /= team.scoutingData.length;
+        newStats.metrics.forEach((stat, index) => {
+            newStats.metrics[index].average /= team.scoutingData.length;
         });
 
         setTeamStats(newStats);

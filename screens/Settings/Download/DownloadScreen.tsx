@@ -1,12 +1,12 @@
 import { useNavigation } from "@react-navigation/core";
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { DownloadEvent } from "../../api/TBAAdapter";
-import StandardButton from "../../components/common/StandardButton";
-import ScrollContainer from "../../components/containers/ScrollContainer";
-import Text from "../../components/text/Text";
-import Title from "../../components/text/Title";
-import { PaletteContext } from "../../context/PaletteContext";
+import { DownloadEvent } from "../../../api/TBAAdapter";
+import StandardButton from "../../../components/common/StandardButton";
+import ScrollContainer from "../../../components/containers/ScrollContainer";
+import Text from "../../../components/text/Text";
+import Title from "../../../components/text/Title";
+import { PaletteContext } from "../../../context/PaletteContext";
 
 export default function DownloadScreen({ route }: any) {
     const paletteContext = React.useContext(PaletteContext);

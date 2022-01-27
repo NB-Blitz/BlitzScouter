@@ -2,11 +2,13 @@ import { useNavigation } from "@react-navigation/core";
 import React from "react";
 import { View } from "react-native";
 import StandardButton from "../../components/common/StandardButton";
+import useStats from "../../hooks/useStats";
 import useTeam from "../../hooks/useTeam";
 
 export default function TeamBanner(props: { teamID: string, onClick?: (teamID: string) => void }) {
     const navigator = useNavigation();
-    const [team, setTeam] = useTeam(props.teamID);
+    const [team] = useTeam(props.teamID);
+    const stats = useStats(props.teamID);
 
     const onClick = () => {
         if (props.onClick)

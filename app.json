@@ -4,8 +4,8 @@
         "slug": "BlitzScouter",
         "version": "1.0.0",
         "orientation": "portrait",
-        "icon": "./assets/images/icon.png",
         "scheme": "blitz",
+        "icon": "./assets/images/icon.png",
         "userInterfaceStyle": "light",
         "primaryColor": "#856a00",
         "splash": {
@@ -22,12 +22,13 @@
         "ios": {
             "supportsTablet": true,
             "bundleIdentifier": "com.nbblitz.blitzscouter",
-            "buildNumber": "1.0.0"
+            "buildNumber": "1.0.0",
+            "icon": "./assets/images/icon.png"
         },
         "android": {
             "adaptiveIcon": {
-                "foregroundImage": "./assets/images/icon.png",
-                "backgroundColor": "#1e1e1e"
+                "foregroundImage": "./assets/images/logo.png",
+                "backgroundColor": "#141416"
             },
             "package": "com.nbblitz.blitzscouter",
             "versionCode": 1

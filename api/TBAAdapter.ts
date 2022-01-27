@@ -102,7 +102,8 @@ export async function DownloadMatches(eventID: string, callback: (matchNumber: n
 
 export async function DownloadTeams(eventID: string, downloadMedia: boolean, callback: (teamNumber: number) => void) {
     const tbaTeams = await TBA.getTeams(eventID);
-    if (!tbaTeams)
+    const tbaRanks = await TBA.getRankings(eventID);
+    if (!tbaTeams || !tbaRanks)
         return undefined;
     const year = parseInt(eventID.substring(0, 4));
 
@@ -115,6 +116,7 @@ export async function DownloadTeams(eventID: string, downloadMedia: boolean, cal
         callback(team.team_number);
         teamIDs.push(team.key);
 
+        // Media
         let mediaPaths: string[] = [];
         if (downloadMedia)
             mediaPaths = await DownloadMedia(team.key, year);
@@ -124,10 +126,21 @@ export async function DownloadTeams(eventID: string, downloadMedia: boolean, cal
                 mediaPaths = JSON.parse(currentTeam).mediaPaths;
         }
 
+        // Ranks
+        const rankingInfo = tbaRanks.rankings.find(rank => rank.team_key === team.key);
+        const rank = rankingInfo ? rankingInfo.rank : -1;
+        const wins = rankingInfo ? rankingInfo.record.wins : -1;
+        const losses = rankingInfo ? rankingInfo.record.losses : -1;
+        const ties = rankingInfo ? rankingInfo.record.ties : -1;
+
         await putStorage<Team>(team.key, {
             id: team.key,
             name: team.nickname,
             number: team.team_number,
+            rank,
+            wins,
+            losses,
+            ties,
             mediaPaths,
             scoutingData: []
         });
@@ -156,7 +169,7 @@ export async function DownloadMedia(teamID: string, year: number) {
         }
         else if (media.direct_url) {
             const path = FileSystem.documentDirectory + mediaID + ".jpg";
-            console.log(media.direct_url + "   -->   " + path);
+            console.log("DOWNLOAD: " + media.direct_url);
             await FileSystem.downloadAsync(media.direct_url, path);
             mediaPaths.push(path);
         }

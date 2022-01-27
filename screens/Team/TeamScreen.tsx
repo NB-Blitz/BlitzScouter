@@ -46,6 +46,10 @@ export default function TeamScreen({ route }: any) {
             id: team.id,
             name: team.name,
             number: team.number,
+            rank: team.rank,
+            wins: team.wins,
+            losses: team.losses,
+            ties: team.ties,
             mediaPaths,
             scoutingData: team.scoutingData
         });
@@ -74,6 +78,10 @@ export default function TeamScreen({ route }: any) {
             id: team.id,
             name: team.name,
             number: team.number,
+            rank: team.rank,
+            wins: team.wins,
+            losses: team.losses,
+            ties: team.ties,
             mediaPaths,
             scoutingData: team.scoutingData
         });
@@ -86,9 +94,24 @@ export default function TeamScreen({ route }: any) {
             id: team.id,
             name: team.name,
             number: team.number,
+            rank: team.rank,
+            wins: team.wins,
+            losses: team.losses,
+            ties: team.ties,
             mediaPaths,
             scoutingData: team.scoutingData
         });
+    }
+
+    const printStat = (name: string, ...values: string[]) => {
+        return (<View style={styles.statContainer} key={name}>
+            <Text style={styles.statLabel}>{name}</Text>
+            <View style={styles.valueContainer}>
+                {values.map((value, index) => {
+                    return (<Text style={styles.statValue} key={index}>{value}</Text>);
+                })}
+            </View>
+        </View>);
     }
 
     return (
@@ -110,7 +133,7 @@ export default function TeamScreen({ route }: any) {
                         style={styles.imageButton}
                         onPress={async () => { takePhoto(); }}>
                         <MaterialIcons
-                            size={40}
+                            size={50}
                             name={"add-a-photo"}
                             color={"white"} />
                     </Button>
@@ -119,7 +142,7 @@ export default function TeamScreen({ route }: any) {
                         style={styles.imageButton}
                         onPress={async () => { uploadPhoto(); }}>
                         <MaterialIcons
-                            size={40}
+                            size={50}
                             name={"add-photo-alternate"}
                             color={"white"} />
                     </Button>
@@ -145,7 +168,14 @@ export default function TeamScreen({ route }: any) {
                 <HorizontalBar />
 
                 <View style={styles.statsContainer}>
-                    {stats.length > 0 ?
+                    {printStat("Rank", team.rank.toString())}
+                    {printStat("Wins", team.wins.toString())}
+                    {printStat("Losses", team.losses.toString())}
+                    {printStat("Ties", team.ties.toString())}
+                </View>
+
+                <View style={styles.statsContainer}>
+                    {stats.metrics.length > 0 ?
                         <View style={styles.statContainer}>
                             <View style={styles.valueContainer}>
                                 <Text style={styles.statHeader}>Min</Text>
@@ -157,15 +187,8 @@ export default function TeamScreen({ route }: any) {
                         null
                     }
 
-                    {stats.map((stat, index) =>
-                        <View style={styles.statContainer} key={index}>
-                            <Text style={styles.statLabel}>{stat.label}</Text>
-                            <View style={styles.valueContainer}>
-                                <Text style={styles.statValue}>{stat.min}</Text>
-                                <Text style={styles.statValue}>{stat.average}</Text>
-                                <Text style={styles.statValue}>{stat.max}</Text>
-                            </View>
-                        </View>
+                    {stats.metrics.map((stat, index) =>
+                        printStat(stat.label, stat.min.toString(), stat.average.toString(), stat.max.toString())
                     )}
                 </View>
 
@@ -188,14 +211,16 @@ const styles = StyleSheet.create({
     thumbnail: {
         height: 200,
         width: 200,
-        borderRadius: 1
+        borderRadius: 5
     },
     imageButton: {
         height: 200,
         width: 200,
+        marginLeft: 6,
         justifyContent: "center",
         flexDirection: "row",
-        backgroundColor: "#444"
+        backgroundColor: "#444",
+        borderRadius: 5
     },
 
     statLabel: {
@@ -230,5 +255,7 @@ const styles = StyleSheet.create({
     statsContainer: {
         backgroundColor: "#1b1b1b",
         borderRadius: 5,
+        marginTop: 5,
+        marginBottom: 5
     }
 });

@@ -3,19 +3,21 @@ import * as React from "react";
 import { Image, StyleSheet, View } from "react-native";
 import PagerView from 'react-native-pager-view';
 import Animated from "react-native-reanimated";
-import logo from "../../assets/images/logo.png";
-import tbalamp from "../../assets/images/tba_lamp.png";
-import Button from "../../components/common/Button";
-import Subtitle from "../../components/text/Subtitle";
-import Text from "../../components/text/Text";
-import Title from "../../components/text/Title";
-import useStorage from "../../hooks/useStorage";
-import TabNavigator from "../../navigation/TabNavigator";
+import logo from "../../../assets/images/logo.png";
+import tbalamp from "../../../assets/images/tba_lamp.png";
+import Button from "../../../components/common/Button";
+import Subtitle from "../../../components/text/Subtitle";
+import Text from "../../../components/text/Text";
+import Title from "../../../components/text/Title";
+import useStorage from "../../../hooks/useStorage";
+import TabNavigator from "../../../navigation/TabNavigator";
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
 export default function OnboardingScreen() {
     const [hasOnboarded] = useStorage<boolean>("onboard", false);
+
+    // Animations
     const scrollOffsetAnimatedValue = React.useRef(new Animated.Value(0)).current;
     const positionAnimatedValue = React.useRef(new Animated.Value(0)).current;
     const translateX = Animated.add(
@@ -28,6 +30,8 @@ export default function OnboardingScreen() {
             outputRange: [0, 30],
         })
     );
+
+    // Navigation
     const navigator = useNavigation();
     if (hasOnboarded)
         return (
@@ -52,14 +56,14 @@ export default function OnboardingScreen() {
                     })}>
 
                     <View style={styles.page} key="1">
-                        <Image source={logo} style={[styles.img, { width: 80, height: 160 }]} />
+                        <Image source={logo} style={[styles.img, { width: 160, height: 160 }]} />
                         <Subtitle style={styles.subtitle}>Welcome to</Subtitle>
                         <Title style={styles.title}>Blitz Scouter</Title>
                         <Text style={styles.text}>Blitz Scouter is a simple, easy to use scouting app for use at a FIRST{"\u00AE"} Robotics Competition.</Text>
                     </View>
                     <View style={[styles.page, { backgroundColor: "#3f51b5" }]} key="2">
                         <View style={{ height: 90 }} />
-                        <Image source={tbalamp} style={[styles.img, { width: 100, height: 160 }]} />
+                        <Animated.Image source={tbalamp} style={[styles.img, { width: 100, height: 160 }]} />
                         <Subtitle style={styles.subtitle}>Import From</Subtitle>
                         <Title style={styles.title}>The Blue Alliance</Title>
                         <Text style={styles.text}>Import Teams and Event data while your online, and continue to use them offline.</Text>

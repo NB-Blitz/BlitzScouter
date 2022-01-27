@@ -6,7 +6,7 @@ import Subtitle from "../../components/text/Subtitle";
 import Title from "../../components/text/Title";
 import useMatch from '../../hooks/useMatch';
 import { TemplateType } from '../../types/TemplateTypes';
-import TeamBanner from '../Teams/TeamBanner';
+import TeamBanner from '../Team/TeamBanner';
 
 export default function TeamSelectScreen({ route }: any) {
     const navigator = useNavigation();

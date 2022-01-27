@@ -2,12 +2,12 @@ import { useNavigation } from "@react-navigation/core";
 import React, { useEffect } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import TBA from "../../api/TBA";
-import Button from "../../components/common/Button";
-import ScrollContainer from "../../components/containers/ScrollContainer";
-import Text from "../../components/text/Text";
-import { PaletteContext } from "../../context/PaletteContext";
-import { TBAEvent } from "../../types/TBAModels";
+import TBA from "../../../api/TBA";
+import Button from "../../../components/common/Button";
+import ScrollContainer from "../../../components/containers/ScrollContainer";
+import Text from "../../../components/text/Text";
+import { PaletteContext } from "../../../context/PaletteContext";
+import { TBAEvent } from "../../../types/TBAModels";
 
 export default function RegionalScreen({ route }: any) {
     const paletteContext = React.useContext(PaletteContext);

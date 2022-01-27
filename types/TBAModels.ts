@@ -38,3 +38,28 @@ export interface TBAStatus {
     max_season: number;
     current_season: number;
 }
+
+export interface TBARankings {
+    extra_stats_info: {
+        name: string;
+        precision: number;
+    }[];
+    rankings: {
+        dq: number;
+        extra_stats: number[];
+        matches_played: number;
+        qual_average: number;
+        rank: number;
+        record: {
+            losses: number;
+            wins: number;
+            ties: number;
+        };
+        sort_orders: number[];
+        team_key: string;
+    }[];
+    sort_order_info: {
+        name: string;
+        precision: number;
+    }[];
+}

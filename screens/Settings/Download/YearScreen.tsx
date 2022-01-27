@@ -1,13 +1,13 @@
 import { useNavigation } from "@react-navigation/core";
 import React from "react";
 import { StyleSheet, ToastAndroid } from "react-native";
-import TBA from "../../api/TBA";
-import HorizontalBar from "../../components/common/HorizontalBar";
-import StandardButton from "../../components/common/StandardButton";
-import ScrollContainer from "../../components/containers/ScrollContainer";
-import Subtitle from "../../components/text/Subtitle";
-import Text from "../../components/text/Text";
-import Title from "../../components/text/Title";
+import TBA from "../../../api/TBA";
+import HorizontalBar from "../../../components/common/HorizontalBar";
+import StandardButton from "../../../components/common/StandardButton";
+import ScrollContainer from "../../../components/containers/ScrollContainer";
+import Subtitle from "../../../components/text/Subtitle";
+import Text from "../../../components/text/Text";
+import Title from "../../../components/text/Title";
 
 /*
     While hard-coding season names isn't best practice,

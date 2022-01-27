@@ -5,7 +5,7 @@ import HorizontalBar from '../../components/common/HorizontalBar';
 import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
-import { DARK_PALETTE, PaletteContext } from '../../context/PaletteContext';
+import { DARK_PALETTE, LIGHT_PALETTE, PaletteContext } from '../../context/PaletteContext';
 import useEvent from '../../hooks/useEvent';
 import { clearStorage } from '../../hooks/useStorage';
 import { TemplateType } from '../../types/TemplateTypes';
@@ -46,10 +46,16 @@ export default function SettingsScreen() {
                 onPress={() => { navigator.navigate("Palette"); }} />
 
             <StandardButton
-                iconType={"format-color-reset"}
-                title={"Reset Palette"}
-                subtitle={"Resets the palette to default"}
-                onPress={() => { paletteContext.setPalette(DARK_PALETTE); ToastAndroid.show("Palette Reset!", ToastAndroid.SHORT); }} />
+                iconType={"lightbulb"}
+                title={"Light Mode"}
+                subtitle={"Resets to the default light palette"}
+                onPress={() => { paletteContext.setPalette(LIGHT_PALETTE); ToastAndroid.show("Light Mode!", ToastAndroid.SHORT); }} />
+
+            <StandardButton
+                iconType={"lightbulb-outline"}
+                title={"Dark Mode"}
+                subtitle={"Resets to the default dark palette"}
+                onPress={() => { paletteContext.setPalette(DARK_PALETTE); ToastAndroid.show("Dark Mode!", ToastAndroid.SHORT); }} />
 
             <HorizontalBar />
 

@@ -5,6 +5,10 @@ const DEFAULT_TEAM = {
     id: "",
     name: "",
     number: 0,
+    rank: -1,
+    wins: -1,
+    losses: -1,
+    ties: -1,
     mediaPaths: [],
     scoutingData: []
 } as Team;

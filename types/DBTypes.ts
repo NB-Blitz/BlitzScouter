@@ -11,6 +11,10 @@ export interface Team {
     id: string;
     name: string;
     number: number;
+    rank: number;
+    wins: number;
+    losses: number;
+    ties: number;
     mediaPaths: string[];
     scoutingData: ScoutingData[];
 }

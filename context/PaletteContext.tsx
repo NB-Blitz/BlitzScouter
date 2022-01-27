@@ -14,12 +14,12 @@ export const DARK_PALETTE: Palette = {
 
 export const LIGHT_PALETTE: Palette = {
     background: "#ffffff",
-    button: "#e7e7e7",
-    navigation: "#b6b6b6",
+    button: "#f7f7f7",
+    navigation: "#d0d0d0",
     navigationText: "#000000",
     navigationSelected: "#008bc7",
     navigationTextSelected: "#000000",
-    textPrimary: "#000000",
+    textPrimary: "#111111",
     textSecondary: "#424242"
 };
 

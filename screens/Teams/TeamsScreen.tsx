@@ -1,20 +1,23 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import * as React from 'react';
-import { ActivityIndicator, Platform, ToastAndroid, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, ToastAndroid, View } from 'react-native';
 import { DownloadTeams } from '../../api/TBAAdapter';
+import Button from '../../components/common/Button';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
 import Text from '../../components/text/Text';
 import { PaletteContext } from '../../context/PaletteContext';
 import useEvent from '../../hooks/useEvent';
-import TeamBanner from './TeamBanner';
+import TeamBanner from '../Team/TeamBanner';
+
+const TeamBannerHeight = 190;
 
 export default function TeamsScreen() {
     const paletteContext = React.useContext(PaletteContext);
     const [event, setEvent] = useEvent();
 
+    // Download Teams
     const onRefresh = async () => {
-        if (Platform.OS !== "android")
-            return;
         const teamIDs = await DownloadTeams(event.id, false, () => { });
         if (teamIDs) {
             await setEvent({
@@ -30,21 +33,46 @@ export default function TeamsScreen() {
         }
     };
 
-    if (event.id === "bogus")
-        return (
-            <View style={{ alignSelf: "center", marginTop: 80 }}>
-                <ActivityIndicator color={paletteContext.palette.textPrimary} size={40} />
-            </View>
-        );
-    else
-        return (
-            <ScrollContainer onRefresh={onRefresh} key={event.id}>
+    const onFilter = () => {
+
+    };
+
+    return (
+        <ScrollContainer onRefresh={onRefresh} key={event.id}>
+            <View style={{ flexDirection: "row" }}>
                 <NavTitle>Teams</NavTitle>
-                {event.teamIDs.length <= 0 ?
-                    <Text>This event has no teams posted yet. Pull down to refresh.</Text>
-                    :
+                <View style={styles.filterContainer}>
+                    <Button style={styles.filterButton} onPress={onFilter}>
+                        <MaterialIcons
+                            name="filter-list"
+                            size={24}
+                            color={paletteContext.palette.textPrimary} />
+                    </Button>
+                </View>
+            </View>
+
+
+            {event.id === "bogus" ?
+                <ActivityIndicator color={paletteContext.palette.textPrimary} size={40} /> :
+                event.teamIDs.length <= 0 ?
+                    <Text>This event has no teams posted yet. Pull down to refresh.</Text> :
                     event.teamIDs.map((teamID) => <TeamBanner teamID={teamID} key={teamID} />)
-                }
-            </ScrollContainer>
-        );
+            }
+        </ScrollContainer>
+    );
 }
+
+const styles = StyleSheet.create({
+    filterButton: {
+        width: 42,
+        height: 42,
+        marginBottom: 12,
+        marginRight: 5,
+        alignSelf: "flex-end"
+    },
+    filterContainer: {
+        flexDirection: "column",
+        alignSelf: "flex-end",
+        flex: 1
+    }
+})

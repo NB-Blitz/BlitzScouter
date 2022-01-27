@@ -1,5 +1,5 @@
 import { Linking } from 'react-native';
-import { TBAEvent, TBAMatch, TBAMedia, TBAStatus, TBATeam } from '../types/TBAModels';
+import { TBAEvent, TBAMatch, TBAMedia, TBARankings, TBAStatus, TBATeam } from '../types/TBAModels';
 
 const API_KEY = "i90dAcKHXvQ9havypHJKeGY8O1tfymFpaW1Po3RGYpvoMTRVwtiUsUFaLmstCDp3";
 const URL_PREFIX = "https://www.thebluealliance.com/api/v3/";
@@ -14,6 +14,15 @@ export default class TBA {
      */
     static getMatches(eventID: string) {
         return TBA._fetch<TBAMatch[]>("event/" + eventID + "/matches/simple");
+    }
+
+    /**
+     * Fetches team stats and rankings at a given event
+     * @param eventID - ID of the event
+     * @returns Ranking data
+     */
+    static getRankings(eventID: string) {
+        return TBA._fetch<TBARankings>("event/" + eventID + "/rankings");
     }
 
     /**
@@ -93,6 +102,7 @@ export default class TBA {
                 headers: headers
             };
 
+            console.log("GET: " + URL);
             fetch(URL, REQUEST_DATA).then((result) => {
                 result.json().then((json) => {
                     resolve(json);
