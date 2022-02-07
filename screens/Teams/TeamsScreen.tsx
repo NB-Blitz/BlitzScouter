@@ -33,18 +33,14 @@ export default function TeamsScreen() {
         }
     };
 
-    const onFilter = () => {
-
-    };
-
     return (
         <ScrollContainer onRefresh={onRefresh} key={event.id}>
             <View style={{ flexDirection: "row" }}>
                 <NavTitle>Teams</NavTitle>
                 <View style={styles.filterContainer}>
-                    <Button style={styles.filterButton} onPress={onFilter}>
+                    <Button style={styles.searchButton} onPress={() => { }}>
                         <MaterialIcons
-                            name="filter-list"
+                            name="search"
                             size={24}
                             color={paletteContext.palette.textPrimary} />
                     </Button>
@@ -63,9 +59,9 @@ export default function TeamsScreen() {
 }
 
 const styles = StyleSheet.create({
-    filterButton: {
-        width: 42,
-        height: 42,
+    searchButton: {
+        width: 46,
+        height: 46,
         marginBottom: 12,
         marginRight: 5,
         alignSelf: "flex-end"

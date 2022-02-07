@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#222222",
         borderRadius: 10,
         padding: 10,
-        margin: 5,
+        margin: 10,
         fontSize: 15,
         height: 100,
         textAlignVertical: "top"

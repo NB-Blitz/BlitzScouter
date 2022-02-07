@@ -3,7 +3,7 @@ import { Palette } from '../types/OtherTypes';
 
 export const DARK_PALETTE: Palette = {
     background: "#141416",
-    button: "#1b1b1b",
+    button: "#141416",
     navigation: "#2d2e30",
     navigationText: "#ffffff",
     navigationSelected: "#c89f00",
@@ -14,7 +14,7 @@ export const DARK_PALETTE: Palette = {
 
 export const LIGHT_PALETTE: Palette = {
     background: "#ffffff",
-    button: "#f7f7f7",
+    button: "#ffffff",
     navigation: "#d0d0d0",
     navigationText: "#000000",
     navigationSelected: "#008bc7",

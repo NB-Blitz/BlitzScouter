@@ -13,6 +13,6 @@ export default function NavTitle(props: TextProps) {
         fontSize: 30,
         fontWeight: 'bold',
         marginTop: 60,
-        marginBottom: 15
+        marginBottom: 15,
     }, style]} {...otherProps} />;
 }

@@ -3,7 +3,6 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import * as React from 'react';
-import HorizontalBar from '../../components/common/HorizontalBar';
 import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
@@ -53,7 +52,6 @@ export default function SharingScreen() {
                 title={"Scan QRCode"}
                 subtitle={"Import Scouting Data"}
                 onPress={() => { navigator.navigate("ImportQR"); }} />
-            <HorizontalBar />
 
             {/* File Formats */}
             <StandardButton
@@ -67,6 +65,12 @@ export default function SharingScreen() {
                 title={"Import JSON"}
                 subtitle={"Import Scouting Data"}
                 onPress={() => { importJson(); }} />
+
+            <StandardButton
+                iconType={"print"}
+                title={"Print Summary"}
+                subtitle={"Export Scouting Data"}
+                onPress={() => { navigator.navigate("PrintSummaryScreen"); }} />
 
             {/*<StandardButton
                 iconType={"inventory"}

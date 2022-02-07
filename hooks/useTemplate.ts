@@ -1,5 +1,5 @@
 import { ScoutingTemplate, TemplateType } from "../types/TemplateTypes";
-import useStorage from "./useStorage";
+import useStorage, { getStorage, putStorage } from "./useStorage";
 
 /**
  * Grabs template data as a react hook
@@ -9,4 +9,12 @@ import useStorage from "./useStorage";
 export default function useTemplate(templateType: TemplateType): [ScoutingTemplate, (template: ScoutingTemplate) => Promise<void>] {
     const [templateData, setTemplateData] = useStorage<ScoutingTemplate>("template-" + templateType, []);
     return [templateData, setTemplateData];
+}
+
+export async function getTemplate(templateType: TemplateType) {
+    return await getStorage<ScoutingTemplate>("template-" + templateType);
+}
+
+export async function setTemplate(type: TemplateType, template: ScoutingTemplate) {
+    return await putStorage<ScoutingTemplate>("template-" + type, template);
 }

@@ -17,6 +17,7 @@ export type RootNavParamList = {
     DefaultTeam: undefined,
     ExportQR: { data: string },
     ImportQR: undefined,
+    PrintSummaryScreen: undefined,
     About: undefined,
     Palette: undefined,
     ColorPicker: { defaultColor: string, onPick: (color: string) => void }

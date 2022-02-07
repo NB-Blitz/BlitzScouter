@@ -6,7 +6,7 @@ import useMatch from "../../hooks/useMatch";
 
 export default function MatchBanner(props: { matchID: string }) {
     const navigator = useNavigation();
-    const [match, setMatch] = useMatch(props.matchID);
+    const [match] = useMatch(props.matchID);
 
     return (
         <View>

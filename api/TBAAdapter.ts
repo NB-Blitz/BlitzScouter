@@ -103,7 +103,7 @@ export async function DownloadMatches(eventID: string, callback: (matchNumber: n
 export async function DownloadTeams(eventID: string, downloadMedia: boolean, callback: (teamNumber: number) => void) {
     const tbaTeams = await TBA.getTeams(eventID);
     const tbaRanks = await TBA.getRankings(eventID);
-    if (!tbaTeams || !tbaRanks)
+    if (!tbaTeams)
         return undefined;
     const year = parseInt(eventID.substring(0, 4));
 
@@ -116,22 +116,22 @@ export async function DownloadTeams(eventID: string, downloadMedia: boolean, cal
         callback(team.team_number);
         teamIDs.push(team.key);
 
+        const currentTeamJSON = await AsyncStorage.getItem(team.key);
+        const currentTeam = currentTeamJSON !== null ? (JSON.parse(currentTeamJSON) as Team) : undefined;
+
         // Media
         let mediaPaths: string[] = [];
         if (downloadMedia)
             mediaPaths = await DownloadMedia(team.key, year);
-        else {
-            const currentTeam = await AsyncStorage.getItem(team.key);
-            if (currentTeam !== null)
-                mediaPaths = JSON.parse(currentTeam).mediaPaths;
-        }
+        else
+            mediaPaths = currentTeam ? currentTeam.mediaPaths : [];
 
         // Ranks
-        const rankingInfo = tbaRanks.rankings.find(rank => rank.team_key === team.key);
-        const rank = rankingInfo ? rankingInfo.rank : -1;
-        const wins = rankingInfo ? rankingInfo.record.wins : -1;
-        const losses = rankingInfo ? rankingInfo.record.losses : -1;
-        const ties = rankingInfo ? rankingInfo.record.ties : -1;
+        const rankingInfo = tbaRanks ? tbaRanks.rankings.find(rank => rank.team_key === team.key) : undefined;
+        const rank = rankingInfo ? rankingInfo.rank : 0;
+        const wins = rankingInfo ? rankingInfo.record.wins : 0;
+        const losses = rankingInfo ? rankingInfo.record.losses : 0;
+        const ties = rankingInfo ? rankingInfo.record.ties : 0;
 
         await putStorage<Team>(team.key, {
             id: team.key,
@@ -142,7 +142,7 @@ export async function DownloadTeams(eventID: string, downloadMedia: boolean, cal
             losses,
             ties,
             mediaPaths,
-            scoutingData: []
+            scoutingData: currentTeam ? currentTeam.scoutingData : []
         });
     }
 

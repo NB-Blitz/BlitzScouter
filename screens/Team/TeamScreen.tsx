@@ -6,23 +6,25 @@ import React from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
 import TBA from "../../api/TBA";
 import Button from "../../components/common/Button";
-import HorizontalBar from "../../components/common/HorizontalBar";
-import StandardButton from "../../components/common/StandardButton";
 import Subtitle from "../../components/text/Subtitle";
-import Text from "../../components/text/Text";
 import Title from "../../components/text/Title";
+import { PaletteContext } from "../../context/PaletteContext";
+import useEvent from "../../hooks/useEvent";
 import useStats from "../../hooks/useStats";
 import useTeam from "../../hooks/useTeam";
+import StatTable from "./Stats/StatTable";
 
 export default function TeamScreen({ route }: any) {
+    const paletteContext = React.useContext(PaletteContext);
     const navigator = useNavigation();
     const [team, setTeam] = useTeam(route.params.teamID);
     const stats = useStats(team.id);
+    const [event] = useEvent();
 
+    // Photos
     const generateID = () => {
         return team.id + "_" + Math.random().toString(36).slice(2);
     }
-
     const takePhoto = async () => {
         const path = FileSystem.documentDirectory + generateID() + ".png";
         const cameraResult = await ImagePicker.launchCameraAsync({
@@ -54,7 +56,6 @@ export default function TeamScreen({ route }: any) {
             scoutingData: team.scoutingData
         });
     }
-
     const uploadPhoto = async () => {
         const path = FileSystem.documentDirectory + generateID() + ".png";
         const cameraResult = await ImagePicker.launchImageLibraryAsync({
@@ -86,7 +87,6 @@ export default function TeamScreen({ route }: any) {
             scoutingData: team.scoutingData
         });
     }
-
     const deletePhoto = async (path: string) => {
         let mediaPaths = team.mediaPaths;
         mediaPaths.splice(mediaPaths.indexOf(path), 1);
@@ -103,16 +103,21 @@ export default function TeamScreen({ route }: any) {
         });
     }
 
-    const printStat = (name: string, ...values: string[]) => {
-        return (<View style={styles.statContainer} key={name}>
-            <Text style={styles.statLabel}>{name}</Text>
-            <View style={styles.valueContainer}>
-                {values.map((value, index) => {
-                    return (<Text style={styles.statValue} key={index}>{value}</Text>);
-                })}
-            </View>
-        </View>);
+    // Browser Button
+    const onBrowserButton = () => {
+        TBA.openTeam(team.number, event.year);
     }
+    React.useLayoutEffect(() => {
+        navigator.setOptions({
+            headerRight: () => (
+                <View style={styles.headerButtons}>
+                    <Button onPress={onBrowserButton} style={{ marginRight: 11 }}>
+                        <MaterialIcons name="open-in-browser" size={25} color={paletteContext.palette.textPrimary} />
+                    </Button>
+                </View>
+            )
+        });
+    });
 
     return (
         <ScrollView>
@@ -151,46 +156,8 @@ export default function TeamScreen({ route }: any) {
                 <Title>{team.name}</Title>
                 <Subtitle>{team.number}</Subtitle>
 
-                <HorizontalBar />
+                <StatTable teamID={team.id} cols={3} />
 
-                <StandardButton
-                    iconType={"explore"}
-                    title={"Scout Team"}
-                    subtitle={"Pit scout this team"}
-                    onPress={() => { }} />
-
-                <StandardButton
-                    iconTba={true}
-                    title={"View on TBA"}
-                    subtitle={"View Team " + team.number + " on The Blue Alliance"}
-                    onPress={() => { team ? TBA.openTeam(team.number) : null }} />
-
-                <HorizontalBar />
-
-                <View style={styles.statsContainer}>
-                    {printStat("Rank", team.rank.toString())}
-                    {printStat("Wins", team.wins.toString())}
-                    {printStat("Losses", team.losses.toString())}
-                    {printStat("Ties", team.ties.toString())}
-                </View>
-
-                <View style={styles.statsContainer}>
-                    {stats.metrics.length > 0 ?
-                        <View style={styles.statContainer}>
-                            <View style={styles.valueContainer}>
-                                <Text style={styles.statHeader}>Min</Text>
-                                <Text style={styles.statHeader}>Avg</Text>
-                                <Text style={styles.statHeader}>Max</Text>
-                            </View>
-                        </View>
-                        :
-                        null
-                    }
-
-                    {stats.metrics.map((stat, index) =>
-                        printStat(stat.label, stat.min.toString(), stat.average.toString(), stat.max.toString())
-                    )}
-                </View>
 
             </View>
         </ScrollView>
@@ -222,40 +189,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#444",
         borderRadius: 5
     },
-
-    statLabel: {
-        fontWeight: "bold",
-        fontSize: 18
-    },
-    statType: {
-        color: "#bbb"
-    },
-    statValue: {
-        color: "#bbb",
-        fontSize: 16,
-        textAlign: "center",
-        width: 50
-    },
-    statHeader: {
-        fontSize: 16,
-        textAlign: "center",
-        fontWeight: "bold",
-        width: 50
-    },
-    valueContainer: {
-        flexDirection: "row",
-        justifyContent: "flex-end",
-        flex: 1,
-    },
-    statContainer: {
-        flexDirection: "row",
-        flex: 1,
-        padding: 10,
-    },
-    statsContainer: {
-        backgroundColor: "#1b1b1b",
-        borderRadius: 5,
-        marginTop: 5,
-        marginBottom: 5
+    headerButtons: {
+        alignSelf: "flex-end",
+        flexDirection: "row"
     }
 });

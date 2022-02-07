@@ -1,20 +1,40 @@
+import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import TBA from "../../api/TBA";
+import Button from "../../components/common/Button";
 import HorizontalBar from "../../components/common/HorizontalBar";
 import StandardButton from "../../components/common/StandardButton";
 import Subtitle from "../../components/text/Subtitle";
 import Title from "../../components/text/Title";
+import { PaletteContext } from "../../context/PaletteContext";
 import useMatch from "../../hooks/useMatch";
 import useTemplate from "../../hooks/useTemplate";
 import { TemplateType } from "../../types/TemplateTypes";
 import TeamPreview from "../Matches/TeamPreview";
 
 export default function MatchScreen({ route }: any) {
+    const paletteContext = React.useContext(PaletteContext);
     const navigator = useNavigation();
     const [match, setMatch] = useMatch(route.params.matchID);
     const [template, setTemplate] = useTemplate(TemplateType.Match);
+
+    // Browser Button
+    const onBrowserButton = () => {
+        TBA.openMatch(match.id);
+    }
+    React.useLayoutEffect(() => {
+        navigator.setOptions({
+            headerRight: () => (
+                <View style={styles.headerButtons}>
+                    <Button onPress={onBrowserButton} style={{ marginRight: 11 }}>
+                        <MaterialIcons name="open-in-browser" size={25} color={paletteContext.palette.textPrimary} />
+                    </Button>
+                </View>
+            )
+        });
+    });
 
     return (
         <ScrollView>
@@ -31,12 +51,6 @@ export default function MatchScreen({ route }: any) {
                         subtitle={"Scout this match"}
                         onPress={() => { navigator.navigate("TeamSelect", { matchID: match.id }); }} />
                     : undefined}
-
-                <StandardButton
-                    iconTba={true}
-                    title={"View on TBA"}
-                    subtitle={"View this Match on The Blue Alliance"}
-                    onPress={() => { match ? TBA.openMatch(match.id) : null }} />
 
                 <HorizontalBar />
 
@@ -71,5 +85,9 @@ const styles = StyleSheet.create({
     },
     allianceHeader: {
         marginBottom: 15
+    },
+    headerButtons: {
+        alignSelf: "flex-end",
+        flexDirection: "row"
     }
 });

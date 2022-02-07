@@ -15,6 +15,7 @@ export interface ButtonProps {
 
     title: string;
     subtitle: string;
+    sidetitle?: string;
     onPress: (event: GestureResponderEvent) => void;
 }
 
@@ -60,6 +61,7 @@ export default function StandardButton(props: ButtonProps) {
                     <Text style={[styles.buttonTitle, { color: paletteContext.palette.textPrimary }]} numberOfLines={1}>{props.title}</Text>
                     <Text style={{ color: paletteContext.palette.textSecondary }}>{props.subtitle}</Text>
                 </View>
+                <Text style={[styles.sidetitle, { color: paletteContext.palette.textSecondary }]}>{props.sidetitle}</Text>
             </View>
 
 
@@ -75,7 +77,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         alignSelf: 'stretch',
         padding: 10,
-        paddingRight: 65,
+        paddingRight: 100,
         marginBottom: 8,
         borderRadius: 5
     },
@@ -93,8 +95,7 @@ const styles = StyleSheet.create({
         height: 60,
         margin: -10,
         marginRight: 14,
-        borderTopLeftRadius: 5,
-        borderBottomLeftRadius: 5,
+        borderRadius: 6
     },
     buttonIconTXT: {
         fontSize: 20,
@@ -118,4 +119,10 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 1,
         borderBottomLeftRadius: 1,
     },
+    sidetitle: {
+        position: "absolute",
+        top: 10,
+        right: 10,
+        fontSize: 12
+    }
 });

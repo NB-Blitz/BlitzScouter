@@ -15,6 +15,11 @@ export default function TeamPreview(props: { teamID: string }) {
     const [team, setTeam] = useTeam(props.teamID);
     const stats = useStats(props.teamID);
 
+    const decToString = (num: number) => {
+        return (Math.round(num * 10) / 10).toString()
+    }
+
+    // Media
     let mediaIcon: JSX.Element;
     if (team.mediaPaths.length > 0) {
         mediaIcon = (
@@ -51,8 +56,8 @@ export default function TeamPreview(props: { teamID: string }) {
 
             {stats.map((element, index) =>
                 <View key={index} style={styles.subContainer}>
-                    <Text style={[styles.title, { color: paletteContext.palette.textPrimary }]}>{element.label}</Text>
-                    <Text style={[styles.subtitle, { color: paletteContext.palette.textSecondary }]}>{element.average}</Text>
+                    <Text style={[styles.title, { color: paletteContext.palette.textPrimary }]}>{decToString(element.average)}</Text>
+                    <Text style={[styles.subtitle, { color: paletteContext.palette.textSecondary }]}>{element.label}</Text>
                 </View>
             )}
         </View>
@@ -69,8 +74,8 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
     subContainer: {
-        marginRight: 20,
-        width: 120,
+        margin: 5,
+        width: 150,
         justifyContent: "center",
         alignItems: "center"
     },
@@ -92,7 +97,7 @@ const styles = StyleSheet.create({
         borderRadius: 5
     },
     title: {
-        fontSize: 18,
+        fontSize: 22,
         fontWeight: "bold",
         textAlign: "center"
     },

@@ -12,7 +12,7 @@ export default function HorizontalBar(props: ViewProps) {
         style={[{
             borderBottomColor: paletteContext.palette.textSecondary,
             borderBottomWidth: 1,
-            marginBottom: 15,
+            marginBottom: 12,
             marginTop: 15
         }, style]}
 

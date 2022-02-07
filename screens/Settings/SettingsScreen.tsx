@@ -7,13 +7,17 @@ import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
 import { DARK_PALETTE, LIGHT_PALETTE, PaletteContext } from '../../context/PaletteContext';
 import useEvent from '../../hooks/useEvent';
+import { getMatch } from '../../hooks/useMatch';
 import { clearStorage } from '../../hooks/useStorage';
+import { getTeam, setTeam } from '../../hooks/useTeam';
+import useTemplate from '../../hooks/useTemplate';
 import { TemplateType } from '../../types/TemplateTypes';
 
 export default function SettingsScreen() {
     const paletteContext = React.useContext(PaletteContext);
     const navigator = useNavigation();
     const [event] = useEvent();
+    const [template] = useTemplate(TemplateType.Match);
 
     const clearData = () => {
         Alert.alert("Are you sure?", "This will delete all team, event, match, and scouting data on your device.",
@@ -32,6 +36,62 @@ export default function SettingsScreen() {
                 }
             ], { cancelable: true }
         );
+    }
+
+    const clearScoutingData = () => {
+        Alert.alert("Are you sure?", "This will delete all scouting data on your device.",
+            [
+                {
+                    text: "Confirm",
+                    onPress: async () => {
+                        for (const teamID of event.teamIDs) {
+                            const team = await getTeam(teamID);
+                            if (team) {
+                                team.scoutingData = [];
+                                setTeam(team);
+                            }
+                        }
+                        Alert.alert("Success!", "All scouting data has been cleared");
+                    }
+                },
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                }
+            ], { cancelable: true }
+        );
+    }
+
+    const generateRandomData = async () => {
+        for (let matchID of event.matchIDs) {
+            const match = await getMatch(matchID);
+
+            if (!match)
+                continue;
+
+            console.log(match.id);
+
+            const teamIDs = match.blueTeamIDs;
+            teamIDs.push(...match.redTeamIDs);
+
+            for (let teamID of teamIDs) {
+                const team = await getTeam(teamID);
+
+                if (!team)
+                    continue;
+
+                const values = template.map(() => Math.round(Math.random() * 10));
+                team.scoutingData.push({
+                    matchID,
+                    values
+                });
+
+
+                await setTeam(team);
+            }
+        }
+
+        Alert.alert("Success", "Successfully filled with random data!");
     }
 
     return (
@@ -65,6 +125,12 @@ export default function SettingsScreen() {
                 title={"Edit Match Scouting"}
                 subtitle={"Adjust the match scouting template"}
                 onPress={() => { navigator.navigate("EditTemplate", { templateType: TemplateType.Match }); }} />
+
+            <StandardButton
+                iconType={"shuffle"}
+                title={"Scramble Data"}
+                subtitle={"Generates Random Data"}
+                onPress={() => { generateRandomData(); }} />
             {/*
             <StandardButton
                 iconType={"edit"}
@@ -93,8 +159,15 @@ export default function SettingsScreen() {
 
             <StandardButton
                 iconType={"delete-outline"}
+                title={"Clear Scouting Data"}
+                subtitle={"Wipes all scouting data on your device"}
+                onPress={() => { clearScoutingData(); }} />
+
+
+            <StandardButton
+                iconType={"delete-outline"}
                 title={"Clear All Data"}
-                subtitle={"Wipes all data on your device"}
+                subtitle={"Wipes all app data on your device"}
                 onPress={() => { clearData(); }} />
 
             <StandardButton

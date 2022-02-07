@@ -18,6 +18,7 @@ import EditTemplateScreen from "../screens/Settings/Template/EditTemplateScreen"
 import ElementChooserScreen from "../screens/Settings/Template/ElementChooserScreen";
 import ExportQRScreen from "../screens/Sharing/ExportQRScreen";
 import ImportQRScreen from "../screens/Sharing/ImportQRScreen";
+import PrintSummaryScreen from "../screens/Sharing/PrintSummaryScreen";
 import TeamScreen from "../screens/Team/TeamScreen";
 
 const horizontalAnimation = ({ current, layouts }: any) => {
@@ -31,6 +32,10 @@ const horizontalAnimation = ({ current, layouts }: any) => {
                     }),
                 },
             ],
+            opacity: current.progress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 1],
+            })
         },
     };
 };
@@ -59,7 +64,7 @@ export default function RootNavigator() {
                         open: {
                             animation: "timing",
                             config: {
-                                duration: 250,
+                                duration: 200,
                             },
                         },
                         close: {
@@ -86,6 +91,7 @@ export default function RootNavigator() {
                 <Stack.Screen name="DefaultTeam" component={DefaultTeamScreen} />
                 <Stack.Screen name="ExportQR" component={ExportQRScreen} />
                 <Stack.Screen name="ImportQR" component={ImportQRScreen} />
+                <Stack.Screen name="PrintSummaryScreen" component={PrintSummaryScreen} />
                 <Stack.Screen name="About" component={AboutScreen} />
                 <Stack.Screen name="Palette" component={PaletteScreen} />
                 <Stack.Screen name="ColorPicker" component={ColorPickerScreen} />

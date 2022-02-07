@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import Button from '../../components/common/Button';
-import HorizontalBar from '../../components/common/HorizontalBar';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import ScoutingElement from '../../components/elements/ScoutingElement';
 import Text from '../../components/text/Text';
@@ -37,6 +36,12 @@ export default function ScoutingScreen({ route }: any) {
         Alert.alert("Success", "Data has been saved to storage");
     }
 
+    React.useLayoutEffect(() => {
+        navigator.setOptions({
+            title: team.number.toString()
+        });
+    })
+
     return (
         <View style={styles.parentView}>
             <ScrollContainer>
@@ -47,8 +52,6 @@ export default function ScoutingScreen({ route }: any) {
                         key={index}
                         onChange={onChange} />
                 )}
-
-                <HorizontalBar />
 
                 <Button
                     style={styles.submitButton}
@@ -71,7 +74,7 @@ const styles = StyleSheet.create({
         height: 40,
         borderRadius: 5,
         padding: 10,
-        margin: 5,
+        margin: 10,
         marginTop: 0,
 
         backgroundColor: "#c89f00"
