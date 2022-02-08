@@ -7,6 +7,7 @@ import Text from '../../components/text/Text';
 import { PaletteContext } from '../../context/PaletteContext';
 import useStats from '../../hooks/useStats';
 import useTeam from '../../hooks/useTeam';
+import StatTable from '../Team/Stats/StatTable';
 
 
 export default function TeamPreview(props: { teamID: string }) {
@@ -23,10 +24,12 @@ export default function TeamPreview(props: { teamID: string }) {
     let mediaIcon: JSX.Element;
     if (team.mediaPaths.length > 0) {
         mediaIcon = (
-            <Image
-                style={styles.thumbnail}
-                source={{ uri: team.mediaPaths[team.mediaPaths.length - 1] }}
-                key={Math.random()} />
+            <View style={styles.thumbnail}>
+                <Image
+                    style={styles.thumbnail}
+                    source={{ uri: team.mediaPaths[team.mediaPaths.length - 1] }}
+                    key={team.id + "-" + (team.mediaPaths.length - 1)} />
+            </View>
         );
     }
     else {
@@ -34,7 +37,7 @@ export default function TeamPreview(props: { teamID: string }) {
             <View style={styles.thumbnail}>
                 <MaterialIcons
                     name="block"
-                    size={50}
+                    size={40}
                     color={paletteContext.palette.textPrimary} />
             </View>
         );
@@ -50,16 +53,12 @@ export default function TeamPreview(props: { teamID: string }) {
                 <View style={styles.subContainer}>
                     <Text style={[styles.title, { color: paletteContext.palette.textPrimary }]}>{team.name}</Text>
                     <Text style={[styles.subtitle, { color: paletteContext.palette.textSecondary }]}>{team.number}</Text>
-
                 </View>
             </Button>
 
-            {stats.map((element, index) =>
-                <View key={index} style={styles.subContainer}>
-                    <Text style={[styles.title, { color: paletteContext.palette.textPrimary }]}>{decToString(element.average)}</Text>
-                    <Text style={[styles.subtitle, { color: paletteContext.palette.textSecondary }]}>{element.label}</Text>
-                </View>
-            )}
+            <View style={styles.statTable}>
+                <StatTable teamID={props.teamID} cols={1} />
+            </View>
         </View>
     );
 }
@@ -67,15 +66,16 @@ export default function TeamPreview(props: { teamID: string }) {
 const styles = StyleSheet.create({
     container: {
         marginBottom: 10,
-        flexDirection: "row",
-        height: 200
+        width: 100,
+        flexDirection: "column"
     },
     button: {
-        flexDirection: "row"
+        flexDirection: "column",
+        padding: 2
     },
     subContainer: {
-        margin: 5,
-        width: 150,
+        height: 100,
+        overflow: "hidden",
         justifyContent: "center",
         alignItems: "center"
     },
@@ -88,21 +88,25 @@ const styles = StyleSheet.create({
         backgroundColor: "black"
     },
     thumbnail: {
-        height: 200,
-        width: 200,
-        justifyContent: "center",
-        alignItems: "center",
+        width: "100%",
+        aspectRatio: 1,
         backgroundColor: "#444",
-        marginRight: 15,
-        borderRadius: 5
+        borderRadius: 5,
+        padding: 0,
+        margin: 0,
+        justifyContent: "center",
+        alignItems: "center"
     },
     title: {
-        fontSize: 22,
+        fontSize: 16,
         fontWeight: "bold",
-        textAlign: "center"
+        textAlign: "center",
     },
     subtitle: {
         fontWeight: "bold",
         textAlign: "center"
     },
+    statTable: {
+        flex: 1
+    }
 });

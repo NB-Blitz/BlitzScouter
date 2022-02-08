@@ -9,6 +9,13 @@ export default function CheckboxElement(props: ElementProps) {
     const defaultValue = elementData.options.defaultValue;
     const [isChecked, setChecked] = React.useState(defaultValue === undefined ? defaultValue as boolean : false);
 
+    // Default Value
+    if (elementData.value === undefined && props.onChange) {
+        elementData.value = false;
+        props.onChange(elementData);
+    }
+
+    // Value State Change
     const changeChecked = (isChecked: boolean) => {
 
         // Value

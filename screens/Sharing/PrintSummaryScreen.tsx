@@ -55,7 +55,7 @@ export default function PrintSummaryScreen() {
         printData += `<hr />`;
 
         printData += `<table>`
-        printData += `<tr><th>Team</th>`;
+        printData += `<tr><th />`;
         for (const element of template)
             if (typeof element.value === "number")
                 printData += `<th>` + element.label + `</th>`;
@@ -69,10 +69,10 @@ export default function PrintSummaryScreen() {
                 continue;
 
             printData += `<tr>`;
-            printData += `<td><h4>` + team.number + `</h3><h6>` + team.name + `</h4></td>`
+            printData += `<th><h4>` + team.number + `</h3><h6>` + team.name + `</h4></th>`
 
             for (const stat of stats) {
-                printData += `<td><h4>` + (Math.round(stat.average * 100) / 100) + `</h4></td>`
+                printData += `<td style="background-color:rgba(150,150,150,` + stat.percentile + `);"><h4>` + (Math.round(stat.average * 100) / 100) + `</h4></td>`
             }
 
             printData += `</tr><div class="pagebreak" />`;

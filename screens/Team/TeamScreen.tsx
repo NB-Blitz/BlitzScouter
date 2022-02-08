@@ -156,7 +156,9 @@ export default function TeamScreen({ route }: any) {
                 <Title>{team.name}</Title>
                 <Subtitle>{team.number}</Subtitle>
 
-                <StatTable teamID={team.id} cols={3} />
+                <View style={{ marginTop: 15 }}>
+                    <StatTable teamID={team.id} cols={3} />
+                </View>
 
 
             </View>

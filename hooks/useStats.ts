@@ -31,7 +31,6 @@ export default function useStats(teamID: string) {
 }
 
 export async function getStats(teamID: string) {
-    console.log(teamID);
     const team = await getTeam(teamID);
     const event = await getEvent();
     const template = await getTemplate(TemplateType.Match);
@@ -42,10 +41,35 @@ export async function getStats(teamID: string) {
     if (team.scoutingData.length === 0 || template.length === 0) {
         return [] as TeamStats;
     }
-    let newStats: TeamStats = [];
 
+    // Calculate Max Values
+    const maxs: number[] = [];
+    for (const teamID of event.teamIDs) {
+        const team = await getTeam(teamID);
+        if (team) {
+            for (const data of team.scoutingData) {
+                let index = 0;
+                for (const value of data.values) {
+                    if (typeof value == "number") {
+                        if (index >= maxs.length)
+                            maxs.push(Number.MIN_SAFE_INTEGER);
+                        maxs[index] = Math.max(value, maxs[index]);
+                        index++;
+                    }
+                    else if (typeof value == "boolean") {
+                        if (index >= maxs.length)
+                            maxs.push(Number.MIN_SAFE_INTEGER);
+                        maxs[index] = Math.max(value ? 1 : 0, maxs[index]);
+                        index++;
+                    }
+                }
+            }
+        }
+    }
+
+    let newStats: TeamStats = [];
     template.forEach(element => {
-        if (typeof element.value === "number") {
+        if (typeof element.value === "number" || typeof element.value === "boolean") {
             const metric: TeamMetric = {
                 label: element.label,
                 average: 0,
@@ -65,12 +89,17 @@ export async function getStats(teamID: string) {
                 newStats[index].max = Math.max(newStats[index].max, value);
                 newStats[index].min = Math.min(newStats[index].min, value);
             }
+            else if (typeof value === "boolean") {
+                newStats[index].average += value ? 1 : 0;
+                newStats[index].max = Math.max(newStats[index].max, value ? 1 : 0);
+                newStats[index].min = Math.min(newStats[index].min, value ? 1 : 0);
+            }
         });
     });
 
     newStats.forEach((stat, index) => {
         newStats[index].average /= team.scoutingData.length;
-        newStats[index].percentile = (newStats[index].average - newStats[index].min) / (newStats[index].max - newStats[index].min);
+        newStats[index].percentile = newStats[index].average / maxs[index];
     });
 
     return newStats;

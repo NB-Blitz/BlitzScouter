@@ -54,27 +54,17 @@ export default function MatchScreen({ route }: any) {
 
                 <HorizontalBar />
 
-                <Title style={styles.allianceHeader}>Red Alliance</Title>
-
                 <ScrollView horizontal={true}>
-                    <View>
-                        {match.redTeamIDs.map(teamID => <TeamPreview teamID={teamID} key={teamID} />)}
-                    </View>
+                    <ScrollView style={{ width: "100%" }}>
+                        <View style={styles.previewContainer}>
+                            {match.redTeamIDs.map(teamID => <TeamPreview teamID={teamID} key={teamID} />)}
+                            <View style={{ marginRight: 8 }} />
+                            {match.blueTeamIDs.map(teamID => <TeamPreview teamID={teamID} key={teamID} />)}
+                        </View>
+                    </ScrollView>
                 </ScrollView>
-
-                <HorizontalBar />
-
-                <Title style={styles.allianceHeader}>Blue Alliance</Title>
-
-                <ScrollView horizontal={true}>
-                    <View>
-                        {match.blueTeamIDs.map(teamID => <TeamPreview teamID={teamID} key={teamID} />)}
-                    </View>
-                </ScrollView>
-
-                <HorizontalBar />
-            </View>
-        </ScrollView>
+            </View >
+        </ScrollView >
     );
 }
 
@@ -89,5 +79,9 @@ const styles = StyleSheet.create({
     headerButtons: {
         alignSelf: "flex-end",
         flexDirection: "row"
+    },
+    previewContainer: {
+        flex: 1,
+        flexDirection: "row",
     }
 });

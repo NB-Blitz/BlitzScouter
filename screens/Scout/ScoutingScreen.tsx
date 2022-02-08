@@ -33,7 +33,29 @@ export default function ScoutingScreen({ route }: any) {
         setTeam(team);
         navigator.goBack();
         navigator.goBack();
-        Alert.alert("Success", "Data has been saved to storage");
+        Alert.alert("Success", "Data has been saved to storage", [
+            {
+                text: "Undo",
+                onPress: () => {
+                    Alert.alert("Are you sure?", "This will delete last round's scouting data", [
+                        {
+                            text: "Confirm",
+                            onPress: () => {
+                                Alert.alert("Success!", "Last round's scouting data has been cleared");
+                            }
+                        },
+                        {
+                            text: "Cancel",
+                            style: "cancel"
+                        }
+                    ], { cancelable: true });
+                }
+            },
+            {
+                text: "OK",
+                style: "cancel"
+            }
+        ], { cancelable: true });
     }
 
     React.useLayoutEffect(() => {
@@ -75,7 +97,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 10,
         margin: 10,
-        marginTop: 0,
+        marginTop: 20,
 
         backgroundColor: "#c89f00"
     },

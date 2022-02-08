@@ -79,13 +79,14 @@ export default function SettingsScreen() {
 
                 if (!team)
                     continue;
+                if (team.scoutingData.length >= 2)
+                    continue;
 
                 const values = template.map(() => Math.round(Math.random() * 10));
                 team.scoutingData.push({
                     matchID,
                     values
                 });
-
 
                 await setTeam(team);
             }

@@ -22,9 +22,9 @@ export default function StatTable(props: { teamID: string, cols: number }) {
         percentile: 1 - (team.rank / event.teamIDs.length)
     });
     statList.push({
-        label: "Win/Loss",
-        value: team.wins + "/" + team.losses,
-        percentile: team.wins / (team.wins + team.losses)
+        label: "W-T-L",
+        value: team.wins + "-" + team.ties + "-" + team.losses,
+        percentile: team.wins / (team.wins + team.ties + team.losses)
     });
     statList.push(
         ...stats.map((stat) => {
@@ -63,17 +63,18 @@ export default function StatTable(props: { teamID: string, cols: number }) {
 
 const styles = StyleSheet.create({
     tableContainer: {
+        flex: 1,
         flexDirection: "row",
-        flexWrap: "wrap",
-        marginTop: 15
+        flexWrap: "wrap"
     },
     break: {
         flexBasis: "100%",
-        height: 0
+        height: 0,
+        margin: 0
     },
     blank: {
         flex: 1,
         margin: 2,
-        padding: 5
+        padding: 5,
     }
 });
