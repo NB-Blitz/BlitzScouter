@@ -1,18 +1,23 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import Button from '../../components/common/Button';
-import ScrollContainer from '../../components/containers/ScrollContainer';
+import HorizontalBar from '../../components/common/HorizontalBar';
 import ScoutingElement from '../../components/elements/ScoutingElement';
+import Subtitle from '../../components/text/Subtitle';
 import Text from '../../components/text/Text';
+import Title from '../../components/text/Title';
+import useScoutingData, { getScoutingData, setScoutingData } from '../../hooks/useScoutingData';
 import useTeam from '../../hooks/useTeam';
 import useTemplate from '../../hooks/useTemplate';
 import { ElementData, ScoutingData } from '../../types/TemplateTypes';
 
 export default function ScoutingScreen({ route }: any) {
     const navigator = useNavigation();
-    const [template, setTemplate] = useTemplate(route.params.templateType);
-    const [team, setTeam] = useTeam(route.params.teamID);
+    const [scoutingData, setScoutingDataHook] = useScoutingData();
+    const [template] = useTemplate(route.params.templateType);
+    const [team] = useTeam(route.params.teamID);
 
     const onChange = (element: ElementData) => {
         const index = template.findIndex(e => e.id === element.id);
@@ -22,6 +27,7 @@ export default function ScoutingScreen({ route }: any) {
 
     const onSubmit = () => {
         let data: ScoutingData = {
+            teamID: route.params.teamID,
             matchID: route.params.matchID,
             values: []
         };
@@ -29,8 +35,9 @@ export default function ScoutingScreen({ route }: any) {
             if (element.value !== undefined)
                 data.values.push(element.value);
         }
-        team.scoutingData.push(data);
-        setTeam(team);
+        scoutingData.push(data);
+        setScoutingDataHook(scoutingData);
+
         navigator.goBack();
         navigator.goBack();
         Alert.alert("Success", "Data has been saved to storage", [
@@ -40,7 +47,12 @@ export default function ScoutingScreen({ route }: any) {
                     Alert.alert("Are you sure?", "This will delete last round's scouting data", [
                         {
                             text: "Confirm",
-                            onPress: () => {
+                            onPress: async () => {
+                                const data = await getScoutingData();
+                                if (data) {
+                                    data.splice(scoutingData.length - 1, 1);
+                                    setScoutingData(scoutingData);
+                                }
                                 Alert.alert("Success!", "Last round's scouting data has been cleared");
                             }
                         },
@@ -58,15 +70,12 @@ export default function ScoutingScreen({ route }: any) {
         ], { cancelable: true });
     }
 
-    React.useLayoutEffect(() => {
-        navigator.setOptions({
-            title: team.number.toString()
-        });
-    })
-
     return (
-        <View style={styles.parentView}>
-            <ScrollContainer>
+        <ScrollView>
+            <View style={styles.container}>
+                <Title>{team.name}</Title>
+                <Subtitle>{team.number}</Subtitle>
+                <HorizontalBar />
                 {template.map((element, index) =>
                     <ScoutingElement
                         data={element}
@@ -82,22 +91,22 @@ export default function ScoutingScreen({ route }: any) {
                     <Text style={styles.buttonText}>Submit</Text>
 
                 </Button>
-            </ScrollContainer>
-        </View>
+            </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
-    parentView: {
-        height: "100%",
-        width: "100%"
+    container: {
+        paddingLeft: 20,
+        paddingRight: 20
     },
     submitButton: {
         height: 40,
         borderRadius: 5,
         padding: 10,
         margin: 10,
-        marginTop: 20,
+        marginTop: 30,
 
         backgroundColor: "#c89f00"
     },

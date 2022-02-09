@@ -10,7 +10,6 @@ import Subtitle from "../../components/text/Subtitle";
 import Title from "../../components/text/Title";
 import { PaletteContext } from "../../context/PaletteContext";
 import useEvent from "../../hooks/useEvent";
-import useStats from "../../hooks/useStats";
 import useTeam from "../../hooks/useTeam";
 import StatTable from "./Stats/StatTable";
 
@@ -18,7 +17,6 @@ export default function TeamScreen({ route }: any) {
     const paletteContext = React.useContext(PaletteContext);
     const navigator = useNavigation();
     const [team, setTeam] = useTeam(route.params.teamID);
-    const stats = useStats(team.id);
     const [event] = useEvent();
 
     // Photos
@@ -52,8 +50,7 @@ export default function TeamScreen({ route }: any) {
             wins: team.wins,
             losses: team.losses,
             ties: team.ties,
-            mediaPaths,
-            scoutingData: team.scoutingData
+            mediaPaths
         });
     }
     const uploadPhoto = async () => {
@@ -83,8 +80,7 @@ export default function TeamScreen({ route }: any) {
             wins: team.wins,
             losses: team.losses,
             ties: team.ties,
-            mediaPaths,
-            scoutingData: team.scoutingData
+            mediaPaths
         });
     }
     const deletePhoto = async (path: string) => {
@@ -98,8 +94,7 @@ export default function TeamScreen({ route }: any) {
             wins: team.wins,
             losses: team.losses,
             ties: team.ties,
-            mediaPaths,
-            scoutingData: team.scoutingData
+            mediaPaths
         });
     }
 
@@ -156,11 +151,9 @@ export default function TeamScreen({ route }: any) {
                 <Title>{team.name}</Title>
                 <Subtitle>{team.number}</Subtitle>
 
-                <View style={{ marginTop: 15 }}>
-                    <StatTable teamID={team.id} cols={3} />
+                <View style={{ marginTop: 15, width: 100 }}>
+                    <StatTable teamID={team.id} cols={1} />
                 </View>
-
-
             </View>
         </ScrollView>
     );

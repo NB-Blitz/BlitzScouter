@@ -15,7 +15,7 @@ export type RootNavParamList = {
     TeamSelect: { matchID: string },
     Scout: { teamID: string, matchID: string, templateType: TemplateType },
     DefaultTeam: undefined,
-    ExportQR: { data: string },
+    ExportQR: undefined,
     ImportQR: undefined,
     PrintSummaryScreen: undefined,
     About: undefined,

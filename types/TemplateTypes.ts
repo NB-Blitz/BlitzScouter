@@ -9,8 +9,7 @@ export enum ElementType {
     text,
     hr,
     counter,
-    checkbox,
-    textbox
+    checkbox
 }
 
 export interface ElementData {
@@ -18,7 +17,7 @@ export interface ElementData {
     type: ElementType;
     label: string;
     options: any;
-    value: number | boolean | string | undefined;
+    value: number | boolean | undefined;
 }
 
 export interface ElementProps {
@@ -32,5 +31,6 @@ export type ScoutingTemplate = ElementData[];
 
 export interface ScoutingData {
     matchID: string;
-    values: (number | boolean | string)[]
+    teamID: string;
+    values: (number | boolean)[]
 }

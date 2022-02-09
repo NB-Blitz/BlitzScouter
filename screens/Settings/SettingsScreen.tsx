@@ -8,10 +8,11 @@ import NavTitle from '../../components/text/NavTitle';
 import { DARK_PALETTE, LIGHT_PALETTE, PaletteContext } from '../../context/PaletteContext';
 import useEvent from '../../hooks/useEvent';
 import { getMatch } from '../../hooks/useMatch';
+import { setScoutingData } from '../../hooks/useScoutingData';
 import { clearStorage } from '../../hooks/useStorage';
-import { getTeam, setTeam } from '../../hooks/useTeam';
+import { getTeam } from '../../hooks/useTeam';
 import useTemplate from '../../hooks/useTemplate';
-import { TemplateType } from '../../types/TemplateTypes';
+import { ScoutingData, TemplateType } from '../../types/TemplateTypes';
 
 export default function SettingsScreen() {
     const paletteContext = React.useContext(PaletteContext);
@@ -44,13 +45,7 @@ export default function SettingsScreen() {
                 {
                     text: "Confirm",
                     onPress: async () => {
-                        for (const teamID of event.teamIDs) {
-                            const team = await getTeam(teamID);
-                            if (team) {
-                                team.scoutingData = [];
-                                setTeam(team);
-                            }
-                        }
+                        await setScoutingData([]);
                         Alert.alert("Success!", "All scouting data has been cleared");
                     }
                 },
@@ -63,6 +58,7 @@ export default function SettingsScreen() {
     }
 
     const generateRandomData = async () => {
+        const scoutingData: ScoutingData[] = [];
         for (let matchID of event.matchIDs) {
             const match = await getMatch(matchID);
 
@@ -76,21 +72,20 @@ export default function SettingsScreen() {
 
             for (let teamID of teamIDs) {
                 const team = await getTeam(teamID);
-
                 if (!team)
                     continue;
-                if (team.scoutingData.length >= 2)
-                    continue;
 
-                const values = template.map(() => Math.round(Math.random() * 10));
-                team.scoutingData.push({
+                const values = template.filter(elem => elem.value != undefined).map((elem) => typeof elem.value === "number" ? Math.round(Math.random() * (50 - team.rank)) : Math.random() < .5);
+
+                //if (scoutingData.filter(scout => scout.teamID === teamID).length <= 2)
+                scoutingData.push({
                     matchID,
+                    teamID,
                     values
                 });
-
-                await setTeam(team);
             }
         }
+        await setScoutingData(scoutingData);
 
         Alert.alert("Success", "Successfully filled with random data!");
     }

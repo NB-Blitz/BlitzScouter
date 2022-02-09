@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
-import HorizontalBar from "../../components/common/HorizontalBar";
 import Subtitle from "../../components/text/Subtitle";
+import Text from '../../components/text/Text';
 import Title from "../../components/text/Title";
 import useMatch from '../../hooks/useMatch';
 import { TemplateType } from '../../types/TemplateTypes';
@@ -20,17 +20,15 @@ export default function TeamSelectScreen({ route }: any) {
         <ScrollView>
             <View style={styles.container}>
                 <Title>{match.name}</Title>
-                <Subtitle>Select the team to scout</Subtitle>
+                <Subtitle style={{ marginBottom: 20 }}>Select the team to scout</Subtitle>
 
-                <HorizontalBar />
-
+                <Text style={[styles.allianceHeader, { backgroundColor: "#e7311f" }]}>Red Alliance</Text>
                 {match.redTeamIDs.map((teamID) => <TeamBanner teamID={teamID} onClick={onClick} key={teamID} />)}
+                <View style={[styles.allianceFooter, { backgroundColor: "#e7311f" }]} />
 
-                <HorizontalBar />
-
+                <Text style={[styles.allianceHeader, { backgroundColor: "#008cf1" }]}>Blue Alliance</Text>
                 {match.blueTeamIDs.map((teamID) => <TeamBanner teamID={teamID} onClick={onClick} key={teamID} />)}
-
-                <HorizontalBar />
+                <View style={[styles.allianceFooter, { backgroundColor: "#008cf1" }]} />
             </View>
         </ScrollView>
     );
@@ -41,5 +39,23 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingRight: 20,
         paddingTop: 20
-    }
+    },
+    allianceHeader: {
+        paddingBottom: 5,
+        paddingTop: 5,
+        marginRight: 8,
+        marginBottom: 5,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        fontSize: 18,
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+    allianceFooter: {
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
+        height: 10,
+        marginRight: 8,
+        marginBottom: 20
+    },
 });

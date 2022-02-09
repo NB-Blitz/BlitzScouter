@@ -7,7 +7,6 @@ import CheckboxElement from "./CheckboxElement";
 import CounterElement from "./CounterElement";
 import HRElement from "./HRElement";
 import SubtitleElement from "./SubtitleElement";
-import TextBoxElement from "./TextBoxElement";
 import TextElement from "./TextElement";
 import TitleElement from "./TitleElement";
 
@@ -31,9 +30,6 @@ export default function ScoutingElement(props: ElementProps) {
             break;
         case ElementType.checkbox:
             element = (<CheckboxElement {...props} />);
-            break;
-        case ElementType.textbox:
-            element = (<TextBoxElement {...props} />);
             break;
     }
 

@@ -43,12 +43,6 @@ export default function ElementChooserScreen({ route }: any) {
                 subtitle={"A simple check or uncheck"}
                 onPress={() => { chooseElement(ElementType.checkbox); }} />
 
-            <StandardButton
-                iconType={"text-fields"}
-                title={"Textbox"}
-                subtitle={"Type in text or comments"}
-                onPress={() => { chooseElement(ElementType.textbox); }} />
-
             <HorizontalBar />
 
             <StandardButton

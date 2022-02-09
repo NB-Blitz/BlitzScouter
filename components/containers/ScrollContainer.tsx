@@ -1,3 +1,4 @@
+import Constants from 'expo-constants';
 import * as React from 'react';
 import { RefreshControl, ScrollView, View } from "react-native";
 import FadeIn from '../common/FadeIn';
@@ -22,22 +23,24 @@ export default function ScrollContainer(props: ScrollContainerProps) {
 
     return (
         <FadeIn>
-            <ScrollView
-                bounces={true}
-                style={{
-                    marginTop: 0,
-                    paddingLeft: 20,
-                    paddingRight: 20,
-                }}
-                refreshControl={
-                    props.onRefresh ? <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} /> : undefined
-                }>
+            <View style={{ marginTop: Constants.statusBarHeight }}>
+                <ScrollView
+                    bounces={true}
+                    style={{
+                        marginTop: 0,
+                        paddingLeft: 20,
+                        paddingRight: 20,
+                    }}
+                    refreshControl={
+                        props.onRefresh ? <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} /> : undefined
+                    }>
 
-                <View style={{ marginTop: 10 }}>
-                    {props.children}
-                </View>
+                    <View style={{ marginTop: 10 }}>
+                        {props.children}
+                    </View>
 
-            </ScrollView>
+                </ScrollView>
+            </View>
         </FadeIn>
     );
 }

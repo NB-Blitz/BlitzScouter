@@ -1,16 +1,15 @@
 import { Match } from "../types/DBTypes";
 import useStorage, { getStorage, putStorage } from "./useStorage";
 
-const DEFAULT_MATCH = {
+const DEFAULT_MATCH: Match = {
     id: "",
     name: "",
     description: "",
     number: 0,
     compLevel: "",
     blueTeamIDs: [],
-    redTeamIDs: [],
-    scoutingData: []
-} as Match;
+    redTeamIDs: []
+};
 
 /**
  * Grabs match data as a react hook

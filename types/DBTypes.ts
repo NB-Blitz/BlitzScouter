@@ -1,4 +1,3 @@
-import { ScoutingData } from "./TemplateTypes";
 
 export interface Event {
     id: string;
@@ -16,7 +15,6 @@ export interface Team {
     losses: number;
     ties: number;
     mediaPaths: string[];
-    scoutingData: ScoutingData[];
 }
 
 export interface Match {

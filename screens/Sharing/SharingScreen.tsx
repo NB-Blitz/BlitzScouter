@@ -6,16 +6,17 @@ import * as React from 'react';
 import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
-import { useDataImporter, useJsonData } from '../../hooks/useCompressedData';
+import { useDataImporter } from '../../hooks/useCompressedData';
+import useScoutingData from '../../hooks/useScoutingData';
 
 export default function SharingScreen() {
     const navigator = useNavigation();
-    const data = useJsonData();
+    const [scoutingData] = useScoutingData();
     const importJsonData = useDataImporter();
 
     const exportJson = async () => {
         const path = FileSystem.documentDirectory + "data.json";
-        await FileSystem.writeAsStringAsync(path, data, { encoding: FileSystem.EncodingType.UTF8 });
+        await FileSystem.writeAsStringAsync(path, JSON.stringify(scoutingData), { encoding: FileSystem.EncodingType.UTF8 });
         Sharing.shareAsync(path);
     }
 
@@ -45,7 +46,7 @@ export default function SharingScreen() {
                 iconType={"qr-code"}
                 title={"Show QRCode"}
                 subtitle={"Export Scouting Data"}
-                onPress={() => { navigator.navigate("ExportQR", { data }); }} />
+                onPress={() => { navigator.navigate("ExportQR"); }} />
 
             <StandardButton
                 iconType={"camera-alt"}

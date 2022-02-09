@@ -5,7 +5,6 @@ import { Image, StyleSheet, View } from "react-native";
 import Button from '../../components/common/Button';
 import Text from '../../components/text/Text';
 import { PaletteContext } from '../../context/PaletteContext';
-import useStats from '../../hooks/useStats';
 import useTeam from '../../hooks/useTeam';
 import StatTable from '../Team/Stats/StatTable';
 
@@ -14,7 +13,6 @@ export default function TeamPreview(props: { teamID: string }) {
     const paletteContext = React.useContext(PaletteContext);
     const navigator = useNavigation();
     const [team, setTeam] = useTeam(props.teamID);
-    const stats = useStats(props.teamID);
 
     const decToString = (num: number) => {
         return (Math.round(num * 10) / 10).toString()
@@ -56,22 +54,19 @@ export default function TeamPreview(props: { teamID: string }) {
                 </View>
             </Button>
 
-            <View style={styles.statTable}>
-                <StatTable teamID={props.teamID} cols={1} />
-            </View>
+            <StatTable teamID={props.teamID} cols={1} />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        marginBottom: 10,
         width: 100,
-        flexDirection: "column"
+        flexDirection: "column",
     },
     button: {
         flexDirection: "column",
-        padding: 2
+        padding: 0
     },
     subContainer: {
         height: 100,
@@ -91,7 +86,6 @@ const styles = StyleSheet.create({
         width: "100%",
         aspectRatio: 1,
         backgroundColor: "#444",
-        borderRadius: 5,
         padding: 0,
         margin: 0,
         justifyContent: "center",
@@ -105,8 +99,5 @@ const styles = StyleSheet.create({
     subtitle: {
         fontWeight: "bold",
         textAlign: "center"
-    },
-    statTable: {
-        flex: 1
     }
 });

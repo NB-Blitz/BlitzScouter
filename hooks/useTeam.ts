@@ -1,7 +1,7 @@
 import { Team } from "../types/DBTypes";
 import useStorage, { getStorage, putStorage } from "./useStorage";
 
-const DEFAULT_TEAM = {
+const DEFAULT_TEAM: Team = {
     id: "",
     name: "",
     number: 0,
@@ -9,9 +9,8 @@ const DEFAULT_TEAM = {
     wins: -1,
     losses: -1,
     ties: -1,
-    mediaPaths: [],
-    scoutingData: []
-} as Team;
+    mediaPaths: []
+};
 
 /**
  * Grabs team data as a react hook

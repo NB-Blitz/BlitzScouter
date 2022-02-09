@@ -1,85 +1,53 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ToastAndroid } from "react-native";
 import { ScoutingData } from "../types/TemplateTypes";
 import useEvent from "./useEvent";
-import { getTeam, setTeam } from "./useTeam";
+import useScoutingData from "./useScoutingData";
 
 export interface ExportData {
     eventID: string,
     exportID: string,
-    scoutingData: Record<string, ScoutingData[]>
+    scoutingData: ScoutingData[]
 }
-export function getChecksum(data: Record<string, ScoutingData[]>) {
+export function getChecksum(data: ScoutingData[]) {
     const jsonData = JSON.stringify(data);
     return jsonData.split("").reduce((a, b) => {
         a = ((a << 5) - a) + b.charCodeAt(0);
         return a & a;
-    }, 0);
-}
-
-export function useJsonData() {
-    const [event] = useEvent();
-    const [data, setData] = useState("");
-
-    const compressJsonData = async () => {
-        const teams = await Promise.all(event.teamIDs.map(getTeam));
-        let scoutingData: Record<string, ScoutingData[]> = {};
-        for (const team of teams) {
-            if (team)
-                if (team.scoutingData.length > 0)
-                    scoutingData[team.id] = team.scoutingData;
-        }
-        const outputData: ExportData = {
-            exportID: getChecksum(scoutingData).toString(),
-            eventID: event.id,
-            scoutingData
-        };
-        const jsonData = JSON.stringify(outputData);
-        setData(jsonData);
-    }
-
-    useEffect(() => {
-        compressJsonData();
-    }, [event]);
-
-    return event.id === "bogus" ? "" : data;
+    }, 0).toString();
 }
 
 export function useDataImporter() {
     const [event] = useEvent();
+    const [scoutingData, setScoutingData] = useScoutingData();
     const [importedIDs, setImportedIDs] = React.useState([] as string[]);
 
     const importJsonData = async (data: string) => {
         try {
+            // Decompress
             const decompressedData = JSON.parse(data) as ExportData;
             if (!decompressedData) {
                 ToastAndroid.show("Invalid QR code", ToastAndroid.SHORT);
                 return;
             }
+
+            // Check Duplicates
             if (importedIDs.includes(decompressedData.exportID)) {
                 return;
             }
             importedIDs.push(decompressedData.exportID);
             setImportedIDs(importedIDs);
+
+            // Check Event
             if (decompressedData.eventID !== event.id) {
                 ToastAndroid.show("Invalid Event", ToastAndroid.SHORT);
                 return;
             }
 
-            const teamIDs = Object.keys(decompressedData.scoutingData);
-            for (const teamID of teamIDs) {
-                const team = await getTeam(teamID);
-                if (team) {
-                    const scoutingData = decompressedData.scoutingData[teamID];
-                    for (let scout of scoutingData) {
-                        if (team.scoutingData.findIndex(s => s.matchID === scout.matchID) === -1) {
-                            team.scoutingData.push(scout);
-                        }
-                    }
-                    await setTeam(team);
-                }
-            }
-            ToastAndroid.show("Imported " + teamIDs.length + " team(s).", ToastAndroid.SHORT);
+            // Append Data
+            scoutingData.push(...decompressedData.scoutingData);
+            setScoutingData(scoutingData);
+            ToastAndroid.show("Imported " + scoutingData.length + " matches.", ToastAndroid.SHORT);
         }
         catch (e) {
             ToastAndroid.show("Invalid Data Import", ToastAndroid.SHORT);

@@ -1,12 +1,12 @@
 import { Event } from "../types/DBTypes";
 import useStorage, { getStorage } from "./useStorage";
 
-const DEFAULT_EVENT = {
+const DEFAULT_EVENT: Event = {
     id: "bogus",
     matchIDs: [],
     teamIDs: [],
     year: 0
-} as Event;
+};
 
 /**
  * Grabs the current event data as a react hook

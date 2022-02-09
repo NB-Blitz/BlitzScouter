@@ -12,7 +12,7 @@ export default function NavTitle(props: TextProps) {
         color: paletteContext.palette.textPrimary,
         fontSize: 30,
         fontWeight: 'bold',
-        marginTop: 60,
+        marginTop: 20,
         marginBottom: 15,
     }, style]} {...otherProps} />;
 }

@@ -10,10 +10,10 @@ export default function HorizontalBar(props: ViewProps) {
 
     return (<View
         style={[{
-            borderBottomColor: paletteContext.palette.textSecondary,
+            borderBottomColor: "#444",
             borderBottomWidth: 1,
-            marginBottom: 12,
-            marginTop: 15
+            marginBottom: 15,
+            marginTop: 10
         }, style]}
 
         {...otherProps}

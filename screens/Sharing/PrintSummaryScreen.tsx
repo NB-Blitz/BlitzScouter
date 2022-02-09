@@ -5,7 +5,7 @@ import ScrollContainer from '../../components/containers/ScrollContainer';
 import Subtitle from '../../components/text/Subtitle';
 import Title from '../../components/text/Title';
 import useEvent from '../../hooks/useEvent';
-import { getStats } from '../../hooks/useStats';
+import useScoutingData from '../../hooks/useScoutingData';
 import { getTeam } from '../../hooks/useTeam';
 import { getTemplate } from '../../hooks/useTemplate';
 import { TemplateType } from '../../types/TemplateTypes';
@@ -40,10 +40,13 @@ const PRINT_FOOTER = `</body></html>`;
 
 export default function PrintSummaryScreen() {
     const navigator = useNavigation();
+    const [scoutingData] = useScoutingData();
     const [event] = useEvent();
 
     const printSummary = async () => {
         if (event.id === "bogus")
+            return;
+        if (scoutingData.length <= 0)
             return;
         const template = await getTemplate(TemplateType.Match);
         if (template === undefined)
@@ -57,23 +60,51 @@ export default function PrintSummaryScreen() {
         printData += `<table>`
         printData += `<tr><th />`;
         for (const element of template)
-            if (typeof element.value === "number")
+            if (element.value !== undefined)
                 printData += `<th>` + element.label + `</th>`;
 
         printData += `<th>Notes</th></tr>`;
         for (const teamID of event.teamIDs) {
             const team = await getTeam(teamID);
-            const stats = await getStats(teamID);
-
-            if (team === undefined || stats === undefined)
+            if (team === undefined)
                 continue;
+
+            const teamScoutingData = scoutingData.filter((data) => data.teamID === teamID);
+
+
+            // Calculate Stats
+            const avgs: number[] = [];
+            const maxs: number[] = [];
+            teamScoutingData.forEach(scout => {
+                scout.values.forEach((val, index) => {
+                    if (index >= avgs.length)
+                        avgs.push(0);
+                    if (typeof val === "number")
+                        avgs[index] += val;
+                    else
+                        avgs[index] += val ? 1 : 0;
+                });
+            });
+            avgs.forEach((val, index) => {
+                avgs[index] = val / teamScoutingData.length;
+            });
+            scoutingData.forEach(scout => {
+                scout.values.forEach((val, index) => {
+                    if (index >= maxs.length)
+                        maxs.push(0);
+                    if (typeof val === "number")
+                        maxs[index] = Math.max(maxs[index], val);
+                    else
+                        maxs[index] = 1;
+                });
+            });
 
             printData += `<tr>`;
             printData += `<th><h4>` + team.number + `</h3><h6>` + team.name + `</h4></th>`
 
-            for (const stat of stats) {
-                printData += `<td style="background-color:rgba(150,150,150,` + stat.percentile + `);"><h4>` + (Math.round(stat.average * 100) / 100) + `</h4></td>`
-            }
+            avgs.forEach((avg, index) => {
+                printData += `<td style="background-color:rgba(100,100,100,` + (avg / maxs[index]) + `);"><h4>` + (Math.round(avg * 100) / 100) + `</h4></td>`
+            })
 
             printData += `</tr><div class="pagebreak" />`;
         }
