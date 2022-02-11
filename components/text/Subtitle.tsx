@@ -11,6 +11,7 @@ export default function Subtitle(props: TextProps) {
     return <Text style={[{
         color: paletteContext.palette.textSecondary,
         fontSize: 15,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        marginBottom: 15
     }, style]} {...otherProps} />;
 }

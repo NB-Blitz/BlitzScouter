@@ -7,11 +7,11 @@ import Text from '../text/Text';
 export default function CheckboxElement(props: ElementProps) {
     let elementData = props.data;
     const defaultValue = elementData.options.defaultValue;
-    const [isChecked, setChecked] = React.useState(defaultValue === undefined ? defaultValue as boolean : false);
+    const [value, setValue] = React.useState(defaultValue ? defaultValue as number : 0);
 
     // Default Value
     if (elementData.value === undefined && props.onChange) {
-        elementData.value = false;
+        elementData.value = value;
         props.onChange(elementData);
     }
 
@@ -19,10 +19,11 @@ export default function CheckboxElement(props: ElementProps) {
     const changeChecked = (isChecked: boolean) => {
 
         // Value
-        setChecked(isChecked);
-        elementData.value = isChecked;
+        const newValue = isChecked ? 1 : 0;
+        setValue(newValue);
+        elementData.value = newValue;
         if (props.isEditable)
-            elementData.options.defaultValue = isChecked;
+            elementData.options.defaultValue = newValue;
 
         // Vibrate
         if (isChecked)
@@ -45,7 +46,7 @@ export default function CheckboxElement(props: ElementProps) {
         <View style={styles.container}>
             <Checkbox
                 style={styles.checkbox}
-                value={isChecked}
+                value={value === 1}
                 onValueChange={changeChecked}
                 color={'#c89f00'} />
             {props.isEditable ?

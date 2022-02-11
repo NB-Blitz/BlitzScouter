@@ -2,9 +2,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import Button from '../../../components/common/Button';
-import HorizontalBar from '../../../components/common/HorizontalBar';
-import ScrollContainer from '../../../components/containers/ScrollContainer';
 import ScoutingElement from '../../../components/elements/ScoutingElement';
 import Subtitle from '../../../components/text/Subtitle';
 import Text from '../../../components/text/Text';
@@ -58,11 +57,10 @@ export default function EditTemplateScreen({ route }: any) {
     });
 
     return (
-        <View style={styles.parentView}>
-            <ScrollContainer>
+        <View style={styles.container}>
+            <ScrollView>
                 <Title>Edit Template</Title>
                 <Subtitle>{TEMPLATE_NAMES[templateType]} Scouting</Subtitle>
-                <HorizontalBar />
 
                 {template.length > 0 ? template.map(element =>
                     <ScoutingElement
@@ -77,7 +75,7 @@ export default function EditTemplateScreen({ route }: any) {
 
                 <View style={{ height: 150 }} />
 
-            </ScrollContainer>
+            </ScrollView>
 
             <Button
                 style={[styles.addButton, { backgroundColor: paletteContext.palette.navigationSelected }]}
@@ -91,9 +89,10 @@ export default function EditTemplateScreen({ route }: any) {
 }
 
 const styles = StyleSheet.create({
-    parentView: {
-        height: "100%",
-        width: "100%"
+    container: {
+        flex: 1,
+        paddingLeft: 20,
+        paddingRight: 20,
     },
     trashButton: {
         alignSelf: "flex-end",

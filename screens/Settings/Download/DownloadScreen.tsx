@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/core";
 import React from "react";
 import { StyleSheet, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { DownloadEvent } from "../../../api/TBAAdapter";
 import StandardButton from "../../../components/common/StandardButton";
-import ScrollContainer from "../../../components/containers/ScrollContainer";
 import Text from "../../../components/text/Text";
 import Title from "../../../components/text/Title";
 import { PaletteContext } from "../../../context/PaletteContext";
@@ -22,9 +22,7 @@ export default function DownloadScreen({ route }: any) {
     }
 
     return (
-        <ScrollContainer>
-
-
+        <ScrollView style={styles.container}>
             {downloadStatus === "" ?
                 <View>
                     <Title style={styles.title}>Download Event</Title>
@@ -45,15 +43,15 @@ export default function DownloadScreen({ route }: any) {
                     <Text>{downloadStatus}</Text>
                 </View>
             }
-        </ScrollContainer>
+        </ScrollView>
 
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        width: "100%",
-        height: "100%"
+        paddingLeft: 20,
+        paddingRight: 20
     },
     title: {
         marginBottom: 15

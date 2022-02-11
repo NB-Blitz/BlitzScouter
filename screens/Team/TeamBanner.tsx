@@ -1,14 +1,12 @@
 import { useNavigation } from "@react-navigation/core";
-import React, { useContext } from "react";
+import React from "react";
 import { View } from "react-native";
 import StandardButton from "../../components/common/StandardButton";
-import { PaletteContext } from "../../context/PaletteContext";
 import useTeam from "../../hooks/useTeam";
 
 export default function TeamBanner(props: { teamID: string, onClick?: (teamID: string) => void }) {
     const navigator = useNavigation();
     const [team] = useTeam(props.teamID);
-    const { palette } = useContext(PaletteContext);
 
     // On Click
     const onClick = () => {

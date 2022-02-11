@@ -7,6 +7,7 @@ import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
 import TBA from "../../api/TBA";
 import Button from "../../components/common/Button";
 import Subtitle from "../../components/text/Subtitle";
+import Text from "../../components/text/Text";
 import Title from "../../components/text/Title";
 import { PaletteContext } from "../../context/PaletteContext";
 import useEvent from "../../hooks/useEvent";
@@ -130,7 +131,7 @@ export default function TeamScreen({ route }: any) {
                     )}
 
                     <Button
-                        style={styles.imageButton}
+                        style={[styles.imageButton, { backgroundColor: paletteContext.palette.navigation }]}
                         onPress={async () => { takePhoto(); }}>
                         <MaterialIcons
                             size={50}
@@ -139,7 +140,7 @@ export default function TeamScreen({ route }: any) {
                     </Button>
 
                     <Button
-                        style={styles.imageButton}
+                        style={[styles.imageButton, { backgroundColor: paletteContext.palette.navigation }]}
                         onPress={async () => { uploadPhoto(); }}>
                         <MaterialIcons
                             size={50}
@@ -148,12 +149,14 @@ export default function TeamScreen({ route }: any) {
                     </Button>
                 </ScrollView>
 
-                <Title>{team.name}</Title>
-                <Subtitle>{team.number}</Subtitle>
-
-                <View style={{ marginTop: 15, width: 100 }}>
-                    <StatTable teamID={team.id} cols={1} />
+                <View>
+                    <Title>{team.name}</Title>
+                    <Subtitle>{team.number}</Subtitle>
+                    <Text style={[styles.sidetitle, { color: paletteContext.palette.textSecondary }]}>#{team.rank}</Text>
                 </View>
+
+                <StatTable teamID={team.id} cols={1} useCharts={true} />
+
             </View>
         </ScrollView>
     );
@@ -181,11 +184,16 @@ const styles = StyleSheet.create({
         marginLeft: 6,
         justifyContent: "center",
         flexDirection: "row",
-        backgroundColor: "#444",
         borderRadius: 5
     },
     headerButtons: {
         alignSelf: "flex-end",
         flexDirection: "row"
+    },
+    sidetitle: {
+        position: "absolute",
+        top: 20,
+        right: 0,
+        fontSize: 12
     }
 });

@@ -18,8 +18,8 @@ import TeamPreview from "../Matches/TeamPreview";
 export default function MatchScreen({ route }: any) {
     const paletteContext = React.useContext(PaletteContext);
     const navigator = useNavigation();
-    const [match, setMatch] = useMatch(route.params.matchID);
-    const [template, setTemplate] = useTemplate(TemplateType.Match);
+    const [match] = useMatch(route.params.matchID);
+    const [template] = useTemplate(TemplateType.Match);
 
     // Browser Button
     const onBrowserButton = () => {
@@ -86,20 +86,20 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
         paddingTop: 5,
         marginRight: 8,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
+        borderRadius: 6,
+        marginBottom: 5,
         fontSize: 18,
         fontWeight: "bold",
         width: 300,
         textAlign: "center"
     },
     allianceFooter: {
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
+        borderRadius: 10,
         width: 300,
         height: 10,
         marginRight: 8,
-        marginBottom: 20
+        marginBottom: 20,
+        marginTop: 2
     },
     headerButtons: {
         alignSelf: "flex-end",

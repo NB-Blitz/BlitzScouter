@@ -2,9 +2,9 @@ import { MaterialIcons } from "@expo/vector-icons";
 import * as Application from 'expo-application';
 import { Accelerometer } from 'expo-sensors';
 import * as React from "react";
-import { Image } from "react-native";
+import { Image, StyleSheet } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import HorizontalBar from "../../components/common/HorizontalBar";
-import ScrollContainer from "../../components/containers/ScrollContainer";
 import Subtitle from "../../components/text/Subtitle";
 import Text from "../../components/text/Text";
 import Title from "../../components/text/Title";
@@ -35,7 +35,7 @@ export default function AboutScreen() {
     }, [accelerometer, setEasterEgg, isEasterEgg]);
 
     return (
-        <ScrollContainer>
+        <ScrollView style={styles.container}>
             <Title>Blitz Scouter</Title>
             <Subtitle>Version {Application.nativeApplicationVersion}</Subtitle>
 
@@ -58,5 +58,12 @@ export default function AboutScreen() {
             {isEasterEgg ?
                 <Image style={{ height: 300, width: 200, margin: 20 }} fadeDuration={1000} source={{ uri: "https://i.redd.it/ru3eqcdd99b81.jpg" }} />
                 : null}
-        </ScrollContainer>)
+        </ScrollView>)
 }
+
+const styles = StyleSheet.create({
+    container: {
+        paddingLeft: 20,
+        paddingRight: 20
+    }
+})

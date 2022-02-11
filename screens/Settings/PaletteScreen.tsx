@@ -1,8 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import * as React from "react";
+import { StyleSheet } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import HorizontalBar from "../../components/common/HorizontalBar";
 import StandardButton from "../../components/common/StandardButton";
-import ScrollContainer from "../../components/containers/ScrollContainer";
 import Subtitle from "../../components/text/Subtitle";
 import Title from "../../components/text/Title";
 import { PaletteContext } from "../../context/PaletteContext";
@@ -22,7 +23,7 @@ export function PaletteScreen() {
     }
 
     return (
-        <ScrollContainer>
+        <ScrollView style={styles.container}>
             <Title>Color Palette</Title>
             <Subtitle>Change the color palette to match your team</Subtitle>
             <HorizontalBar />
@@ -75,6 +76,13 @@ export function PaletteScreen() {
                 subtitle="Used globally for subtitles"
                 onPress={() => { promptForColor("textSecondary"); }}
             />
-        </ScrollContainer>
+        </ScrollView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        paddingLeft: 20,
+        paddingRight: 20
+    }
+})

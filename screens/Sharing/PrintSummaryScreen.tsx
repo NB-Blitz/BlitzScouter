@@ -8,12 +8,16 @@ import useEvent from '../../hooks/useEvent';
 import useScoutingData from '../../hooks/useScoutingData';
 import { getTeam } from '../../hooks/useTeam';
 import { getTemplate } from '../../hooks/useTemplate';
-import { TemplateType } from '../../types/TemplateTypes';
+import { ScoutingData, TemplateType } from '../../types/TemplateTypes';
 
 const PRINT_HEADER = `<html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
         <style>
+            .restrict {
+                height: 48px;
+                overflow: hidden;
+            }
             td {
                 border: 1px solid black;
                 text-align: center;
@@ -43,6 +47,10 @@ export default function PrintSummaryScreen() {
     const [scoutingData] = useScoutingData();
     const [event] = useEvent();
 
+    const getValues = (data: ScoutingData[], index: number) => {
+        return data.map((scout) => index < scout.values.length ? scout.values[index] : 0);
+    }
+
     const printSummary = async () => {
         if (event.id === "bogus")
             return;
@@ -54,7 +62,7 @@ export default function PrintSummaryScreen() {
 
         let printData = PRINT_HEADER;
         printData += `<h1>Scouting Data Export</h1>`;
-        printData += `<h6>Event:` + event.id + ` Teams:` + event.teamIDs.length + ` Matches:` + event.matchIDs.length + ` Timestamp` + ((new Date()).toISOString()) + `</h6>`;
+        printData += `<h6>Event:` + event.id + ` Teams:` + event.teamIDs.length + ` Matches:` + event.matchIDs.length + ` Scouts:` + scoutingData.length + `</h6>`;
         printData += `<hr />`;
 
         printData += `<table>`
@@ -63,7 +71,7 @@ export default function PrintSummaryScreen() {
             if (element.value !== undefined)
                 printData += `<th>` + element.label + `</th>`;
 
-        printData += `<th>Notes</th></tr>`;
+        printData += `<th /><th>Notes</th><th /></tr>`;
         for (const teamID of event.teamIDs) {
             const team = await getTeam(teamID);
             if (team === undefined)
@@ -73,40 +81,28 @@ export default function PrintSummaryScreen() {
 
 
             // Calculate Stats
+            const labels = template.filter((elem) => elem.value !== undefined).map((elem) => elem.label);
             const avgs: number[] = [];
             const maxs: number[] = [];
-            teamScoutingData.forEach(scout => {
-                scout.values.forEach((val, index) => {
-                    if (index >= avgs.length)
-                        avgs.push(0);
-                    if (typeof val === "number")
-                        avgs[index] += val;
-                    else
-                        avgs[index] += val ? 1 : 0;
-                });
-            });
-            avgs.forEach((val, index) => {
-                avgs[index] = val / teamScoutingData.length;
-            });
-            scoutingData.forEach(scout => {
-                scout.values.forEach((val, index) => {
-                    if (index >= maxs.length)
-                        maxs.push(0);
-                    if (typeof val === "number")
-                        maxs[index] = Math.max(maxs[index], val);
-                    else
-                        maxs[index] = 1;
-                });
+            labels.forEach((label, index) => {
+                const teamValues = getValues(teamScoutingData, index);
+                const allValues = getValues(scoutingData, index);
+
+                if (teamValues.length <= 0)
+                    return;
+
+                maxs.push(Math.max(...allValues));
+                avgs.push(teamValues.reduce((prev, cur) => prev + cur) / teamValues.length);
             });
 
             printData += `<tr>`;
-            printData += `<th><h4>` + team.number + `</h3><h6>` + team.name + `</h4></th>`
+            printData += `<th><div class="restrict"><h4>` + team.number + `</h3><h6>` + team.name + `</h4></div></th>`
 
             avgs.forEach((avg, index) => {
                 printData += `<td style="background-color:rgba(100,100,100,` + (avg / maxs[index]) + `);"><h4>` + (Math.round(avg * 100) / 100) + `</h4></td>`
             })
 
-            printData += `</tr><div class="pagebreak" />`;
+            printData += `</tr>`;
         }
         printData += `</table>`;
 

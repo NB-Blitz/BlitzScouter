@@ -8,10 +8,13 @@ import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
 import { useDataImporter } from '../../hooks/useCompressedData';
 import useScoutingData from '../../hooks/useScoutingData';
+import useTemplate from '../../hooks/useTemplate';
+import { TemplateType } from '../../types/TemplateTypes';
 
 export default function SharingScreen() {
     const navigator = useNavigation();
     const [scoutingData] = useScoutingData();
+    const [template] = useTemplate(TemplateType.Match);
     const importJsonData = useDataImporter();
 
     const exportJson = async () => {
@@ -35,6 +38,16 @@ export default function SharingScreen() {
             const jsonData = await FileSystem.readAsStringAsync(path, { encoding: FileSystem.EncodingType.UTF8 });
             importJsonData(jsonData);
         }
+    }
+
+    const exportCSV = async () => {
+        const labels = template.filter((elem) => elem.value !== undefined).map((elem) => elem.label);
+        let data = "Team ID,Match ID," + labels + "\n";
+        data += scoutingData.map((scout) => scout.teamID + "," + scout.matchID + "," + scout.values).join("\n");
+
+        const path = FileSystem.documentDirectory + "data.csv";
+        await FileSystem.writeAsStringAsync(path, data, { encoding: FileSystem.EncodingType.UTF8 });
+        Sharing.shareAsync(path);
     }
 
     return (
@@ -66,6 +79,14 @@ export default function SharingScreen() {
                 title={"Import JSON"}
                 subtitle={"Import Scouting Data"}
                 onPress={() => { importJson(); }} />
+
+            <StandardButton
+                iconType={"table-chart"}
+                title={"Save to CSV"}
+                subtitle={"Export Scouting Data"}
+                onPress={() => { exportCSV(); }} />
+
+            {/* Printing */}
 
             <StandardButton
                 iconType={"print"}

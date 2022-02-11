@@ -5,6 +5,8 @@ import HorizontalBar from '../../components/common/HorizontalBar';
 import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
+import Subtitle from '../../components/text/Subtitle';
+import Title from '../../components/text/Title';
 import { DARK_PALETTE, LIGHT_PALETTE, PaletteContext } from '../../context/PaletteContext';
 import useEvent from '../../hooks/useEvent';
 import { getMatch } from '../../hooks/useMatch';
@@ -57,37 +59,52 @@ export default function SettingsScreen() {
         );
     }
 
-    const generateRandomData = async () => {
-        const scoutingData: ScoutingData[] = [];
-        for (let matchID of event.matchIDs) {
-            const match = await getMatch(matchID);
+    const generateRandomData = async (isConfirmed: boolean) => {
+        if (!isConfirmed) {
+            Alert.alert("Are you sure?", "This will replace all scouting data on your device.",
+                [
+                    {
+                        text: "Confirm",
+                        onPress: async () => {
+                            await generateRandomData(true);
+                            Alert.alert("Success!", "All scouting data has been randomized");
+                        }
+                    },
+                    {
+                        text: "Cancel",
+                        style: "cancel"
+                    }
+                ], { cancelable: true }
+            );
+        } else {
+            const scoutingData: ScoutingData[] = [];
+            for (let matchID of event.matchIDs) {
+                const match = await getMatch(matchID);
 
-            if (!match)
-                continue;
-
-            console.log(match.id);
-
-            const teamIDs = match.blueTeamIDs;
-            teamIDs.push(...match.redTeamIDs);
-
-            for (let teamID of teamIDs) {
-                const team = await getTeam(teamID);
-                if (!team)
+                if (!match)
                     continue;
 
-                const values = template.filter(elem => elem.value != undefined).map((elem) => typeof elem.value === "number" ? Math.round(Math.random() * (50 - team.rank)) : Math.random() < .5);
+                console.log(match.id);
 
-                //if (scoutingData.filter(scout => scout.teamID === teamID).length <= 2)
-                scoutingData.push({
-                    matchID,
-                    teamID,
-                    values
-                });
+                const teamIDs = match.blueTeamIDs;
+                teamIDs.push(...match.redTeamIDs);
+
+                for (let teamID of teamIDs) {
+                    const team = await getTeam(teamID);
+                    if (!team)
+                        continue;
+
+                    const values = template.filter(elem => elem.value != undefined).map((elem) => Math.round(15 * Math.random() * (1 - (team.rank / event.teamIDs.length))));
+
+                    scoutingData.push({
+                        matchID,
+                        teamID,
+                        values
+                    });
+                }
             }
+            await setScoutingData(scoutingData);
         }
-        await setScoutingData(scoutingData);
-
-        Alert.alert("Success", "Successfully filled with random data!");
     }
 
     return (
@@ -113,8 +130,6 @@ export default function SettingsScreen() {
                 subtitle={"Resets to the default dark palette"}
                 onPress={() => { paletteContext.setPalette(DARK_PALETTE); ToastAndroid.show("Dark Mode!", ToastAndroid.SHORT); }} />
 
-            <HorizontalBar />
-
             {/* Scouting Buttons */}
             <StandardButton
                 iconType={"edit"}
@@ -123,23 +138,20 @@ export default function SettingsScreen() {
                 onPress={() => { navigator.navigate("EditTemplate", { templateType: TemplateType.Match }); }} />
 
             <StandardButton
+                iconType={"info-outline"}
+                title={"About"}
+                subtitle={"App version and developer details"}
+                onPress={() => { navigator.navigate("About"); }} />
+
+            <HorizontalBar />
+            <Title>Danger Zone</Title>
+            <Subtitle>Actions here may overwrite your scouting data</Subtitle>
+
+            <StandardButton
                 iconType={"shuffle"}
                 title={"Scramble Data"}
                 subtitle={"Generates Random Data"}
-                onPress={() => { generateRandomData(); }} />
-            {/*
-            <StandardButton
-                iconType={"edit"}
-                title={"Edit Pit Scouting"}
-                subtitle={"Adjust the pit scouting template"}
-            onPress={() => { navigator.navigate("EditTemplate", { templateType: TemplateType.Pit }); }} />
-            <StandardButton
-                iconType={"person-outline"}
-                title={"Assign Default Team"}
-                subtitle={"Assign the default team to scout"}
-                onPress={() => { navigator.navigate("DefaultTeam"); }} />*/}
-
-            <HorizontalBar />
+                onPress={() => { generateRandomData(false); }} />
 
             <StandardButton
                 iconType={"location-pin"}
@@ -165,12 +177,6 @@ export default function SettingsScreen() {
                 title={"Clear All Data"}
                 subtitle={"Wipes all app data on your device"}
                 onPress={() => { clearData(); }} />
-
-            <StandardButton
-                iconType={"info-outline"}
-                title={"About"}
-                subtitle={"App version and developer details"}
-                onPress={() => { navigator.navigate("About"); }} />
 
         </ScrollContainer>
     );

@@ -32,11 +32,14 @@ export default function TeamPreview(props: { teamID: string }) {
     }
     else {
         mediaIcon = (
-            <View style={styles.thumbnail}>
-                <MaterialIcons
-                    name="block"
-                    size={40}
-                    color={paletteContext.palette.textPrimary} />
+            <View style={{ padding: 1 }}>
+                <View style={[styles.thumbnail, { backgroundColor: paletteContext.palette.navigation }]}>
+                    <MaterialIcons
+                        name="block"
+                        size={40}
+                        color={paletteContext.palette.textPrimary} />
+                </View>
+
             </View>
         );
     }
@@ -49,7 +52,7 @@ export default function TeamPreview(props: { teamID: string }) {
                 {mediaIcon}
 
                 <View style={styles.subContainer}>
-                    <Text style={[styles.title, { color: paletteContext.palette.textPrimary }]}>{team.name}</Text>
+                    <Text style={[styles.title, { color: paletteContext.palette.textPrimary }]}>{team.name.substring(0, 16) + (team.name.length > 16 ? "..." : "")}</Text>
                     <Text style={[styles.subtitle, { color: paletteContext.palette.textSecondary }]}>{team.number}</Text>
                 </View>
             </Button>
@@ -85,11 +88,10 @@ const styles = StyleSheet.create({
     thumbnail: {
         width: "100%",
         aspectRatio: 1,
-        backgroundColor: "#444",
-        padding: 0,
-        margin: 0,
+        padding: 1,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        borderRadius: 8
     },
     title: {
         fontSize: 16,

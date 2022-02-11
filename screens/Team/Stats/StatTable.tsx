@@ -1,73 +1,62 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
+import HorizontalBar from "../../../components/common/HorizontalBar";
 import useEvent from "../../../hooks/useEvent";
 import useScoutingData from "../../../hooks/useScoutingData";
 import useTeam from "../../../hooks/useTeam";
 import useTemplate from "../../../hooks/useTemplate";
-import { TemplateType } from "../../../types/TemplateTypes";
+import { ScoutingData, TemplateType } from "../../../types/TemplateTypes";
+import { StatChart } from "./StatChart";
 import StatSquare from "./StatSquare";
 
-export default function StatTable(props: { teamID: string, cols: number }) {
+interface StatData {
+    label: string,
+    avg: number,
+    chartValues: number[],
+    max: number
+}
+
+export default function StatTable(props: { teamID: string, cols: number, useCharts?: boolean }) {
     const [scoutingData] = useScoutingData();
     const [event] = useEvent();
     const [team] = useTeam(props.teamID);
     const [template] = useTemplate(TemplateType.Match);
+    const [statList, setStatList] = useState([] as StatData[]);
 
-    const teamScoutingData = scoutingData.filter((data) => data.teamID === team.id);
-
-    // Calculate Stats
-    const avgs: number[] = [];
-    const maxs: number[] = [];
-    teamScoutingData.forEach(scout => {
-        scout.values.forEach((val, index) => {
-            if (index >= avgs.length)
-                avgs.push(0);
-            if (typeof val === "number")
-                avgs[index] += val;
-            else
-                avgs[index] += val ? 1 : 0;
-        });
-    });
-    avgs.forEach((val, index) => {
-        avgs[index] = val / teamScoutingData.length;
-    });
-    scoutingData.forEach(scout => {
-        scout.values.forEach((val, index) => {
-            if (index >= maxs.length)
-                maxs.push(0);
-            if (typeof val === "number")
-                maxs[index] = Math.max(maxs[index], val);
-            else
-                maxs[index] = 1;
-        });
-    });
-
-    // Display Stats
     const decToString = (num: number) => {
         return (Math.round(num * 10) / 10).toString()
     }
-    const statList: { label: string, value: string, percentile: number }[] = [];
-    statList.push({
-        label: "Rank",
-        value: team.rank.toString(),
-        percentile: 1 - (team.rank / event.teamIDs.length)
-    });
-    statList.push({
-        label: "W-T-L",
-        value: team.wins + "-" + team.ties + "-" + team.losses,
-        percentile: team.wins / (team.wins + team.ties + team.losses)
-    });
+    const getValues = (data: ScoutingData[], index: number) => {
+        return data.map((scout) => index < scout.values.length ? scout.values[index] : 0);
+    }
+    const calculateStats = () => {
+        const newStatList: StatData[] = [];
+        const teamScoutingData = scoutingData.filter((data) => data.teamID === team.id);
+        const labels = template.filter((elem) => elem.value !== undefined).map((elem) => elem.label);
 
-    if (teamScoutingData.length > 0) {
-        const labels = template.filter(elem => elem.value !== undefined).map(elem => elem.label);
         labels.forEach((label, index) => {
-            statList.push({
+            const teamValues = getValues(teamScoutingData, index);
+            const allValues = getValues(scoutingData, index);
+
+            if (teamValues.length <= 0)
+                return;
+
+            const max = Math.max(...allValues);
+            const avg = teamValues.reduce((prev, cur) => prev + cur) / teamValues.length;
+
+            newStatList.push({
                 label,
-                value: decToString(avgs[index]),
-                percentile: avgs[index] / maxs[index]
+                avg: avg,
+                chartValues: teamValues,
+                max
             })
         });
+
+        setStatList(newStatList);
     }
+    React.useEffect(() => {
+        calculateStats();
+    }, [event, team, template, setStatList])
 
     // Stat Squares
     let statIndex = 0;
@@ -78,10 +67,18 @@ export default function StatTable(props: { teamID: string, cols: number }) {
             const stat = statList[statIndex];
             statIndex++;
 
-            if (stat)
-                row.push(<StatSquare name={stat.label} value={stat.value} percentile={stat.percentile} key={statIndex} />);
-            else
+            if (stat) {
+                if (props.useCharts) {
+                    row.push(<StatChart label={stat.label} values={stat.chartValues} max={stat.max} key={"c" + statIndex} />);
+                    if (statIndex !== 1)
+                        statSquares.push(<HorizontalBar style={{ marginBottom: 5 }} key={"hb" + statIndex} />)
+                } else {
+                    row.push(<StatSquare name={stat.label} value={decToString(stat.avg)} percentile={stat.avg / stat.max} key={statIndex} />);
+                }
+
+            } else {
                 row.push(<View style={styles.blank} key={statIndex} />);
+            }
         }
 
         statSquares.push(
@@ -104,7 +101,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     tableRow: {
-        flexDirection: "row",
+        flexDirection: "row"
     },
     blank: {
         flex: 1,

@@ -17,7 +17,7 @@ export interface ElementData {
     type: ElementType;
     label: string;
     options: any;
-    value: number | boolean | undefined;
+    value?: number;
 }
 
 export interface ElementProps {
@@ -32,5 +32,5 @@ export type ScoutingTemplate = ElementData[];
 export interface ScoutingData {
     matchID: string;
     teamID: string;
-    values: (number | boolean)[]
+    values: number[]
 }

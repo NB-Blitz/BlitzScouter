@@ -26,10 +26,12 @@ export default function StatSquare(props: { name: string, value: string, percent
 
 const styles = StyleSheet.create({
     statContainer: {
+        borderRadius: 8,
         padding: 5,
         justifyContent: "center",
         flex: 1,
         aspectRatio: 1.2,
+        margin: 1
     },
     statName: {
         fontSize: 20,
@@ -45,6 +47,7 @@ const styles = StyleSheet.create({
         left: 0,
         bottom: 0,
         right: 0,
-        opacity: .4
+        opacity: .4,
+        borderRadius: 8
     }
 });
