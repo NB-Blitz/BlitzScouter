@@ -43,15 +43,21 @@ export default function MatchScreen({ route }: any) {
                 <Title>{match.name}</Title>
                 <Subtitle>{match.description}</Subtitle>
 
-                {template.length > 0 ?
-                    <View style={{ marginTop: 15 }}>
+                <View style={{ marginTop: 10 }}>
+                    {template.filter((element) => element.value !== undefined).length > 0 ?
                         <StandardButton
                             iconType={"explore"}
                             title={"Scout Match"}
                             subtitle={"Scout this match"}
                             onPress={() => { navigator.navigate("TeamSelect", { matchID: match.id }); }} />
-                    </View>
-                    : undefined}
+                        :
+                        <StandardButton
+                            iconType={"edit"}
+                            title={"Create Scouting Template"}
+                            subtitle={"Create a match scouting template"}
+                            onPress={() => { navigator.navigate("EditTemplate", { templateType: TemplateType.Match }); }} />
+                    }
+                </View>
 
                 <HorizontalBar />
 

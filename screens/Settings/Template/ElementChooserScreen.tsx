@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
-import HorizontalBar from '../../../components/common/HorizontalBar';
+import { StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import StandardButton from '../../../components/common/StandardButton';
-import ScrollContainer from '../../../components/containers/ScrollContainer';
 import Subtitle from '../../../components/text/Subtitle';
 import Title from '../../../components/text/Title';
 import useTemplate from '../../../hooks/useTemplate';
@@ -26,10 +26,9 @@ export default function ElementChooserScreen({ route }: any) {
     }
 
     return (
-        <ScrollContainer>
+        <ScrollView style={styles.container}>
             <Title>Add Element</Title>
             <Subtitle>Choose an element to add:</Subtitle>
-            <HorizontalBar />
 
             <StandardButton
                 iconType={"import-export"}
@@ -42,8 +41,6 @@ export default function ElementChooserScreen({ route }: any) {
                 title={"Checkbox"}
                 subtitle={"A simple check or uncheck"}
                 onPress={() => { chooseElement(ElementType.checkbox); }} />
-
-            <HorizontalBar />
 
             <StandardButton
                 iconText={"T"}
@@ -69,6 +66,13 @@ export default function ElementChooserScreen({ route }: any) {
                 subtitle={"A divider to seperate sections"}
                 onPress={() => { chooseElement(ElementType.hr); }} />
 
-        </ScrollContainer>
+        </ScrollView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        paddingLeft: 20,
+        paddingRight: 20
+    }
+})
