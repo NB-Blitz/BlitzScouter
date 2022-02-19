@@ -4,7 +4,6 @@ import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import TBA from "../../api/TBA";
 import Button from "../../components/common/Button";
-import HorizontalBar from "../../components/common/HorizontalBar";
 import StandardButton from "../../components/common/StandardButton";
 import Subtitle from "../../components/text/Subtitle";
 import Text from "../../components/text/Text";
@@ -43,6 +42,7 @@ export default function MatchScreen({ route }: any) {
                 <Title>{match.name}</Title>
                 <Subtitle>{match.description}</Subtitle>
 
+                {/* Create Template / Scout Button */}
                 <View style={{ marginTop: 10 }}>
                     {template.filter((element) => element.value !== undefined).length > 0 ?
                         <StandardButton
@@ -59,25 +59,28 @@ export default function MatchScreen({ route }: any) {
                     }
                 </View>
 
-                <HorizontalBar />
-
-                <ScrollView horizontal={true}>
-                    <ScrollView style={{ width: "100%" }}>
-                        <View style={{ flexDirection: "row" }}>
-                            <Text style={[styles.allianceHeader, { backgroundColor: "#e7311f" }]}>Red Alliance</Text>
-                            <Text style={[styles.allianceHeader, { backgroundColor: "#008cf1" }]}>Blue Alliance</Text>
-                        </View>
-                        <View style={styles.previewContainer}>
-                            {match.redTeamIDs.map(teamID => <TeamPreview teamID={teamID} key={teamID} />)}
-                            <View style={{ marginRight: 8 }} />
-                            {match.blueTeamIDs.map(teamID => <TeamPreview teamID={teamID} key={teamID} />)}
-                        </View>
-                        <View style={{ flexDirection: "row" }}>
-                            <View style={[styles.allianceFooter, { backgroundColor: "#e7311f" }]} />
-                            <View style={[styles.allianceFooter, { backgroundColor: "#008cf1" }]} />
-                        </View>
+                {/* Stat Tables */}
+                <View style={styles.scrollContainer}>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                        <View style={{ width: 20 }} />
+                        <ScrollView style={{ width: "100%" }}>
+                            <View style={{ flexDirection: "row" }}>
+                                <Text style={[styles.allianceHeader, { backgroundColor: "#e7311f" }]}>Red Alliance</Text>
+                                <Text style={[styles.allianceHeader, { backgroundColor: "#008cf1" }]}>Blue Alliance</Text>
+                            </View>
+                            <View style={styles.previewContainer}>
+                                {match.redTeamIDs.map(teamID => <TeamPreview teamID={teamID} key={teamID} />)}
+                                <View style={{ marginRight: 8 }} />
+                                {match.blueTeamIDs.map(teamID => <TeamPreview teamID={teamID} key={teamID} />)}
+                            </View>
+                            <View style={{ flexDirection: "row" }}>
+                                <View style={[styles.allianceFooter, { backgroundColor: "#e7311f" }]} />
+                                <View style={[styles.allianceFooter, { backgroundColor: "#008cf1" }]} />
+                            </View>
+                        </ScrollView>
+                        <View style={{ width: 20 }} />
                     </ScrollView>
-                </ScrollView>
+                </View>
             </View >
         </ScrollView >
     );
@@ -114,5 +117,10 @@ const styles = StyleSheet.create({
     previewContainer: {
         flex: 1,
         flexDirection: "row"
+    },
+    scrollContainer: {
+        marginLeft: -20,
+        marginRight: -20,
+        marginTop: 15
     }
 });

@@ -38,24 +38,33 @@ export default function ScoutingElement(props: ElementProps) {
         if (props.onRemove)
             props.onRemove(props.data);
     }
+    const onUp = () => {
+        if (props.onUp)
+            props.onUp(props.data);
+    }
+    const onDown = () => {
+        if (props.onDown)
+            props.onDown(props.data);
+    }
 
     return (
         <View>
-            <View style={{
-                paddingRight: 50,
-                minHeight: 50,
-                justifyContent: "center",
-            }}>
+            {props.isEditable ?
+                <View style={styles.scoutingElement}>{element}</View>
+                : element}
 
-                {element}
-
-            </View>
-
-            {props.isEditable && props.onRemove ?
-                <View style={styles.deleteButton}>
-                    <Button onPress={onRemove}>
+            {props.isEditable ?
+                <View style={styles.buttonContainer}>
+                    <Button onPress={onUp} style={styles.button}>
+                        <MaterialIcons name="arrow-drop-up" size={25} color={"#ffffff"} />
+                    </Button>
+                    <Button onPress={onDown} style={styles.button}>
+                        <MaterialIcons name="arrow-drop-down" size={25} color={"#ffffff"} />
+                    </Button>
+                    <Button onPress={onRemove} style={styles.button}>
                         <MaterialIcons name="delete-outline" size={25} color={"#ffffff"} />
                     </Button>
+
                 </View>
                 : null}
         </View>
@@ -63,10 +72,22 @@ export default function ScoutingElement(props: ElementProps) {
 }
 
 const styles = StyleSheet.create({
-    deleteButton: {
+    scoutingElement: {
+        paddingRight: 90,
+        minHeight: 50,
+        justifyContent: "center",
+    },
+    buttonContainer: {
+        flexDirection: "row",
         position: "absolute",
         right: 0,
         top: 0,
-        padding: 10
+        paddingTop: 15
+    },
+    button: {
+        margin: 0,
+        padding: 2,
+        height: 30,
+        width: 30
     }
 });

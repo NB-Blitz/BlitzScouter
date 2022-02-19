@@ -1,13 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, Image, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Button from '../../components/common/Button';
-import HorizontalBar from '../../components/common/HorizontalBar';
 import ScoutingElement from '../../components/elements/ScoutingElement';
 import Subtitle from '../../components/text/Subtitle';
 import Text from '../../components/text/Text';
 import Title from '../../components/text/Title';
+import { PaletteContext } from '../../context/PaletteContext';
 import useScoutingData, { getScoutingData, setScoutingData } from '../../hooks/useScoutingData';
 import useTeam from '../../hooks/useTeam';
 import useTemplate from '../../hooks/useTemplate';
@@ -18,13 +18,13 @@ export default function ScoutingScreen({ route }: any) {
     const [scoutingData, setScoutingDataHook] = useScoutingData();
     const [template] = useTemplate(route.params.templateType);
     const [team] = useTeam(route.params.teamID);
+    const paletteContext = React.useContext(PaletteContext);
 
     const onChange = (element: ElementData) => {
         const index = template.findIndex(e => e.id === element.id);
         if (index >= 0)
             template[index] = element;
     }
-
     const onSubmit = () => {
         let data: ScoutingData = {
             teamID: route.params.teamID,
@@ -70,12 +70,27 @@ export default function ScoutingScreen({ route }: any) {
         ], { cancelable: true });
     }
 
+    // Media
+
     return (
         <ScrollView>
             <View style={styles.container}>
-                <Title>{team.name}</Title>
-                <Subtitle>{team.number}</Subtitle>
-                <HorizontalBar />
+                <View style={{ flexDirection: "row", marginBottom: 10 }}>
+                    {team.mediaPaths.length > 0 ?
+                        <View style={styles.thumbnail}>
+                            <Image
+                                style={styles.thumbnail}
+                                source={{ uri: team.mediaPaths[team.mediaPaths.length - 1] }}
+                                key={team.id + "-" + (team.mediaPaths.length - 1)} />
+                        </View>
+                        : null}
+                    <View style={{ alignSelf: "center" }}>
+                        <Title style={{ marginTop: 0 }}>{team.number}</Title>
+                        <Subtitle>{team.name}</Subtitle>
+                    </View>
+                </View>
+
+
                 {template.map((element, index) =>
                     <ScoutingElement
                         data={element}
@@ -113,5 +128,13 @@ const styles = StyleSheet.create({
     buttonText: {
         color: "#000000",
         fontWeight: "bold"
-    }
+    },
+    thumbnail: {
+        height: 80,
+        width: 80,
+        marginRight: 10,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 8
+    },
 });

@@ -12,8 +12,7 @@ export default function HorizontalBar(props: ViewProps) {
         style={[{
             borderBottomColor: "#444",
             borderBottomWidth: 1,
-            marginBottom: 15,
-            marginTop: 10
+            marginTop: 15
         }, style]}
 
         {...otherProps}

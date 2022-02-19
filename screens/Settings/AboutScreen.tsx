@@ -4,7 +4,6 @@ import { Accelerometer } from 'expo-sensors';
 import * as React from "react";
 import { Image, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import HorizontalBar from "../../components/common/HorizontalBar";
 import Subtitle from "../../components/text/Subtitle";
 import Text from "../../components/text/Text";
 import Title from "../../components/text/Title";
@@ -39,13 +38,10 @@ export default function AboutScreen() {
             <Title>Blitz Scouter</Title>
             <Subtitle>Version {Application.nativeApplicationVersion}</Subtitle>
 
-            <HorizontalBar />
-
             <Text>
                 Blitz Scouter is a scouting app for the FIRST Robotics Competition. It is designed to be as simple as possible, and is designed to be used by teams of all sizes.
             </Text>
 
-            <HorizontalBar />
 
             <Text>
                 Made with <MaterialIcons name="favorite" color={"#ed0000"} size={14} /> by Team 5148, New Berlin Blitz

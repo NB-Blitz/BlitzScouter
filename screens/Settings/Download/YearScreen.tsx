@@ -1,10 +1,9 @@
 import { useNavigation } from "@react-navigation/core";
 import React from "react";
-import { StyleSheet, ToastAndroid } from "react-native";
+import { StyleSheet, ToastAndroid, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import TBA from "../../../api/TBA";
-import HorizontalBar from "../../../components/common/HorizontalBar";
 import StandardButton from "../../../components/common/StandardButton";
-import ScrollContainer from "../../../components/containers/ScrollContainer";
 import Subtitle from "../../../components/text/Subtitle";
 import Text from "../../../components/text/Text";
 import Title from "../../../components/text/Title";
@@ -89,16 +88,21 @@ export default function YearScreen() {
     // Display Data
 
     return (
-        <ScrollContainer>
-            <Title>Years</Title>
-            <Subtitle>Select the target year/season</Subtitle>
-            <HorizontalBar />
-            {yearsDisplay}
-        </ScrollContainer>
+        <ScrollView>
+            <View style={styles.container}>
+                <Title>Years</Title>
+                <Subtitle>Select the target year/season</Subtitle>
+                {yearsDisplay}
+            </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
+    container: {
+        paddingLeft: 20,
+        paddingRight: 20
+    },
     loadingText: {
         textAlign: "center",
         fontStyle: "italic"

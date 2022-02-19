@@ -45,17 +45,15 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         marginRight: 8,
         marginBottom: 5,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
+        borderRadius: 10,
         fontSize: 18,
         fontWeight: "bold",
         textAlign: "center"
     },
     allianceFooter: {
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
+        borderRadius: 10,
         height: 10,
         marginRight: 8,
-        marginBottom: 20
+        marginBottom: 10
     },
 });

@@ -1,7 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, Vibration, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Button from '../../../components/common/Button';
 import ScoutingElement from '../../../components/elements/ScoutingElement';
@@ -35,6 +35,25 @@ export default function EditTemplateScreen({ route }: any) {
         const newTemplate = template.filter((e) => e.id !== element.id);
         setTemplate(newTemplate);
     }
+    const onMove = (element: ElementData, delta: number) => {
+        const index = template.findIndex((e) => e.id === element.id);
+        const newIndex = index + delta;
+        if (newIndex < 0 || newIndex >= template.length) {
+            Vibration.vibrate(10);
+            return;
+        }
+
+        const temp = template[newIndex];
+        template[newIndex] = template[index];
+        template[index] = temp;
+        setTemplate(template);
+    }
+    const onUp = (element: ElementData) => {
+        onMove(element, -1);
+    }
+    const onDown = (element: ElementData) => {
+        onMove(element, 1);
+    }
 
     // Edit Event
     const onChange = (element: ElementData) => {
@@ -59,8 +78,10 @@ export default function EditTemplateScreen({ route }: any) {
     return (
         <View style={styles.container}>
             <ScrollView>
-                <Title>Edit Template</Title>
-                <Subtitle>{TEMPLATE_NAMES[templateType]} Scouting</Subtitle>
+                <View style={{ paddingLeft: 10, paddingRight: 10 }}>
+                    <Title>Edit Template</Title>
+                    <Subtitle>{TEMPLATE_NAMES[templateType]} Scouting</Subtitle>
+                </View>
 
                 {template.length > 0 ? template.map(element =>
                     <ScoutingElement
@@ -68,6 +89,8 @@ export default function EditTemplateScreen({ route }: any) {
                         isEditable={true}
                         onChange={onChange}
                         onRemove={onRemove}
+                        onUp={onUp}
+                        onDown={onDown}
                         key={element.id} />
                 ) :
                     <Text key={"0"}>There are no elements yet. Add an element to scout below.</Text>
@@ -91,8 +114,8 @@ export default function EditTemplateScreen({ route }: any) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingLeft: 20,
-        paddingRight: 20,
+        paddingLeft: 10,
+        paddingRight: 10,
     },
     trashButton: {
         alignSelf: "flex-end",

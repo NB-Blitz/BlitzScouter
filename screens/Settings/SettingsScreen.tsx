@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import * as React from 'react';
 import { Alert, ToastAndroid } from 'react-native';
-import HorizontalBar from '../../components/common/HorizontalBar';
 import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
@@ -143,7 +142,6 @@ export default function SettingsScreen() {
                 subtitle={"App version and developer details"}
                 onPress={() => { navigator.navigate("About"); }} />
 
-            <HorizontalBar />
             <Title>Danger Zone</Title>
             <Subtitle>Actions here may overwrite your scouting data</Subtitle>
 

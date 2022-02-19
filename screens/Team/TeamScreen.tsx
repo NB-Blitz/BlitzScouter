@@ -152,7 +152,9 @@ export default function TeamScreen({ route }: any) {
                 <View>
                     <Title>{team.name}</Title>
                     <Subtitle>{team.number}</Subtitle>
-                    <Text style={[styles.sidetitle, { color: paletteContext.palette.textSecondary }]}>#{team.rank}</Text>
+                    <Text style={[styles.sidetitle, { color: paletteContext.palette.textSecondary }]}>
+                        {team.rank === 0 ? "" : "#" + team.rank}
+                    </Text>
                 </View>
 
                 <StatTable teamID={team.id} cols={1} useCharts={true} />

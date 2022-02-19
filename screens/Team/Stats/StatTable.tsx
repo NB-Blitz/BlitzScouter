@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import HorizontalBar from "../../../components/common/HorizontalBar";
+import Text from "../../../components/text/Text";
 import useEvent from "../../../hooks/useEvent";
 import useScoutingData from "../../../hooks/useScoutingData";
 import useTeam from "../../../hooks/useTeam";
@@ -90,7 +91,7 @@ export default function StatTable(props: { teamID: string, cols: number, useChar
 
     return (
         <View style={styles.tableContainer}>
-            {statSquares}
+            {statSquares.length > 0 ? statSquares : <Text style={styles.text}>This team has no scouting data yet</Text>}
         </View>
     );
 }
@@ -107,5 +108,10 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 2,
         padding: 5,
+    },
+    text: {
+        fontStyle: "italic",
+        textAlign: "center",
+        marginBottom: 10
     }
 });

@@ -2,7 +2,6 @@ import { useNavigation } from "@react-navigation/native";
 import * as React from "react";
 import { StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import HorizontalBar from "../../components/common/HorizontalBar";
 import StandardButton from "../../components/common/StandardButton";
 import Subtitle from "../../components/text/Subtitle";
 import Title from "../../components/text/Title";
@@ -26,7 +25,6 @@ export function PaletteScreen() {
         <ScrollView style={styles.container}>
             <Title>Color Palette</Title>
             <Subtitle>Change the color palette to match your team</Subtitle>
-            <HorizontalBar />
 
             <StandardButton
                 iconColor={paletteContext.palette.background}

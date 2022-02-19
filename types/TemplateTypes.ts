@@ -24,7 +24,9 @@ export interface ElementProps {
     data: ElementData;
     isEditable: boolean;
     onChange?: (elementData: ElementData) => void,
-    onRemove?: (elementData: ElementData) => void
+    onRemove?: (elementData: ElementData) => void,
+    onUp?: (elementData: ElementData) => void,
+    onDown?: (elementData: ElementData) => void,
 }
 
 export type ScoutingTemplate = ElementData[];

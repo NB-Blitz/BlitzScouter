@@ -26,7 +26,7 @@ export default function TeamBanner(props: { teamID: string, onClick?: (teamID: s
                 iconType={teamIcon ? undefined : "do-not-disturb"}
                 title={team.name}
                 subtitle={team.number.toString()}
-                sidetitle={"#" + team.rank}
+                sidetitle={team.rank === 0 ? "" : "#" + team.rank}
                 onPress={onClick} />
         </View>
     );

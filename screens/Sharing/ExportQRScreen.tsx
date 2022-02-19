@@ -93,7 +93,8 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         width: "100%",
         textAlign: "center",
-        marginTop: 5
+        marginTop: 5,
+        color: "#fff"
     },
     headerButtons: {
         alignSelf: "flex-end",
