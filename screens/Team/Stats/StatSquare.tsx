@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import Text from "../../../components/text/Text";
-import { PaletteContext } from "../../../context/PaletteContext";
+import { usePalette } from "../../../hooks/usePalette";
 
 export default function StatSquare(props: { name: string, value: string, percentile: number }) {
-    const paletteContext = React.useContext(PaletteContext);
+    const [palette] = usePalette();
 
     const percentToRGB = (percent: number) => {
         var hue = percent * 120;
@@ -12,7 +12,7 @@ export default function StatSquare(props: { name: string, value: string, percent
     }
 
     return (
-        <View style={[styles.statContainer, { backgroundColor: paletteContext.palette.navigation }]}>
+        <View style={[styles.statContainer, { backgroundColor: palette.innerBox }]}>
             <Text style={styles.statName}>{props.value}</Text>
             <Text style={styles.statValue}>{props.name}</Text>
             <View style={[styles.statGraph, {

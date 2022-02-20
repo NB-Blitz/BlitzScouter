@@ -141,8 +141,7 @@ export async function DownloadTeams(eventID: string, downloadMedia: boolean, cal
             wins,
             losses,
             ties,
-            mediaPaths,
-            scoutingData: currentTeam ? currentTeam.scoutingData : []
+            mediaPaths
         });
     }
 

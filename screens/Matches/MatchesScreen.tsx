@@ -4,12 +4,12 @@ import { DownloadMatches } from '../../api/TBAAdapter';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
 import Text from '../../components/text/Text';
-import { PaletteContext } from '../../context/PaletteContext';
 import useEvent from '../../hooks/useEvent';
+import { usePalette } from '../../hooks/usePalette';
 import MatchBanner from './MatchBanner';
 
 export default function MatchesScreen() {
-    const paletteContext = React.useContext(PaletteContext);
+    const [palette] = usePalette();
     const [event, setEvent] = useEvent();
 
     const onRefresh = async () => {
@@ -33,7 +33,7 @@ export default function MatchesScreen() {
     if (event.id === "bogus")
         return (
             <View style={{ alignSelf: "center", marginTop: 80 }}>
-                <ActivityIndicator color={paletteContext.palette.textPrimary} size={40} />
+                <ActivityIndicator color={palette.textPrimary} size={40} />
             </View>
         );
     else

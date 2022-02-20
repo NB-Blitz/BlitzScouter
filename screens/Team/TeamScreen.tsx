@@ -9,13 +9,13 @@ import Button from "../../components/common/Button";
 import Subtitle from "../../components/text/Subtitle";
 import Text from "../../components/text/Text";
 import Title from "../../components/text/Title";
-import { PaletteContext } from "../../context/PaletteContext";
 import useEvent from "../../hooks/useEvent";
+import { usePalette } from "../../hooks/usePalette";
 import useTeam from "../../hooks/useTeam";
 import StatTable from "./Stats/StatTable";
 
 export default function TeamScreen({ route }: any) {
-    const paletteContext = React.useContext(PaletteContext);
+    const [palette] = usePalette();
     const navigator = useNavigation();
     const [team, setTeam] = useTeam(route.params.teamID);
     const [event] = useEvent();
@@ -108,7 +108,7 @@ export default function TeamScreen({ route }: any) {
             headerRight: () => (
                 <View style={styles.headerButtons}>
                     <Button onPress={onBrowserButton} style={{ marginRight: 11 }}>
-                        <MaterialIcons name="open-in-browser" size={25} color={paletteContext.palette.textPrimary} />
+                        <MaterialIcons name="open-in-browser" size={25} color={palette.textPrimary} />
                     </Button>
                 </View>
             )
@@ -131,29 +131,29 @@ export default function TeamScreen({ route }: any) {
                     )}
 
                     <Button
-                        style={[styles.imageButton, { backgroundColor: paletteContext.palette.navigation }]}
+                        style={[styles.imageButton, { backgroundColor: palette.innerBox }]}
                         onPress={async () => { takePhoto(); }}>
                         <MaterialIcons
                             size={50}
                             name={"add-a-photo"}
-                            color={"white"} />
+                            color={palette.textPrimary} />
                     </Button>
 
                     <Button
-                        style={[styles.imageButton, { backgroundColor: paletteContext.palette.navigation }]}
+                        style={[styles.imageButton, { backgroundColor: palette.innerBox }]}
                         onPress={async () => { uploadPhoto(); }}>
                         <MaterialIcons
                             size={50}
                             name={"add-photo-alternate"}
-                            color={"white"} />
+                            color={palette.textPrimary} />
                     </Button>
                 </ScrollView>
 
                 <View>
                     <Title>{team.name}</Title>
                     <Subtitle>{team.number}</Subtitle>
-                    <Text style={[styles.sidetitle, { color: paletteContext.palette.textSecondary }]}>
-                        {team.rank === 0 ? "" : "#" + team.rank}
+                    <Text style={[styles.sidetitle, { color: palette.textSecondary }]}>
+                        {team.rank ? "#" + team.rank : ""}
                     </Text>
                 </View>
 

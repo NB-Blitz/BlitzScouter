@@ -6,6 +6,7 @@ import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue }
 export type ViewProps = View['props'];
 
 export default function ZoomContainer(props: ViewProps) {
+
     // Hooks
     const start = useSharedValue(1);
     const end = useSharedValue(1);

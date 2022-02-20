@@ -1,6 +1,7 @@
 import Checkbox from 'expo-checkbox';
 import React from "react";
 import { StyleSheet, TextInput, Vibration, View } from "react-native";
+import { usePalette } from '../../hooks/usePalette';
 import { ElementProps } from '../../types/TemplateTypes';
 import Text from '../text/Text';
 
@@ -8,6 +9,7 @@ export default function CheckboxElement(props: ElementProps) {
     let elementData = props.data;
     const defaultValue = elementData.options.defaultValue;
     const [value, setValue] = React.useState(defaultValue ? defaultValue as number : 0);
+    const [palette] = usePalette();
 
     // Default Value
     if (elementData.value === undefined && props.onChange) {
@@ -48,14 +50,14 @@ export default function CheckboxElement(props: ElementProps) {
                 style={styles.checkbox}
                 value={value === 1}
                 onValueChange={changeChecked}
-                color={'#c89f00'} />
+                color={palette.navigationSelected} />
             {props.isEditable ?
                 <TextInput
                     defaultValue={elementData.label}
                     placeholder="Name"
                     placeholderTextColor="#bbb"
                     onChangeText={changeText}
-                    style={styles.textInput}></TextInput>
+                    style={[styles.textInput, { color: palette.textPrimary, backgroundColor: palette.innerBox }]} />
                 :
                 <Text style={styles.title}>{elementData.label}</Text>
             }
@@ -70,8 +72,6 @@ const styles = StyleSheet.create({
         marginLeft: 15
     },
     textInput: {
-        color: "#fff",
-        backgroundColor: "#222222",
         borderRadius: 10,
         padding: 5,
         marginLeft: 10,

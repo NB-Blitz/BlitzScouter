@@ -12,6 +12,7 @@ export default function MediaScreen({ route }: any) {
     const mediaPath = route.params.mediaPath;
     const onDelete = route.params.onDelete;
     const navigator = useNavigation();
+
     // TODO: React Navigation callback warnings
 
     const shareImage = () => {

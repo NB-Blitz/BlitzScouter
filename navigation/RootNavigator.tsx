@@ -2,7 +2,7 @@ import { DarkTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as React from 'react';
 import MediaScreen from "../components/containers/MediaScreen";
-import { PaletteContext } from "../context/PaletteContext";
+import { usePalette } from "../hooks/usePalette";
 import DefaultTeamScreen from "../screens/DefaultTeam/DefaultTeamScreen";
 import TeamSelectScreen from "../screens/DefaultTeam/TeamSelectScreen";
 import MatchScreen from "../screens/Match/MatchScreen";
@@ -43,13 +43,13 @@ const horizontalAnimation = ({ current, layouts }: any) => {
 const Stack = createStackNavigator();
 
 export default function RootNavigator() {
-    const paletteContext = React.useContext(PaletteContext);
+    const [palette] = usePalette();
 
     const BlitzTheme = {
         ...DarkTheme,
         colors: {
             ...DarkTheme.colors,
-            background: paletteContext.palette.background,
+            background: palette.background,
         }
     }
 
@@ -58,7 +58,8 @@ export default function RootNavigator() {
             <Stack.Navigator
                 screenOptions={{
                     title: "",
-                    headerStyle: { backgroundColor: paletteContext.palette.background },
+                    headerStyle: { backgroundColor: palette.background },
+                    headerTintColor: palette.textPrimary,
                     cardStyleInterpolator: horizontalAnimation,
                     transitionSpec: {
                         open: {

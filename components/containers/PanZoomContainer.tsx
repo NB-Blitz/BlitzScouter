@@ -6,6 +6,7 @@ import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue, 
 export type ViewProps = View['props'];
 
 export default function PanZoomContainer(props: ViewProps) {
+
     // Hooks
     const pinchRef = React.createRef();
     const startPan = { x: useSharedValue(0), y: useSharedValue(0) };

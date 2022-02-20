@@ -8,14 +8,14 @@ import ScoutingElement from '../../../components/elements/ScoutingElement';
 import Subtitle from '../../../components/text/Subtitle';
 import Text from '../../../components/text/Text';
 import Title from '../../../components/text/Title';
-import { PaletteContext } from '../../../context/PaletteContext';
+import { usePalette } from '../../../hooks/usePalette';
 import useTemplate from '../../../hooks/useTemplate';
 import { ElementData, TemplateType } from '../../../types/TemplateTypes';
 
 const TEMPLATE_NAMES = ["Pit", "Match"];
 
 export default function EditTemplateScreen({ route }: any) {
-    const paletteContext = React.useContext(PaletteContext);
+    const [palette] = usePalette();
     const navigator = useNavigation();
     const templateType = route.params.templateType as TemplateType;
     const [template, setTemplate] = useTemplate(templateType);
@@ -69,7 +69,7 @@ export default function EditTemplateScreen({ route }: any) {
         navigator.setOptions({
             headerRight: () => (
                 <Button onPress={onDeleteEvent} style={styles.trashButton}>
-                    <MaterialIcons name="delete-outline" size={25} color={paletteContext.palette.textPrimary} />
+                    <MaterialIcons name="delete-outline" size={25} color={palette.textPrimary} />
                 </Button>
             )
         });
@@ -101,10 +101,10 @@ export default function EditTemplateScreen({ route }: any) {
             </ScrollView>
 
             <Button
-                style={[styles.addButton, { backgroundColor: paletteContext.palette.navigationSelected }]}
+                style={[styles.addButton, { backgroundColor: palette.navigationSelected }]}
                 onPress={() => { navigator.navigate("ElementChooser", { templateType: templateType }); }}>
 
-                <MaterialIcons name="add" size={30} style={{ color: paletteContext.palette.navigationTextSelected }} />
+                <MaterialIcons name="add" size={30} style={{ color: palette.navigationTextSelected }} />
 
             </Button>
         </View>

@@ -1,6 +1,7 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, View } from "react-native";
+import { usePalette } from "../../hooks/usePalette";
 import { ElementProps, ElementType } from "../../types/TemplateTypes";
 import Button from "../common/Button";
 import CheckboxElement from "./CheckboxElement";
@@ -11,6 +12,8 @@ import TextElement from "./TextElement";
 import TitleElement from "./TitleElement";
 
 export default function ScoutingElement(props: ElementProps) {
+    const [palette] = usePalette();
+
     let element: JSX.Element | undefined;
     switch (props.data.type) {
         case ElementType.title:
@@ -56,13 +59,13 @@ export default function ScoutingElement(props: ElementProps) {
             {props.isEditable ?
                 <View style={styles.buttonContainer}>
                     <Button onPress={onUp} style={styles.button}>
-                        <MaterialIcons name="arrow-drop-up" size={25} color={"#ffffff"} />
+                        <MaterialIcons name="arrow-drop-up" size={25} color={palette.textPrimary} />
                     </Button>
                     <Button onPress={onDown} style={styles.button}>
-                        <MaterialIcons name="arrow-drop-down" size={25} color={"#ffffff"} />
+                        <MaterialIcons name="arrow-drop-down" size={25} color={palette.textPrimary} />
                     </Button>
                     <Button onPress={onRemove} style={styles.button}>
-                        <MaterialIcons name="delete-outline" size={25} color={"#ffffff"} />
+                        <MaterialIcons name="delete-outline" size={25} color={palette.textPrimary} />
                     </Button>
 
                 </View>

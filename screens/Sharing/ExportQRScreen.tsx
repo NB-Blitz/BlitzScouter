@@ -6,17 +6,16 @@ import { Dimensions, StyleSheet, View } from 'react-native';
 import QRCode from 'react-qr-code';
 import Button from '../../components/common/Button';
 import Text from '../../components/text/Text';
-import { PaletteContext } from '../../context/PaletteContext';
 import { getChecksum } from '../../hooks/useCompressedData';
 import useEvent from '../../hooks/useEvent';
+import { usePalette } from '../../hooks/usePalette';
 import useScoutingData from '../../hooks/useScoutingData';
 
 const CHUNK_SIZE = 10;
 
 export default function ExportQRScreen({ route }: any) {
-    const paletteContext = React.useContext(PaletteContext);
+    const [palette] = usePalette();
     const navigator = useNavigation();
-
     const [scoutingData] = useScoutingData();
     const [event] = useEvent();
     const [outputData, setOutputData] = React.useState([] as string[]);
@@ -49,10 +48,10 @@ export default function ExportQRScreen({ route }: any) {
             headerRight: () => (
                 <View style={styles.headerButtons}>
                     <Button onPress={cycleBackward}>
-                        <MaterialIcons name="fast-rewind" size={25} color={paletteContext.palette.textPrimary} />
+                        <MaterialIcons name="fast-rewind" size={25} color={palette.textPrimary} />
                     </Button>
                     <Button onPress={cycleForward} style={{ marginRight: 11 }}>
-                        <MaterialIcons name="fast-forward" size={25} color={paletteContext.palette.textPrimary} />
+                        <MaterialIcons name="fast-forward" size={25} color={palette.textPrimary} />
                     </Button>
                 </View>
             )

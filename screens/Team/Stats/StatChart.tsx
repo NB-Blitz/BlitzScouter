@@ -1,11 +1,11 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import Text from "../../../components/text/Text";
-import { PaletteContext } from "../../../context/PaletteContext";
+import { usePalette } from "../../../hooks/usePalette";
 
 
 export function StatChart(props: { label: string, values: number[], max: number }) {
-    const paletteContext = React.useContext(PaletteContext);
+    const [palette] = usePalette();
 
     const values = props.values;
     const percentiles = values.map((val) => val / props.max);
@@ -19,7 +19,7 @@ export function StatChart(props: { label: string, values: number[], max: number 
     }
 
     return (
-        <View style={[styles.container, { backgroundColor: paletteContext.palette.button }]}>
+        <View style={[styles.container, { backgroundColor: palette.innerBox }]}>
             <Text style={styles.chartLabel}>{props.label}</Text>
             <View style={{ flex: 1, flexDirection: "row" }} >
                 {percentiles.map((percentile, index) =>

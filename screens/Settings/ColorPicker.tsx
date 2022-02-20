@@ -8,10 +8,10 @@ import Button from "../../components/common/Button";
 import Subtitle from "../../components/text/Subtitle";
 import Text from "../../components/text/Text";
 import Title from "../../components/text/Title";
-import { PaletteContext } from "../../context/PaletteContext";
+import { usePalette } from "../../hooks/usePalette";
 
 export function ColorPickerScreen({ route }: any) {
-    const paletteContext = React.useContext(PaletteContext);
+    const [palette] = usePalette();
     const [color, setColor] = React.useState(route.params.defaultColor);
     const [pickerColor, setPickerColor] = React.useState(route.params.defaultColor);
     const navigator = useNavigation();
@@ -39,9 +39,9 @@ export function ColorPickerScreen({ route }: any) {
             <TextInput
                 key={"color-picker"}
                 placeholder="#000000"
-                placeholderTextColor={paletteContext.palette.textSecondary}
+                placeholderTextColor={palette.textSecondary}
                 value={color}
-                style={[styles.textInput, { color: paletteContext.palette.textPrimary, backgroundColor: paletteContext.palette.button }]}
+                style={[styles.textInput, { color: palette.textPrimary, backgroundColor: palette.innerBox }]}
                 onChangeText={onHexChange}
             />
 
@@ -53,7 +53,7 @@ export function ColorPickerScreen({ route }: any) {
                 hideControls={true}
             />
 
-            <Button onPress={onSubmit} style={[styles.button, { backgroundColor: paletteContext.palette.navigationSelected }]}>
+            <Button onPress={onSubmit} style={[styles.button, { backgroundColor: palette.navigationSelected }]}>
                 <Text>Done</Text>
             </Button>
 

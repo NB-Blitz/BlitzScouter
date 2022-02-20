@@ -1,9 +1,12 @@
 import React from "react";
 import { StyleSheet, TextInput } from "react-native";
+import { usePalette } from "../../hooks/usePalette";
 import { ElementProps } from "../../types/TemplateTypes";
 import Title from "../text/Title";
 
 export default function TitleElement(props: ElementProps) {
+    const [palette] = usePalette();
+
     let elementData = props.data;
     if (props.isEditable) {
         const onEdit = (text: string) => {
@@ -16,9 +19,9 @@ export default function TitleElement(props: ElementProps) {
             <TextInput
                 defaultValue={elementData.label}
                 placeholder="Title"
-                placeholderTextColor="#bbb"
+                placeholderTextColor={palette.textSecondary}
                 onChangeText={onEdit}
-                style={styles.textInput}></TextInput>
+                style={[styles.textInput, { color: palette.textPrimary, backgroundColor: palette.innerBox }]} />
         );
     }
     else {
@@ -30,8 +33,6 @@ export default function TitleElement(props: ElementProps) {
 
 const styles = StyleSheet.create({
     textInput: {
-        color: "#fff",
-        backgroundColor: "#222222",
         borderRadius: 10,
         padding: 5,
         margin: 5,

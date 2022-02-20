@@ -6,8 +6,6 @@ import Subtitle from "../../components/text/Subtitle";
 import Title from "../../components/text/Title";
 
 export default function DefaultTeamScreen({ route }: any) {
-
-
     return (
         <ScrollView>
             <View style={styles.container}>

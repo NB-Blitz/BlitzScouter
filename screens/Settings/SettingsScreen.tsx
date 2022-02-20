@@ -1,14 +1,14 @@
 import { useNavigation } from '@react-navigation/core';
 import * as React from 'react';
-import { Alert, ToastAndroid } from 'react-native';
+import { Alert } from 'react-native';
 import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
 import Subtitle from '../../components/text/Subtitle';
 import Title from '../../components/text/Title';
-import { DARK_PALETTE, LIGHT_PALETTE, PaletteContext } from '../../context/PaletteContext';
 import useEvent from '../../hooks/useEvent';
 import { getMatch } from '../../hooks/useMatch';
+import { usePalette } from '../../hooks/usePalette';
 import { setScoutingData } from '../../hooks/useScoutingData';
 import { clearStorage } from '../../hooks/useStorage';
 import { getTeam } from '../../hooks/useTeam';
@@ -16,7 +16,7 @@ import useTemplate from '../../hooks/useTemplate';
 import { ScoutingData, TemplateType } from '../../types/TemplateTypes';
 
 export default function SettingsScreen() {
-    const paletteContext = React.useContext(PaletteContext);
+    const [palette, setPalette] = usePalette();
     const navigator = useNavigation();
     const [event] = useEvent();
     const [template] = useTemplate(TemplateType.Match);
@@ -93,7 +93,9 @@ export default function SettingsScreen() {
                     if (!team)
                         continue;
 
-                    const values = template.filter(elem => elem.value != undefined).map((elem) => Math.round(15 * Math.random() * (1 - (team.rank / event.teamIDs.length))));
+                    const values = template.filter(elem => elem.value != undefined).map((elem) =>
+                        Math.round(15 * Math.random() * (1 - ((team.rank / event.teamIDs.length))))
+                    );
 
                     scoutingData.push({
                         matchID,
@@ -116,18 +118,6 @@ export default function SettingsScreen() {
                 title={"Edit Palette"}
                 subtitle={"Customizes the app's color palette"}
                 onPress={() => { navigator.navigate("Palette"); }} />
-
-            <StandardButton
-                iconType={"lightbulb"}
-                title={"Light Mode"}
-                subtitle={"Resets to the default light palette"}
-                onPress={() => { paletteContext.setPalette(LIGHT_PALETTE); ToastAndroid.show("Light Mode!", ToastAndroid.SHORT); }} />
-
-            <StandardButton
-                iconType={"lightbulb-outline"}
-                title={"Dark Mode"}
-                subtitle={"Resets to the default dark palette"}
-                onPress={() => { paletteContext.setPalette(DARK_PALETTE); ToastAndroid.show("Dark Mode!", ToastAndroid.SHORT); }} />
 
             {/* Scouting Buttons */}
             <StandardButton

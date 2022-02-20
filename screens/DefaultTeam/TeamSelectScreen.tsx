@@ -10,7 +10,7 @@ import TeamBanner from '../Team/TeamBanner';
 
 export default function TeamSelectScreen({ route }: any) {
     const navigator = useNavigation();
-    const [match, setMatch] = useMatch(route.params.matchID);
+    const [match] = useMatch(route.params.matchID);
 
     const onClick = (teamID: string) => {
         navigator.navigate("Scout", { teamID: teamID, matchID: route.params.matchID, templateType: TemplateType.Match });
@@ -37,8 +37,7 @@ export default function TeamSelectScreen({ route }: any) {
 const styles = StyleSheet.create({
     container: {
         paddingLeft: 20,
-        paddingRight: 20,
-        paddingTop: 20
+        paddingRight: 20
     },
     allianceHeader: {
         paddingBottom: 5,
@@ -48,7 +47,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         fontSize: 18,
         fontWeight: "bold",
-        textAlign: "center"
+        textAlign: "center",
+        color: "#fff"
     },
     allianceFooter: {
         borderRadius: 10,

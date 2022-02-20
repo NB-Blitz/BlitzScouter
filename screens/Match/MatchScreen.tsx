@@ -8,14 +8,14 @@ import StandardButton from "../../components/common/StandardButton";
 import Subtitle from "../../components/text/Subtitle";
 import Text from "../../components/text/Text";
 import Title from "../../components/text/Title";
-import { PaletteContext } from "../../context/PaletteContext";
 import useMatch from "../../hooks/useMatch";
+import { usePalette } from "../../hooks/usePalette";
 import useTemplate from "../../hooks/useTemplate";
 import { TemplateType } from "../../types/TemplateTypes";
 import TeamPreview from "../Matches/TeamPreview";
 
 export default function MatchScreen({ route }: any) {
-    const paletteContext = React.useContext(PaletteContext);
+    const [palette] = usePalette();
     const navigator = useNavigation();
     const [match] = useMatch(route.params.matchID);
     const [template] = useTemplate(TemplateType.Match);
@@ -29,7 +29,7 @@ export default function MatchScreen({ route }: any) {
             headerRight: () => (
                 <View style={styles.headerButtons}>
                     <Button onPress={onBrowserButton} style={{ marginRight: 11 }}>
-                        <MaterialIcons name="open-in-browser" size={25} color={paletteContext.palette.textPrimary} />
+                        <MaterialIcons name="open-in-browser" size={25} color={palette.textPrimary} />
                     </Button>
                 </View>
             )
@@ -100,7 +100,8 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         width: 300,
-        textAlign: "center"
+        textAlign: "center",
+        color: "#fff"
     },
     allianceFooter: {
         borderRadius: 10,
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
         height: 10,
         marginRight: 8,
         marginBottom: 20,
-        marginTop: 2
+        marginTop: 5
     },
     headerButtons: {
         alignSelf: "flex-end",

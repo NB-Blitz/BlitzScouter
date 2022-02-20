@@ -53,7 +53,6 @@ export default function YearScreen() {
     const [maxYear, setMaxYear] = React.useState(0);
     const navigator = useNavigation();
 
-
     TBA.getServerStatus().then((status) => {
         if (status)
             setMaxYear(status.max_season);

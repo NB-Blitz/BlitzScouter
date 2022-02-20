@@ -7,12 +7,16 @@ import { ScrollView } from "react-native-gesture-handler";
 import Subtitle from "../../components/text/Subtitle";
 import Text from "../../components/text/Text";
 import Title from "../../components/text/Title";
-import { PaletteContext } from "../../context/PaletteContext";
+import { storageCache } from "../../hooks/useStorage";
 
 export default function AboutScreen() {
-    const paletteContext = React.useContext(PaletteContext);
     const [accelerometer, setAccelerometer] = React.useState({ x: 0, y: 0, z: 0 });
     const [isEasterEgg, setEasterEgg] = React.useState(false);
+    const [data, setData] = React.useState({} as Record<string, any>);
+
+    React.useEffect(() => {
+        setData(storageCache);
+    })
 
     Accelerometer.setUpdateInterval(1000);
     React.useEffect(() => {
@@ -46,11 +50,15 @@ export default function AboutScreen() {
             <Text>
                 Made with <MaterialIcons name="favorite" color={"#ed0000"} size={14} /> by Team 5148, New Berlin Blitz
             </Text>
-            <Text style={{ color: paletteContext.palette.textSecondary, marginTop: 5 }}>
+            <Text style={{ marginTop: 5 }}>
                 https://team5148.org/
                 {"\n"}
                 5148nbblitz@gmail.com
             </Text>
+
+            {Object.entries(data).map((val) =>
+                <Text>{val[0]}</Text>
+            )}
             {isEasterEgg ?
                 <Image style={{ height: 300, width: 200, margin: 20 }} fadeDuration={1000} source={{ uri: "https://i.redd.it/ru3eqcdd99b81.jpg" }} />
                 : null}

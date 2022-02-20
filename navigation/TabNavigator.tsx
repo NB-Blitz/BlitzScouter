@@ -2,7 +2,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { BottomTabBarButtonProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as React from 'react';
 import { TouchableNativeFeedback, View } from 'react-native';
-import { PaletteContext } from '../context/PaletteContext';
+import { usePalette } from '../hooks/usePalette';
 import MatchesScreen from '../screens/Matches/MatchesScreen';
 import SettingsScreen from '../screens/Settings/SettingsScreen';
 import SharingScreen from '../screens/Sharing/SharingScreen';
@@ -11,13 +11,13 @@ import TeamsScreen from '../screens/Teams/TeamsScreen';
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
-    const paletteContext = React.useContext(PaletteContext);
+    const [palette] = usePalette();
 
     const buttonNativeFeedback = ({ children, style, ...props }: BottomTabBarButtonProps) => (
         <TouchableNativeFeedback
             {...props}
             useForeground={false}
-            background={TouchableNativeFeedback.Ripple(paletteContext.palette.navigation, false)}>
+            background={TouchableNativeFeedback.Ripple(palette.navigation, false)}>
             <View style={style}>{children}</View>
         </TouchableNativeFeedback>
     );
@@ -31,10 +31,10 @@ export default function TabNavigator() {
             }}
             screenOptions={{
                 headerShown: false,
-                tabBarActiveBackgroundColor: paletteContext.palette.navigationSelected,
-                tabBarInactiveBackgroundColor: paletteContext.palette.navigation,
-                tabBarActiveTintColor: paletteContext.palette.navigationTextSelected,
-                tabBarInactiveTintColor: paletteContext.palette.navigationText,
+                tabBarActiveBackgroundColor: palette.navigationSelected,
+                tabBarInactiveBackgroundColor: palette.navigation,
+                tabBarActiveTintColor: palette.navigationTextSelected,
+                tabBarInactiveTintColor: palette.navigationText,
                 tabBarStyle: {
                     height: 60,
                 },

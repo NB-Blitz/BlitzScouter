@@ -1,15 +1,17 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, TextInput, Vibration, View } from "react-native";
+import { usePalette } from "../../hooks/usePalette";
 import { ElementProps } from "../../types/TemplateTypes";
 import Button from "../common/Button";
 import Text from "../text/Text";
 import Title from "../text/Title";
 
 export default function CounterElement(props: ElementProps) {
-    let elementData = props.data;
+    const elementData = props.data;
     const defaultValue = elementData.options.defaultValue;
     const [value, setValue] = React.useState(defaultValue ? defaultValue as number : 0);
+    const [palette] = usePalette();
 
     // Default Value
     if (elementData.value === undefined && props.onChange) {
@@ -70,9 +72,9 @@ export default function CounterElement(props: ElementProps) {
                 <TextInput
                     defaultValue={elementData.label}
                     placeholder="Name"
-                    placeholderTextColor="#bbb"
+                    placeholderTextColor={palette.textSecondary}
                     onChangeText={changeText}
-                    style={styles.textInput}></TextInput>
+                    style={[styles.textInput, { color: palette.textPrimary, backgroundColor: palette.innerBox }]} />
                 :
                 <Text style={styles.title}>{elementData.label}</Text>
             }
@@ -85,8 +87,6 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
     textInput: {
-        color: "#fff",
-        backgroundColor: "#222222",
         borderRadius: 10,
         padding: 5,
         margin: 5,

@@ -7,4 +7,5 @@ export interface Palette {
     navigationTextSelected: string;
     textPrimary: string;
     textSecondary: string;
+    innerBox: string;
 }

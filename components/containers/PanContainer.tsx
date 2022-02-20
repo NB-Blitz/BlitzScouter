@@ -6,6 +6,7 @@ import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue }
 export type ViewProps = View['props'];
 
 export default function PanContainer(props: ViewProps) {
+
     // Hooks
     const start = { x: useSharedValue(0), y: useSharedValue(0) };
     const end = { x: useSharedValue(0), y: useSharedValue(0) };

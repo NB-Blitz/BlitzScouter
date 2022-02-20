@@ -7,7 +7,7 @@ import ScoutingElement from '../../components/elements/ScoutingElement';
 import Subtitle from '../../components/text/Subtitle';
 import Text from '../../components/text/Text';
 import Title from '../../components/text/Title';
-import { PaletteContext } from '../../context/PaletteContext';
+import { usePalette } from '../../hooks/usePalette';
 import useScoutingData, { getScoutingData, setScoutingData } from '../../hooks/useScoutingData';
 import useTeam from '../../hooks/useTeam';
 import useTemplate from '../../hooks/useTemplate';
@@ -18,7 +18,7 @@ export default function ScoutingScreen({ route }: any) {
     const [scoutingData, setScoutingDataHook] = useScoutingData();
     const [template] = useTemplate(route.params.templateType);
     const [team] = useTeam(route.params.teamID);
-    const paletteContext = React.useContext(PaletteContext);
+    const [palette] = usePalette();
 
     const onChange = (element: ElementData) => {
         const index = template.findIndex(e => e.id === element.id);
@@ -75,7 +75,7 @@ export default function ScoutingScreen({ route }: any) {
     return (
         <ScrollView>
             <View style={styles.container}>
-                <View style={{ flexDirection: "row", marginBottom: 10 }}>
+                <View style={{ flexDirection: "row", marginBottom: 10, marginTop: 10 }}>
                     {team.mediaPaths.length > 0 ?
                         <View style={styles.thumbnail}>
                             <Image
@@ -100,10 +100,10 @@ export default function ScoutingScreen({ route }: any) {
                 )}
 
                 <Button
-                    style={styles.submitButton}
+                    style={[styles.submitButton, { backgroundColor: palette.navigationSelected }]}
                     onPress={onSubmit}>
 
-                    <Text style={styles.buttonText}>Submit</Text>
+                    <Text style={[styles.buttonText, { color: palette.navigationTextSelected }]}>Submit</Text>
 
                 </Button>
             </View>
@@ -121,12 +121,9 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 10,
         margin: 10,
-        marginTop: 30,
-
-        backgroundColor: "#c89f00"
+        marginTop: 30
     },
     buttonText: {
-        color: "#000000",
         fontWeight: "bold"
     },
     thumbnail: {

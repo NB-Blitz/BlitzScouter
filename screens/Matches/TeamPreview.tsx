@@ -4,19 +4,15 @@ import * as React from 'react';
 import { Image, StyleSheet, View } from "react-native";
 import Button from '../../components/common/Button';
 import Text from '../../components/text/Text';
-import { PaletteContext } from '../../context/PaletteContext';
+import { usePalette } from '../../hooks/usePalette';
 import useTeam from '../../hooks/useTeam';
 import StatTable from '../Team/Stats/StatTable';
 
 
 export default function TeamPreview(props: { teamID: string }) {
-    const paletteContext = React.useContext(PaletteContext);
+    const [palette] = usePalette();
     const navigator = useNavigation();
-    const [team, setTeam] = useTeam(props.teamID);
-
-    const decToString = (num: number) => {
-        return (Math.round(num * 10) / 10).toString()
-    }
+    const [team] = useTeam(props.teamID);
 
     // Media
     let mediaIcon: JSX.Element;
@@ -33,11 +29,11 @@ export default function TeamPreview(props: { teamID: string }) {
     else {
         mediaIcon = (
             <View style={{ padding: 1 }}>
-                <View style={[styles.thumbnail, { backgroundColor: paletteContext.palette.navigation }]}>
+                <View style={[styles.thumbnail, { backgroundColor: palette.navigation }]}>
                     <MaterialIcons
                         name="block"
                         size={40}
-                        color={paletteContext.palette.textPrimary} />
+                        color={palette.navigationText} />
                 </View>
 
             </View>
@@ -52,8 +48,9 @@ export default function TeamPreview(props: { teamID: string }) {
                 {mediaIcon}
 
                 <View style={styles.subContainer}>
-                    <Text style={[styles.title, { color: paletteContext.palette.textPrimary }]}>{team.name.substring(0, 16) + (team.name.length > 16 ? "..." : "")}</Text>
-                    <Text style={[styles.subtitle, { color: paletteContext.palette.textSecondary }]}>{team.number}</Text>
+                    <Text style={[styles.title, { color: palette.textPrimary }]}>{team.name.substring(0, 16) + (team.name.length > 16 ? "..." : "")}</Text>
+                    <Text style={[styles.subtitle, { color: palette.textSecondary }]}>{team.number}</Text>
+                    <Text style={[styles.sidetext, { color: palette.textSecondary }]}>{team.rank ? team.rank : ""}</Text>
                 </View>
             </Button>
 
@@ -75,15 +72,14 @@ const styles = StyleSheet.create({
         height: 100,
         overflow: "hidden",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
     },
     background: {
         position: "absolute",
         top: 0,
         left: 0,
         right: 0,
-        bottom: 0,
-        backgroundColor: "black"
+        bottom: 0
     },
     thumbnail: {
         width: "100%",
@@ -101,5 +97,11 @@ const styles = StyleSheet.create({
     subtitle: {
         fontWeight: "bold",
         textAlign: "center"
+    },
+    sidetext: {
+        position: "absolute",
+        top: 4,
+        right: 4,
+        fontSize: 10
     }
 });

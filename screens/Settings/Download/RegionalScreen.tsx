@@ -5,11 +5,11 @@ import { ScrollView, TextInput } from "react-native-gesture-handler";
 import TBA from "../../../api/TBA";
 import Button from "../../../components/common/Button";
 import Text from "../../../components/text/Text";
-import { PaletteContext } from "../../../context/PaletteContext";
+import { usePalette } from "../../../hooks/usePalette";
 import { TBAEvent } from "../../../types/TBAModels";
 
 export default function RegionalScreen({ route }: any) {
-    const paletteContext = React.useContext(PaletteContext);
+    const [palette] = usePalette();
     const navigator = useNavigation();
     const [searchTerm, updateSearch] = React.useState("");
     const [regionalList, updateRegionals] = React.useState([] as TBAEvent[]);
@@ -43,7 +43,7 @@ export default function RegionalScreen({ route }: any) {
                         onPress={() => { navigator.navigate("Download", { eventID: key }); }}
                         style={[styles.regionalButton]} >
 
-                        <Text style={[styles.regionalText, { color: paletteContext.palette.textPrimary }]} numberOfLines={1}>
+                        <Text style={[styles.regionalText, { color: palette.textPrimary }]} numberOfLines={1}>
                             {regional.name}
                         </Text>
 
@@ -59,8 +59,8 @@ export default function RegionalScreen({ route }: any) {
 
             <TextInput
                 placeholder="Search..."
-                placeholderTextColor={paletteContext.palette.textSecondary}
-                style={[styles.textInput, { color: paletteContext.palette.textPrimary, backgroundColor: paletteContext.palette.button }]}
+                placeholderTextColor={palette.textSecondary}
+                style={[styles.textInput, { color: palette.textPrimary, backgroundColor: palette.innerBox }]}
                 onChangeText={(text) => { updateSearch(text.toLowerCase()) }}
             />
 

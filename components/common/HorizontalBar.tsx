@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { View } from "react-native";
-import { PaletteContext } from '../../context/PaletteContext';
+import { usePalette } from '../../hooks/usePalette';
 
 export type ViewProps = View['props'];
 
 export default function HorizontalBar(props: ViewProps) {
-    const paletteContext = React.useContext(PaletteContext);
+    const [palette] = usePalette();
     const { style, ...otherProps } = props;
 
     return (<View
         style={[{
-            borderBottomColor: "#444",
+            borderBottomColor: palette.textSecondary,
             borderBottomWidth: 1,
             marginTop: 15
         }, style]}

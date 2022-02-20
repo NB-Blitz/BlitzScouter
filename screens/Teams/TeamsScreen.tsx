@@ -1,19 +1,17 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import * as React from 'react';
 import { ActivityIndicator, StyleSheet, ToastAndroid, View } from 'react-native';
 import { DownloadTeams } from '../../api/TBAAdapter';
-import Button from '../../components/common/Button';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
 import Text from '../../components/text/Text';
-import { PaletteContext } from '../../context/PaletteContext';
 import useEvent from '../../hooks/useEvent';
+import { usePalette } from '../../hooks/usePalette';
 import TeamBanner from '../Team/TeamBanner';
 
 const TeamBannerHeight = 190;
 
 export default function TeamsScreen() {
-    const paletteContext = React.useContext(PaletteContext);
+    const [palette] = usePalette();
     const [event, setEvent] = useEvent();
 
     // Download Teams
@@ -38,18 +36,18 @@ export default function TeamsScreen() {
             <View style={{ flexDirection: "row" }}>
                 <NavTitle>Teams</NavTitle>
                 <View style={styles.filterContainer}>
-                    <Button style={styles.searchButton} onPress={() => { }}>
+                    {/*<Button style={styles.searchButton} onPress={() => { }}>
                         <MaterialIcons
                             name="search"
                             size={24}
-                            color={paletteContext.palette.textPrimary} />
-                    </Button>
+                            color={palette.textPrimary} />
+                        </Button>*/}
                 </View>
             </View>
 
 
             {event.id === "bogus" ?
-                <ActivityIndicator color={paletteContext.palette.textPrimary} size={40} /> :
+                <ActivityIndicator color={palette.textPrimary} size={40} /> :
                 event.teamIDs.length <= 0 ?
                     <Text>This event has no teams posted yet. Pull down to refresh.</Text> :
                     event.teamIDs.map((teamID) => <TeamBanner teamID={teamID} key={teamID} />)

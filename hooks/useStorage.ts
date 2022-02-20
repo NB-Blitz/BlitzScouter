@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 
 const eventEmitter = new EventEmitter();
 
+export let storageCache: Record<string, any> = {};
+
 /**
  * Acts as a react hook for AsyncStorage
  * @param id - ID of the element
@@ -17,11 +19,16 @@ export default function useStorage<Type>(id: string, defaultValue: Type): [Type,
 
     // Grab Data
     const getData = async () => {
-        const jsonData = await AsyncStorage.getItem(id);
-        if (jsonData)
-            setData(JSON.parse(jsonData) as Type);
-        else
-            setData(defaultValue);
+        if (id in storageCache) {
+            const value = storageCache[id] as Type;
+            setData(value);
+        } else {
+            const jsonData = await AsyncStorage.getItem(id);
+            const value = jsonData ? (JSON.parse(jsonData) as Type) : defaultValue;
+            storageCache[id] = value;
+            setData(value);
+        }
+
     };
     useEffect(() => {
         getData();
@@ -30,8 +37,8 @@ export default function useStorage<Type>(id: string, defaultValue: Type): [Type,
     // Save Data
     const saveData = async (value: Type) => {
         const jsonData = JSON.stringify(value);
+        storageCache[id] = value;
         await AsyncStorage.setItem(id, jsonData);
-        setData(value);
         eventEmitter.emit(id);
     }
     useEffect(() => {
@@ -55,6 +62,7 @@ export default function useStorage<Type>(id: string, defaultValue: Type): [Type,
  */
 export async function putStorage<Type>(id: string, value: Type) {
     const jsonData = JSON.stringify(value);
+    delete storageCache[id];
     await AsyncStorage.setItem(id, jsonData);
     eventEmitter.emit(id);
 }
@@ -74,6 +82,10 @@ export async function getStorage<Type>(id: string) {
  * Removes all keys from AsyncStorage
  */
 export async function clearStorage() {
+
+    // Cache
+    storageCache = {};
+
     // AsyncStorage
     const keys = await AsyncStorage.getAllKeys();
     for (let key of keys) {
