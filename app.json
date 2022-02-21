@@ -2,7 +2,7 @@
     "expo": {
         "name": "Blitz Scouter",
         "slug": "BlitzScouter",
-        "version": "1.0.2",
+        "version": "1.0.3",
         "orientation": "portrait",
         "scheme": "blitz",
         "icon": "./assets/images/icon.png",
@@ -21,8 +21,8 @@
         ],
         "ios": {
             "supportsTablet": true,
-            "bundleIdentifier": "com.nbblitz.blitzscouter",
-            "buildNumber": "1.0.2",
+            "bundleIdentifier": "com.team5148.blitzscouter",
+            "buildNumber": "1.0.3",
             "icon": "./assets/images/icon.png"
         },
         "android": {
@@ -31,7 +31,7 @@
                 "backgroundColor": "#141416"
             },
             "icon": "./assets/images/icon.png",
-            "package": "com.nbblitz.blitzscouter",
+            "package": "com.team5148.blitzscouter",
             "versionCode": 1
         },
         "web": {

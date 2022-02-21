@@ -73,9 +73,13 @@ export async function putStorage<Type>(id: string, value: Type) {
  * @returns value in AsyncStorage
  */
 export async function getStorage<Type>(id: string) {
-    const jsonData = await AsyncStorage.getItem(id);
-    if (jsonData)
-        return JSON.parse(jsonData) as Type;
+    if (id in storageCache) {
+        return storageCache[id] as Type;
+    } else {
+        const jsonData = await AsyncStorage.getItem(id);
+        if (jsonData)
+            return JSON.parse(jsonData) as Type;
+    }
 }
 
 /**

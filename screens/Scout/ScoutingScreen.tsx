@@ -75,17 +75,19 @@ export default function ScoutingScreen({ route }: any) {
     return (
         <ScrollView>
             <View style={styles.container}>
-                <View style={{ flexDirection: "row", marginBottom: 10, marginTop: 10 }}>
+                <View style={{ flexDirection: "row", marginTop: 10 }}>
                     {team.mediaPaths.length > 0 ?
-                        <View style={styles.thumbnail}>
+                        <Button
+                            style={styles.thumbnail}
+                            onPress={() => { navigator.navigate("Media", { mediaPath: team.mediaPaths[team.mediaPaths.length - 1] }) }}>
                             <Image
                                 style={styles.thumbnail}
                                 source={{ uri: team.mediaPaths[team.mediaPaths.length - 1] }}
                                 key={team.id + "-" + (team.mediaPaths.length - 1)} />
-                        </View>
+                        </Button>
                         : null}
-                    <View style={{ alignSelf: "center" }}>
-                        <Title style={{ marginTop: 0 }}>{team.number}</Title>
+                    <View style={{ alignSelf: "center", marginLeft: 10 }}>
+                        <Title style={{ margin: 0 }}>{team.number}</Title>
                         <Subtitle>{team.name}</Subtitle>
                     </View>
                 </View>
@@ -129,7 +131,7 @@ const styles = StyleSheet.create({
     thumbnail: {
         height: 80,
         width: 80,
-        marginRight: 10,
+        margin: 5,
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 8

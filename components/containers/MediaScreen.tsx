@@ -55,15 +55,17 @@ export default function MediaScreen({ route }: any) {
                     <Text style={styles.buttonText}>Share</Text>
                 </Button>
 
-                <Button
-                    style={styles.button}
-                    onPress={() => { deleteImage(); }} >
-                    <MaterialIcons
-                        name="delete-outline"
-                        size={26}
-                        color={"white"} />
-                    <Text style={styles.buttonText}>Delete</Text>
-                </Button>
+                {onDelete ?
+                    <Button
+                        style={styles.button}
+                        onPress={() => { deleteImage(); }} >
+                        <MaterialIcons
+                            name="delete-outline"
+                            size={26}
+                            color={"white"} />
+                        <Text style={styles.buttonText}>Delete</Text>
+                    </Button>
+                    : undefined}
             </View>
 
         </View>

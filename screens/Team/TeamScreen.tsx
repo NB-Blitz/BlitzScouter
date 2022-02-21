@@ -157,7 +157,7 @@ export default function TeamScreen({ route }: any) {
                     </Text>
                 </View>
 
-                <StatTable teamID={team.id} cols={1} useCharts={true} />
+                <StatTable teamID={route.params.teamID} useCharts={true} />
 
             </View>
         </ScrollView>

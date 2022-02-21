@@ -54,17 +54,17 @@ export default function CounterElement(props: ElementProps) {
         <View style={styles.container}>
             <Title style={styles.counter}>{value}</Title>
             <Button
-                style={[styles.button, { backgroundColor: "#1ccc43" }]}
+                style={[styles.button, { backgroundColor: palette.navigationSelected }]}
                 onPress={() => { changeValue(1); }}>
 
-                <MaterialIcons name="add" size={30} style={{ color: "#ffffff" }} />
+                <MaterialIcons name="add" size={32} style={{ color: palette.navigationTextSelected }} />
 
             </Button>
             <Button
-                style={[styles.button, { backgroundColor: "#cc271d" }]}
+                style={[styles.button, { backgroundColor: palette.innerBox }]}
                 onPress={() => { changeValue(-1); }}>
 
-                <MaterialIcons name="remove" size={30} style={{ color: "#ffffff" }} />
+                <MaterialIcons name="remove" size={32} style={{ color: palette.textPrimary }} />
 
             </Button>
 
@@ -107,9 +107,9 @@ const styles = StyleSheet.create({
         height: 50,
         width: 70,
         borderRadius: 5,
-        paddingLeft: 20,
+        paddingLeft: 18,
         marginLeft: 5,
-        marginTop: 5,
+        marginTop: 4,
 
         flexDirection: "row",
         justifyContent: "flex-start",

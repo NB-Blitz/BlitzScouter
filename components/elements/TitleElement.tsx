@@ -26,7 +26,7 @@ export default function TitleElement(props: ElementProps) {
     }
     else {
         return (
-            <Title>{elementData.label}</Title>
+            <Title style={{ marginTop: 20, marginBottom: 5 }}>{elementData.label}</Title>
         );
     }
 }

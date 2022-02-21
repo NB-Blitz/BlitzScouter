@@ -29,7 +29,7 @@ export default function TeamPreview(props: { teamID: string }) {
     else {
         mediaIcon = (
             <View style={{ padding: 1 }}>
-                <View style={[styles.thumbnail, { backgroundColor: palette.navigation }]}>
+                <View style={[styles.thumbnail, { backgroundColor: palette.innerBox }]}>
                     <MaterialIcons
                         name="block"
                         size={40}
@@ -54,7 +54,7 @@ export default function TeamPreview(props: { teamID: string }) {
                 </View>
             </Button>
 
-            <StatTable teamID={props.teamID} cols={1} />
+            <StatTable teamID={props.teamID} />
         </View>
     );
 }

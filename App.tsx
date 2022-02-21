@@ -2,22 +2,26 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
+import { PaletteProvider, usePalette } from './hooks/usePalette';
 import RootNavigator from './navigation/RootNavigator';
 
 export default function App() {
     const isLoadingComplete = useCachedResources();
+    const [palette] = usePalette();
 
     if (!isLoadingComplete) {
         return null;
     } else {
         return (
-            <SafeAreaProvider>
+            <PaletteProvider>
                 <StatusBar
                     animated={true}
-                    backgroundColor="#141416"
+                    backgroundColor={palette.headerBackground}
                     style='light' />
-                <RootNavigator />
-            </SafeAreaProvider >
+                <SafeAreaProvider>
+                    <RootNavigator />
+                </SafeAreaProvider >
+            </PaletteProvider>
         );
     }
 }

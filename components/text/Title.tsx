@@ -12,6 +12,6 @@ export default function Title(props: TextProps) {
         color: palette.textPrimary,
         fontSize: 30,
         fontWeight: 'bold',
-        marginTop: 10
+        marginTop: 15
     }, style]} {...otherProps} />;
 }

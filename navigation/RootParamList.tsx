@@ -6,7 +6,7 @@ export type RootNavParamList = {
     Onboarding: undefined,
     Match: { matchID: string },
     Team: { teamID: string },
-    Media: { mediaPath: string, onDelete: (mediaPath: string) => void },
+    Media: { mediaPath: string, onDelete?: (mediaPath: string) => void },
     Year: undefined,
     Regional: { year: number },
     Download: { eventID: string },

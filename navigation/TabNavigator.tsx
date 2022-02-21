@@ -37,6 +37,7 @@ export default function TabNavigator() {
                 tabBarInactiveTintColor: palette.navigationText,
                 tabBarStyle: {
                     height: 60,
+                    borderTopWidth: 0
                 },
                 tabBarLabelStyle: {
                     marginBottom: 8,

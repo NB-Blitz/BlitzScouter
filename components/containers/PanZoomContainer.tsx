@@ -8,14 +8,15 @@ export type ViewProps = View['props'];
 export default function PanZoomContainer(props: ViewProps) {
 
     // Hooks
+    const deviceWidth = Dimensions.get('window').width;
+    const deviceHeight = Dimensions.get('window').height;
+
     const pinchRef = React.createRef();
-    const startPan = { x: useSharedValue(0), y: useSharedValue(0) };
-    const endPan = { x: useSharedValue(0), y: useSharedValue(0) };
+    const startPan = { x: useSharedValue(0), y: useSharedValue(deviceHeight / 6) };
+    const endPan = { x: useSharedValue(0), y: useSharedValue(deviceHeight / 6) };
     const startZoom = useSharedValue(1);
     const endZoom = useSharedValue(1);
 
-    const deviceWidth = Dimensions.get('window').width;
-    const deviceHeight = Dimensions.get('window').height;
 
     // Handler
     const panGestureHandler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({

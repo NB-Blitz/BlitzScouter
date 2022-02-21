@@ -29,7 +29,7 @@ export function PaletteScreen() {
                 {
                     text: "Confirm",
                     onPress: () => {
-                        setPalette(DEFAULT_PALETTE);
+                        setPalette(Object.assign({}, DEFAULT_PALETTE));
                         Alert.alert("Success!", "Color palette has been reset!");
                     }
                 },

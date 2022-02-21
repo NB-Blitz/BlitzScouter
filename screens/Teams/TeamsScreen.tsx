@@ -1,18 +1,34 @@
+import { MaterialIcons } from '@expo/vector-icons';
+import { Picker } from '@react-native-picker/picker';
 import * as React from 'react';
-import { ActivityIndicator, StyleSheet, ToastAndroid, View } from 'react-native';
+import { ActivityIndicator, Animated, StyleSheet, ToastAndroid, View } from 'react-native';
 import { DownloadTeams } from '../../api/TBAAdapter';
+import Button from '../../components/common/Button';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
 import Text from '../../components/text/Text';
 import useEvent from '../../hooks/useEvent';
 import { usePalette } from '../../hooks/usePalette';
+import { useEventStats } from '../../hooks/useStats';
+import useTemplate from '../../hooks/useTemplate';
+import { TemplateType } from '../../types/TemplateTypes';
 import TeamBanner from '../Team/TeamBanner';
 
-const TeamBannerHeight = 190;
+interface StatData {
+    index: number,
+    teamID: string,
+    avg: number
+}
 
 export default function TeamsScreen() {
     const [palette] = usePalette();
     const [event, setEvent] = useEvent();
+    const [template] = useTemplate(TemplateType.Match);
+    const stats = useEventStats();
+    const [sortType, setSortType] = React.useState("-1");
+    const [sortedTeamIDs, setSortedTeamIDs] = React.useState([] as string[]);
+    const pickerRef = React.useRef() as React.MutableRefObject<Picker<string>>;
+    const fadeAnim = React.useRef(new Animated.Value(1)).current;
 
     // Download Teams
     const onRefresh = async () => {
@@ -31,27 +47,74 @@ export default function TeamsScreen() {
         }
     };
 
+    // Sort
+    React.useEffect(() => {
+        const sortIndex = parseInt(sortType);
+        if (sortIndex === -1)
+            setSortedTeamIDs(event.teamIDs);
+        else
+            setSortedTeamIDs(stats[sortIndex].teams
+                .sort((a, b) => b.avg - a.avg)
+                .map((stat) => stat.teamID));
+
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 250,
+            useNativeDriver: true
+        }).start();
+
+    }, [sortType, event, stats, setSortedTeamIDs]);
+    const onSort = (type: string) => {
+        Animated.timing(fadeAnim, {
+            toValue: 0,
+            duration: 250,
+            useNativeDriver: true
+        }).start(() => {
+            setSortType(type);
+        });
+    }
+
     return (
         <ScrollContainer onRefresh={onRefresh} key={event.id}>
             <View style={{ flexDirection: "row" }}>
-                <NavTitle>Teams</NavTitle>
+                <NavTitle style={{ marginBottom: 0 }}>Teams</NavTitle>
                 <View style={styles.filterContainer}>
-                    {/*<Button style={styles.searchButton} onPress={() => { }}>
+                    <Button style={styles.searchButton} onPress={() => { pickerRef.current.focus() }}>
                         <MaterialIcons
-                            name="search"
+                            name="swap-vert"
                             size={24}
                             color={palette.textPrimary} />
-                        </Button>*/}
+                    </Button>
                 </View>
             </View>
 
+            <Picker
+                ref={pickerRef}
+                mode={"dropdown"}
+                selectedValue={sortType}
+                onValueChange={(type) => { onSort(type) }}
+                style={{ alignSelf: "flex-end", borderRadius: 10 }}>
 
-            {event.id === "bogus" ?
-                <ActivityIndicator color={palette.textPrimary} size={40} /> :
-                event.teamIDs.length <= 0 ?
-                    <Text>This event has no teams posted yet. Pull down to refresh.</Text> :
-                    event.teamIDs.map((teamID) => <TeamBanner teamID={teamID} key={teamID} />)
-            }
+                <Picker.Item
+                    label="Team Number"
+                    value={"-1"} />
+
+                {template.filter((elem) => elem.value !== undefined).map((elem, index) =>
+                    <Picker.Item
+                        label={elem.label}
+                        value={index}
+                        key={index} />
+                )}
+            </Picker>
+
+            <Animated.View style={{ opacity: fadeAnim }}>
+                {event.id === "bogus" ?
+                    <ActivityIndicator color={palette.textPrimary} size={40} /> :
+                    event.teamIDs.length <= 0 ?
+                        <Text>This event has no teams posted yet. Pull down to refresh.</Text> :
+                        sortedTeamIDs.map((teamID) => <TeamBanner teamID={teamID} key={teamID} />)
+                }
+            </Animated.View>
         </ScrollContainer>
     );
 }
@@ -60,7 +123,6 @@ const styles = StyleSheet.create({
     searchButton: {
         width: 46,
         height: 46,
-        marginBottom: 12,
         marginRight: 5,
         alignSelf: "flex-end"
     },
