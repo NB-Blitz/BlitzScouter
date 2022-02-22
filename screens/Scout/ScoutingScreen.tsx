@@ -16,7 +16,7 @@ import { ElementData, ScoutingData } from '../../types/TemplateTypes';
 export default function ScoutingScreen({ route }: any) {
     const navigator = useNavigation();
     const [scoutingData, setScoutingDataHook] = useScoutingData();
-    const [template] = useTemplate(route.params.templateType);
+    const [template] = useTemplate();
     const [team] = useTeam(route.params.teamID);
     const [palette] = usePalette();
 
@@ -29,14 +29,9 @@ export default function ScoutingScreen({ route }: any) {
         let data: ScoutingData = {
             teamID: route.params.teamID,
             matchID: route.params.matchID,
-            values: []
+            values: template.map(elem => elem.value).filter(val => val != undefined) as number[]
         };
-        for (let element of template) {
-            if (element.value !== undefined)
-                data.values.push(element.value);
-        }
-        scoutingData.push(data);
-        setScoutingDataHook(scoutingData);
+        setScoutingDataHook([...scoutingData, data]);
 
         navigator.goBack();
         navigator.goBack();
@@ -44,23 +39,13 @@ export default function ScoutingScreen({ route }: any) {
             {
                 text: "Undo",
                 onPress: () => {
-                    Alert.alert("Are you sure?", "This will delete last round's scouting data", [
-                        {
-                            text: "Confirm",
-                            onPress: async () => {
-                                const data = await getScoutingData();
-                                if (data) {
-                                    data.splice(scoutingData.length - 1, 1);
-                                    setScoutingData(scoutingData);
-                                }
-                                Alert.alert("Success!", "Last round's scouting data has been cleared");
-                            }
-                        },
-                        {
-                            text: "Cancel",
-                            style: "cancel"
+                    getScoutingData().then((data) => {
+                        if (data) {
+                            data.splice(scoutingData.length - 1, 1);
+                            setScoutingData(scoutingData);
+                            Alert.alert("Success", "Last round has been cleared");
                         }
-                    ], { cancelable: true });
+                    });
                 }
             },
             {
@@ -71,7 +56,6 @@ export default function ScoutingScreen({ route }: any) {
     }
 
     // Media
-
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -119,14 +103,16 @@ const styles = StyleSheet.create({
         paddingRight: 20
     },
     submitButton: {
-        height: 40,
+        height: 60,
         borderRadius: 5,
         padding: 10,
         margin: 10,
-        marginTop: 30
+        marginTop: 30,
+        justifyContent: "center"
     },
     buttonText: {
-        fontWeight: "bold"
+        fontWeight: "bold",
+        fontSize: 20
     },
     thumbnail: {
         height: 80,

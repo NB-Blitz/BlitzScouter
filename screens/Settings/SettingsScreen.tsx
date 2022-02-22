@@ -10,35 +10,15 @@ import useEvent from '../../hooks/useEvent';
 import { getMatch } from '../../hooks/useMatch';
 import { usePalette } from '../../hooks/usePalette';
 import { setScoutingData } from '../../hooks/useScoutingData';
-import { clearStorage } from '../../hooks/useStorage';
 import { getTeam } from '../../hooks/useTeam';
 import useTemplate from '../../hooks/useTemplate';
-import { ScoutingData, TemplateType } from '../../types/TemplateTypes';
+import { ScoutingData } from '../../types/TemplateTypes';
 
 export default function SettingsScreen() {
     const [palette, setPalette] = usePalette();
     const navigator = useNavigation();
     const [event] = useEvent();
-    const [template] = useTemplate(TemplateType.Match);
-
-    const clearData = () => {
-        Alert.alert("Are you sure?", "This will delete all team, event, match, and scouting data on your device.",
-            [
-                {
-                    text: "Confirm",
-                    onPress: () => {
-                        clearStorage().then(() => {
-                            Alert.alert("Success!", "All scouting data has been cleared");
-                        });
-                    }
-                },
-                {
-                    text: "Cancel",
-                    style: "cancel"
-                }
-            ], { cancelable: true }
-        );
-    }
+    const [template] = useTemplate();
 
     const clearScoutingData = () => {
         Alert.alert("Are you sure?", "This will delete all scouting data on your device.",
@@ -115,16 +95,16 @@ export default function SettingsScreen() {
 
             <StandardButton
                 iconType={"format-paint"}
-                title={"Edit Palette"}
+                title={"Edit Color Palette"}
                 subtitle={"Customizes the app's color palette"}
                 onPress={() => { navigator.navigate("Palette"); }} />
 
             {/* Scouting Buttons */}
             <StandardButton
                 iconType={"edit"}
-                title={"Edit Match Scouting"}
+                title={"Edit Scouting Template"}
                 subtitle={"Adjust the match scouting template"}
-                onPress={() => { navigator.navigate("EditTemplate", { templateType: TemplateType.Match }); }} />
+                onPress={() => { navigator.navigate("EditTemplate"); }} />
 
             <StandardButton
                 iconType={"info-outline"}
@@ -148,23 +128,10 @@ export default function SettingsScreen() {
                 onPress={() => { navigator.navigate("Year"); }} />
 
             <StandardButton
-                iconType={"file-download"}
-                title={"Re-Download Event"}
-                subtitle={"Downloads event data from TBA"}
-                onPress={() => { navigator.navigate("Download", { eventID: event.id }); }} />
-
-            <StandardButton
                 iconType={"delete-outline"}
                 title={"Clear Scouting Data"}
                 subtitle={"Wipes all scouting data on your device"}
                 onPress={() => { clearScoutingData(); }} />
-
-
-            <StandardButton
-                iconType={"delete-outline"}
-                title={"Clear All Data"}
-                subtitle={"Wipes all app data on your device"}
-                onPress={() => { clearData(); }} />
 
         </ScrollContainer>
     );

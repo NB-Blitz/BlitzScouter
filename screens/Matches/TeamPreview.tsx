@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     },
     subContainer: {
         height: 100,
+        width: "100%",
         overflow: "hidden",
         justifyContent: "center",
         alignItems: "center",

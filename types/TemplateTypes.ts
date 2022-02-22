@@ -1,8 +1,3 @@
-export enum TemplateType {
-    Pit,
-    Match
-}
-
 export enum ElementType {
     title,
     subtitle,

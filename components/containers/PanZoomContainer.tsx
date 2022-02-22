@@ -30,7 +30,6 @@ export default function PanZoomContainer(props: ViewProps) {
         onEnd: (event, ctx) => {
             startPan.x.value = endPan.x.value;
             startPan.y.value = endPan.y.value;
-
         }
     });
     const zoomGestureHandler = useAnimatedGestureHandler<PinchGestureHandlerGestureEvent>({
@@ -39,6 +38,8 @@ export default function PanZoomContainer(props: ViewProps) {
         },
         onActive: (event, ctx) => {
             endZoom.value = startZoom.value * event.scale;
+            endPan.x.value = endZoom.value * endPan.x.value;
+            endPan.y.value = endZoom.value * endPan.y.value;
         },
         onEnd: (event, ctx) => {
             if (endZoom.value < 1) {

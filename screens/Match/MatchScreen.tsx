@@ -11,14 +11,13 @@ import Title from "../../components/text/Title";
 import useMatch from "../../hooks/useMatch";
 import { usePalette } from "../../hooks/usePalette";
 import useTemplate from "../../hooks/useTemplate";
-import { TemplateType } from "../../types/TemplateTypes";
 import TeamPreview from "../Matches/TeamPreview";
 
 export default function MatchScreen({ route }: any) {
     const [palette] = usePalette();
     const navigator = useNavigation();
     const [match] = useMatch(route.params.matchID);
-    const [template] = useTemplate(TemplateType.Match);
+    const [template] = useTemplate();
 
     // Browser Button
     const onBrowserButton = () => {
@@ -55,7 +54,7 @@ export default function MatchScreen({ route }: any) {
                             iconType={"edit"}
                             title={"Create Scouting Template"}
                             subtitle={"Create a match scouting template"}
-                            onPress={() => { navigator.navigate("EditTemplate", { templateType: TemplateType.Match }); }} />
+                            onPress={() => { navigator.navigate("EditTemplate"); }} />
                     }
                 </View>
 

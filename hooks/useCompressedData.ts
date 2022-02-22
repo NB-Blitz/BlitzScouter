@@ -1,14 +1,10 @@
 import React from "react";
 import { ToastAndroid } from "react-native";
+import { ExportData } from "../types/OtherTypes";
 import { ScoutingData } from "../types/TemplateTypes";
 import useEvent from "./useEvent";
 import useScoutingData from "./useScoutingData";
 
-export interface ExportData {
-    eventID: string,
-    exportID: string,
-    scoutingData: ScoutingData[]
-}
 export function getChecksum(data: ScoutingData[]) {
     const jsonData = JSON.stringify(data);
     return jsonData.split("").reduce((a, b) => {
@@ -55,4 +51,21 @@ export function useDataImporter() {
     };
 
     return importJsonData;
+}
+
+export function useDataExporter() {
+    const [scoutingData] = useScoutingData();
+    const [event] = useEvent();
+
+    const exportJsonData = () => {
+        const data: ExportData = {
+            scoutingData: scoutingData,
+            eventID: event.id,
+            exportID: getChecksum(scoutingData)
+        };
+        const jsonData = JSON.stringify(data);
+        return jsonData;
+    };
+
+    return exportJsonData;
 }

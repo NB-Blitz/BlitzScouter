@@ -5,7 +5,6 @@ import Subtitle from "../../components/text/Subtitle";
 import Text from '../../components/text/Text';
 import Title from "../../components/text/Title";
 import useMatch from '../../hooks/useMatch';
-import { TemplateType } from '../../types/TemplateTypes';
 import TeamBanner from '../Team/TeamBanner';
 
 export default function TeamSelectScreen({ route }: any) {
@@ -13,7 +12,7 @@ export default function TeamSelectScreen({ route }: any) {
     const [match] = useMatch(route.params.matchID);
 
     const onClick = (teamID: string) => {
-        navigator.navigate("Scout", { teamID: teamID, matchID: route.params.matchID, templateType: TemplateType.Match });
+        navigator.navigate("Scout", { teamID: teamID, matchID: route.params.matchID });
     }
 
     return (

@@ -1,5 +1,3 @@
-import { TemplateType } from "../types/TemplateTypes";
-
 // Params
 export type RootNavParamList = {
     Drawer: undefined,
@@ -10,10 +8,10 @@ export type RootNavParamList = {
     Year: undefined,
     Regional: { year: number },
     Download: { eventID: string },
-    EditTemplate: { templateType: TemplateType },
-    ElementChooser: { templateType: TemplateType },
+    EditTemplate: undefined,
+    ElementChooser: undefined,
     TeamSelect: { matchID: string },
-    Scout: { teamID: string, matchID: string, templateType: TemplateType },
+    Scout: { teamID: string, matchID: string },
     DefaultTeam: undefined,
     ExportQR: undefined,
     ImportQR: undefined,

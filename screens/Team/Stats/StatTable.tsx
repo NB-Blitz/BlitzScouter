@@ -2,20 +2,11 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import Text from "../../../components/text/Text";
 import { useEventStats } from "../../../hooks/useStats";
-import useTeam from "../../../hooks/useTeam";
 import { StatChart } from "./StatChart";
 import StatSquare from "./StatSquare";
 
-interface StatData {
-    label: string,
-    avg: number,
-    chartValues: number[],
-    max: number
-}
-
 export default function StatTable(props: { teamID: string, useCharts?: boolean }) {
-    const eventStats = useEventStats();
-    const [team] = useTeam(props.teamID);
+    const [eventStats, statVersion] = useEventStats();
 
     const decToString = (num: number) => {
         return (Math.round(num * 10) / 10).toString()
@@ -25,22 +16,27 @@ export default function StatTable(props: { teamID: string, useCharts?: boolean }
         <View style={styles.tableContainer}>
             {eventStats.map((stat, index) => {
                 const teamStat = stat.teams.find((stat) => stat.teamID === props.teamID);
-                const key = props.teamID + "-" + index;
-
-                if (!(teamStat))
-                    return (<Text style={styles.text} key={key}>This team has no scouting data yet</Text>)
-                else if (props.useCharts)
+                const key = props.teamID + "-" + index + "-" + statVersion;
+                if (!(teamStat)) {
+                    return (<Text key={key} />);
+                } else if (teamStat.history.length <= 0) {
+                    if (index === 0)
+                        return (<Text
+                            style={styles.text}
+                            key={key}>This team has no scouting data yet</Text>)
+                } else if (props.useCharts) {
                     return (<StatChart
                         label={stat.label}
                         values={teamStat.history}
                         max={stat.eventMax}
                         key={key} />)
-                else
+                } else {
                     return (<StatSquare
                         name={stat.label}
                         value={decToString(teamStat.avg)}
-                        percentile={teamStat.avg / stat.eventMax}
+                        percentile={stat.eventMax === 0 ? 0 : teamStat.avg / stat.eventMax}
                         key={key} />)
+                }
             })}
         </View>
     );

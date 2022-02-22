@@ -6,12 +6,11 @@ import StandardButton from '../../../components/common/StandardButton';
 import Subtitle from '../../../components/text/Subtitle';
 import Title from '../../../components/text/Title';
 import useTemplate from '../../../hooks/useTemplate';
-import { ElementType, TemplateType } from '../../../types/TemplateTypes';
+import { ElementType } from '../../../types/TemplateTypes';
 
 export default function ElementChooserScreen({ route }: any) {
     const navigator = useNavigation();
-    const templateType = route.params.templateType as TemplateType;
-    const [template, setTemplate] = useTemplate(templateType);
+    const [template, setTemplate] = useTemplate();
 
     const chooseElement = async (elementType: ElementType) => {
         template.push({

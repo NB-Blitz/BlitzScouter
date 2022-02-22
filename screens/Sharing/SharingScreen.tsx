@@ -6,35 +6,37 @@ import * as React from 'react';
 import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
-import { useDataImporter } from '../../hooks/useCompressedData';
+import { useDataExporter, useDataImporter } from '../../hooks/useCompressedData';
+import useEvent from '../../hooks/useEvent';
 import useScoutingData from '../../hooks/useScoutingData';
 import useTemplate from '../../hooks/useTemplate';
-import { TemplateType } from '../../types/TemplateTypes';
 
 export default function SharingScreen() {
     const navigator = useNavigation();
     const [scoutingData] = useScoutingData();
-    const [template] = useTemplate(TemplateType.Match);
+    const [template] = useTemplate();
+    const [event] = useEvent();
     const importJsonData = useDataImporter();
+    const exportJsonData = useDataExporter();
 
     const exportJson = async () => {
         const path = FileSystem.documentDirectory + "data.json";
-        await FileSystem.writeAsStringAsync(path, JSON.stringify(scoutingData), { encoding: FileSystem.EncodingType.UTF8 });
+        const data = exportJsonData();
+        await FileSystem.writeAsStringAsync(path, data, { encoding: FileSystem.EncodingType.UTF8 });
         Sharing.shareAsync(path);
     }
 
+    /*
+        https://github.com/expo/expo/issues/14335
+
+        TL;DR: result.uri is not the correct file path.
+        The following code is a workaround for this issue.
+    */
     const importJson = async () => {
         const result = await DocumentPicker.getDocumentAsync({ type: 'application/json', copyToCacheDirectory: true });
         if (result.type === "success") {
-            /*
-                https://github.com/expo/expo/issues/14335
-
-                TL;DR: result.uri is not the correct file path.
-                The following code is a workaround for this issue.
-            */
             const fileName = result.uri.split("/").pop();
             const path = FileSystem.cacheDirectory + 'DocumentPicker/' + fileName;
-
             const jsonData = await FileSystem.readAsStringAsync(path, { encoding: FileSystem.EncodingType.UTF8 });
             importJsonData(jsonData);
         }

@@ -10,15 +10,12 @@ import Text from '../../../components/text/Text';
 import Title from '../../../components/text/Title';
 import { usePalette } from '../../../hooks/usePalette';
 import useTemplate from '../../../hooks/useTemplate';
-import { ElementData, TemplateType } from '../../../types/TemplateTypes';
-
-const TEMPLATE_NAMES = ["Pit", "Match"];
+import { ElementData } from '../../../types/TemplateTypes';
 
 export default function EditTemplateScreen({ route }: any) {
     const [palette] = usePalette();
     const navigator = useNavigation();
-    const templateType = route.params.templateType as TemplateType;
-    const [template, setTemplate] = useTemplate(templateType);
+    const [template, setTemplate] = useTemplate();
 
     // Delete Event
     const onDeleteEvent = () => {
@@ -78,12 +75,14 @@ export default function EditTemplateScreen({ route }: any) {
     return (
         <View style={styles.container}>
             <ScrollView>
-                <View style={{ paddingLeft: 10, paddingRight: 10 }}>
+                <View style={{ paddingLeft: 15, paddingRight: 15 }}>
                     <Title>Edit Template</Title>
-                    <Subtitle>{TEMPLATE_NAMES[templateType]} Scouting</Subtitle>
+                    <Subtitle>Match Scouting</Subtitle>
+
+                    {template.length <= 0 ? <Text key={"0"}>There are no elements yet. Add an element to scout below.</Text> : undefined}
                 </View>
 
-                {template.length > 0 ? template.map(element =>
+                {template.map(element =>
                     <ScoutingElement
                         data={element}
                         isEditable={true}
@@ -92,17 +91,14 @@ export default function EditTemplateScreen({ route }: any) {
                         onUp={onUp}
                         onDown={onDown}
                         key={element.id} />
-                ) :
-                    <Text key={"0"}>There are no elements yet. Add an element to scout below.</Text>
-                }
+                )}
 
                 <View style={{ height: 150 }} />
-
             </ScrollView>
 
             <Button
                 style={[styles.addButton, { backgroundColor: palette.navigationSelected }]}
-                onPress={() => { navigator.navigate("ElementChooser", { templateType: templateType }); }}>
+                onPress={() => { navigator.navigate("ElementChooser"); }}>
 
                 <MaterialIcons name="add" size={30} style={{ color: palette.navigationTextSelected }} />
 
@@ -114,8 +110,8 @@ export default function EditTemplateScreen({ route }: any) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingLeft: 10,
-        paddingRight: 10,
+        paddingLeft: 5,
+        paddingRight: 5,
     },
     trashButton: {
         alignSelf: "flex-end",

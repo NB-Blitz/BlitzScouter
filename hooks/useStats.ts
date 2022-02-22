@@ -1,25 +1,15 @@
 import * as React from "react";
-import { ScoutingData, TemplateType } from "../types/TemplateTypes";
+import { Stat } from "../types/OtherTypes";
+import { ScoutingData } from "../types/TemplateTypes";
 import useEvent from "./useEvent";
 import useScoutingData from "./useScoutingData";
 import useTemplate from "./useTemplate";
 
-
-export interface Stat {
-    label: string,
-    eventMax: number,
-    teams: TeamStats[]
-}
-export interface TeamStats {
-    teamID: string,
-    avg: number,
-    history: number[]
-}
-
-export function useEventStats() {
+export function useEventStats(): [Stat[], number] {
     const [scoutingData] = useScoutingData();
     const [event] = useEvent();
-    const [template] = useTemplate(TemplateType.Match);
+    const [template] = useTemplate();
+    const [version, setVersion] = React.useState(0);
     const [stats, setStats] = React.useState([] as Stat[]);
 
     const getScoutingValues = (data: ScoutingData[], index: number) => {
@@ -27,7 +17,6 @@ export function useEventStats() {
     }
     const calculateStats = async () => {
         const newStats: Stat[] = [];
-
         const labels = template.filter((elem) => elem.value !== undefined).map((elem) => elem.label);
 
         for (let i = 0; i < labels.length; i++) {
@@ -45,10 +34,10 @@ export function useEventStats() {
                 const teamScoutingData = scoutingData.filter((data) => data.teamID === teamID);
                 const teamValues = getScoutingValues(teamScoutingData, i);
 
-                if (teamValues.length <= 0)
-                    return;
 
-                const teamAvg = teamValues.reduce((prev, cur) => prev + cur) / teamValues.length;
+                let teamAvg = 0;
+                if (teamValues.length > 0)
+                    teamAvg = teamValues.reduce((prev, cur) => prev + cur) / teamValues.length;
 
                 stat.teams.push({
                     teamID: teamID,
@@ -61,11 +50,16 @@ export function useEventStats() {
         }
 
         setStats(newStats);
+        setVersion(v => v + 1);
     }
     React.useEffect(() => {
+        if (event.id === "bogus")
+            return;
+        if (template.length <= 0)
+            return;
         calculateStats();
-    }, [event, template, setStats]);
+    }, [scoutingData, event, template]);
 
-    return stats;
+    return [stats, version];
 }
 

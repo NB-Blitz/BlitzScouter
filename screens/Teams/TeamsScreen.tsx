@@ -11,7 +11,6 @@ import useEvent from '../../hooks/useEvent';
 import { usePalette } from '../../hooks/usePalette';
 import { useEventStats } from '../../hooks/useStats';
 import useTemplate from '../../hooks/useTemplate';
-import { TemplateType } from '../../types/TemplateTypes';
 import TeamBanner from '../Team/TeamBanner';
 
 interface StatData {
@@ -23,8 +22,8 @@ interface StatData {
 export default function TeamsScreen() {
     const [palette] = usePalette();
     const [event, setEvent] = useEvent();
-    const [template] = useTemplate(TemplateType.Match);
-    const stats = useEventStats();
+    const [template] = useTemplate();
+    const [stats, statVersion] = useEventStats();
     const [sortType, setSortType] = React.useState("-1");
     const [sortedTeamIDs, setSortedTeamIDs] = React.useState([] as string[]);
     const pickerRef = React.useRef() as React.MutableRefObject<Picker<string>>;
@@ -63,7 +62,7 @@ export default function TeamsScreen() {
             useNativeDriver: true
         }).start();
 
-    }, [sortType, event, stats, setSortedTeamIDs]);
+    }, [sortType, event, statVersion, setSortedTeamIDs]);
     const onSort = (type: string) => {
         Animated.timing(fadeAnim, {
             toValue: 0,

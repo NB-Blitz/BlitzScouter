@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/core";
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, ToastAndroid, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import TBA from "../../../api/TBA";
@@ -53,12 +53,14 @@ export default function YearScreen() {
     const [maxYear, setMaxYear] = React.useState(0);
     const navigator = useNavigation();
 
-    TBA.getServerStatus().then((status) => {
-        if (status)
-            setMaxYear(status.max_season);
-        else
-            ToastAndroid.show("Failed to connect to TBA", 1000);
-    });
+    useEffect(() => {
+        TBA.getServerStatus().then((status) => {
+            if (status)
+                setMaxYear(status.max_season);
+            else
+                ToastAndroid.show("Failed to connect to TBA", 1000);
+        });
+    })
 
     // Generate List
     let yearsDisplay: JSX.Element[] = [];
