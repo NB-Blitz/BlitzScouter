@@ -12,7 +12,7 @@ export default function CheckboxElement(props: ElementProps) {
     const [palette] = usePalette();
 
     // Default Value
-    if (props.onChange) {
+    if (props.onChange && elementData.value != value) {
         elementData.value = value;
         props.onChange(elementData);
     }

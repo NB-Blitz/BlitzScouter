@@ -8,14 +8,12 @@ import Subtitle from '../../components/text/Subtitle';
 import Title from '../../components/text/Title';
 import useEvent from '../../hooks/useEvent';
 import { getMatch } from '../../hooks/useMatch';
-import { usePalette } from '../../hooks/usePalette';
 import { setScoutingData } from '../../hooks/useScoutingData';
 import { getTeam } from '../../hooks/useTeam';
 import useTemplate from '../../hooks/useTemplate';
 import { ScoutingData } from '../../types/TemplateTypes';
 
 export default function SettingsScreen() {
-    const [palette, setPalette] = usePalette();
     const navigator = useNavigation();
     const [event] = useEvent();
     const [template] = useTemplate();
@@ -63,8 +61,6 @@ export default function SettingsScreen() {
                 if (!match)
                     continue;
 
-                console.log(match.id);
-
                 const teamIDs = match.blueTeamIDs;
                 teamIDs.push(...match.redTeamIDs);
 
@@ -73,7 +69,7 @@ export default function SettingsScreen() {
                     if (!team)
                         continue;
 
-                    const values = template.filter(elem => elem.value != undefined).map((elem) =>
+                    const values = template.filter(elem => elem.value != undefined).map(() =>
                         Math.round(15 * Math.random() * (1 - ((team.rank / event.teamIDs.length))))
                     );
 

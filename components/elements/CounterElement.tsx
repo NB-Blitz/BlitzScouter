@@ -14,7 +14,7 @@ export default function CounterElement(props: ElementProps) {
     const [palette] = usePalette();
 
     // Default Value
-    if (props.onChange) {
+    if (props.onChange && elementData.value != value) {
         elementData.value = value;
         props.onChange(elementData);
     }
@@ -84,7 +84,8 @@ export default function CounterElement(props: ElementProps) {
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: "row"
+        flexDirection: "row",
+        alignItems: "center"
     },
     textInput: {
         borderRadius: 10,
@@ -101,6 +102,7 @@ const styles = StyleSheet.create({
     },
     counter: {
         width: 50,
+        marginTop: 0,
         textAlign: "center"
     },
     button: {

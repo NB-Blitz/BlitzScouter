@@ -49,9 +49,6 @@ export default function OnboardingScreen() {
                             offset: scrollOffsetAnimatedValue
                         }
                     }], {
-                        listener: ({ nativeEvent: { offset, position } }: any) => {
-                            console.log(`Position: ${position} Offset: ${offset}`);
-                        },
                         useNativeDriver: false,
                     })}>
 
