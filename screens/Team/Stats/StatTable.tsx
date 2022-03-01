@@ -14,7 +14,7 @@ export default function StatTable(props: { teamID: string, useCharts?: boolean }
 
     return (
         <View style={styles.tableContainer}>
-            {eventStats.map((stat, index) => {
+            {eventStats.length > 0 ? eventStats.map((stat, index) => {
                 const teamStat = stat.teams.find((stat) => stat.teamID === props.teamID);
                 const key = props.teamID + "-" + index + "-" + statVersion;
                 if (!(teamStat)) {
@@ -37,7 +37,7 @@ export default function StatTable(props: { teamID: string, useCharts?: boolean }
                         percentile={stat.eventMax === 0 ? 0 : teamStat.avg / stat.eventMax}
                         key={key} />)
                 }
-            })}
+            }) : <Text style={styles.text}>This team has no scouting data yet</Text>}
         </View>
     );
 }

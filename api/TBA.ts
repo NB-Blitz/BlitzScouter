@@ -1,5 +1,5 @@
 import { Linking } from 'react-native';
-import { TBAEvent, TBAMatch, TBAMedia, TBARankings, TBAStatus, TBATeam } from '../types/TBAModels';
+import { TBAEvent, TBAMatch, TBAMedia, TBARankings, TBAStatus, TBATeam, TBAZebra } from '../types/TBAModels';
 
 const API_KEY = "i90dAcKHXvQ9havypHJKeGY8O1tfymFpaW1Po3RGYpvoMTRVwtiUsUFaLmstCDp3";
 const URL_PREFIX = "https://www.thebluealliance.com/api/v3/";
@@ -31,6 +31,15 @@ export default class TBA {
      */
     static async getEvents(year: number) {
         return TBA._fetch<TBAEvent[]>("events/" + year);
+    }
+
+    /**
+     * Fetches Zebra Motionworks data for a match
+     * @param matchID - ID of the match
+     * @returns 
+     */
+    static async getZebra(matchID: string) {
+        return TBA._fetch<TBAZebra>("match/" + matchID + "/zebra_motionworks");
     }
 
     /**

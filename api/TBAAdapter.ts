@@ -163,14 +163,14 @@ export async function DownloadMedia(teamID: string, year: number) {
             await FileSystem.writeAsStringAsync(path, media.details.base64Image, {
                 encoding: FileSystem.EncodingType.Base64,
             });
-
             mediaPaths.push(path);
         }
         else if (media.direct_url) {
             const path = FileSystem.documentDirectory + mediaID + ".jpg";
-            console.log("DOWNLOAD: " + media.direct_url);
-            await FileSystem.downloadAsync(media.direct_url, path);
-            mediaPaths.push(path);
+            const download = await FileSystem.downloadAsync(media.direct_url, path);
+            console.log("DOWNLOAD: " + media.direct_url + " (" + download.status + ")");
+            if (download.status === 200)
+                mediaPaths.push(path);
         }
     }
 

@@ -66,7 +66,7 @@ export default function TeamsScreen() {
     const onSort = (type: string) => {
         Animated.timing(fadeAnim, {
             toValue: 0,
-            duration: 250,
+            duration: 150,
             useNativeDriver: true
         }).start(() => {
             setSortType(type);
@@ -92,7 +92,8 @@ export default function TeamsScreen() {
                 mode={"dropdown"}
                 selectedValue={sortType}
                 onValueChange={(type) => { onSort(type) }}
-                style={{ alignSelf: "flex-end", borderRadius: 10 }}>
+                dropdownIconColor={palette.background}
+                style={{ alignSelf: "flex-end" }}>
 
                 <Picker.Item
                     label="Team Number"

@@ -10,8 +10,11 @@ export default function PanZoomContainer(props: ViewProps) {
     // Hooks
     const deviceWidth = Dimensions.get('window').width;
     const deviceHeight = Dimensions.get('window').height;
+    const SIZE = deviceWidth;
 
     const pinchRef = React.createRef();
+    const panRef = React.createRef();
+
     const startPan = { x: useSharedValue(0), y: useSharedValue(deviceHeight / 6) };
     const endPan = { x: useSharedValue(0), y: useSharedValue(deviceHeight / 6) };
     const startZoom = useSharedValue(1);
@@ -26,6 +29,12 @@ export default function PanZoomContainer(props: ViewProps) {
         onActive: (event, ctx: any) => {
             endPan.x.value = startPan.x.value + event.translationX / endZoom.value;
             endPan.y.value = startPan.y.value + event.translationY / endZoom.value;
+
+            /*
+            const deltaX = (SIZE / 2) - ((SIZE * endZoom.value) / 2) + (endPan.x.value * endZoom.value);
+            if (deltaX > 0) {
+                startPan.x.value -= deltaX;
+            }*/
         },
         onEnd: (event, ctx) => {
             startPan.x.value = endPan.x.value;
@@ -38,13 +47,13 @@ export default function PanZoomContainer(props: ViewProps) {
         },
         onActive: (event, ctx) => {
             endZoom.value = startZoom.value * event.scale;
-            endPan.x.value = endZoom.value * endPan.x.value;
-            endPan.y.value = endZoom.value * endPan.y.value;
+            if (endZoom.value < 1)
+                endZoom.value = Math.pow(endZoom.value, 0.5);
         },
         onEnd: (event, ctx) => {
             if (endZoom.value < 1) {
-                startZoom.value = withSpring(1);
-                endZoom.value = withSpring(1);
+                startZoom.value = 1;
+                endZoom.value = withSpring(1, { overshootClamping: false });
             } else {
                 startZoom.value = endZoom.value;
             }
@@ -64,12 +73,21 @@ export default function PanZoomContainer(props: ViewProps) {
     });
 
     return (
-        <PinchGestureHandler onGestureEvent={zoomGestureHandler} ref={pinchRef}>
+        <PanGestureHandler
+            onGestureEvent={panGestureHandler}
+            maxPointers={2}
+            avgTouches
+            minDist={10}
+            ref={panRef}>
+
             <Animated.View style={[zoomStyle, { height: deviceHeight }]}>
-                <PanGestureHandler onGestureEvent={panGestureHandler} simultaneousHandlers={pinchRef}>
+                <PinchGestureHandler
+                    onGestureEvent={zoomGestureHandler}
+                    simultaneousHandlers={panRef}
+                    ref={pinchRef}>
                     <Animated.View style={panStyle} {...props} />
-                </PanGestureHandler>
+                </PinchGestureHandler>
             </Animated.View>
-        </PinchGestureHandler>
+        </PanGestureHandler>
     );
 }

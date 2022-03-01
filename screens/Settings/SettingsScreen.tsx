@@ -9,6 +9,7 @@ import Title from '../../components/text/Title';
 import useEvent from '../../hooks/useEvent';
 import { getMatch } from '../../hooks/useMatch';
 import { setScoutingData } from '../../hooks/useScoutingData';
+import { clearStorage } from '../../hooks/useStorage';
 import { getTeam } from '../../hooks/useTeam';
 import useTemplate from '../../hooks/useTemplate';
 import { ScoutingData } from '../../types/TemplateTypes';
@@ -26,6 +27,23 @@ export default function SettingsScreen() {
                     onPress: async () => {
                         await setScoutingData([]);
                         Alert.alert("Success!", "All scouting data has been cleared");
+                    }
+                },
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                }
+            ], { cancelable: true }
+        );
+    }
+
+    const clearAllData = () => {
+        Alert.alert("Are you sure?", "This will delete all scouting, event, and team data on your device.",
+            [
+                {
+                    text: "Confirm",
+                    onPress: async () => {
+                        await clearStorage();
                     }
                 },
                 {
@@ -61,7 +79,8 @@ export default function SettingsScreen() {
                 if (!match)
                     continue;
 
-                const teamIDs = match.blueTeamIDs;
+                const teamIDs = [];
+                teamIDs.push(...match.blueTeamIDs);
                 teamIDs.push(...match.redTeamIDs);
 
                 for (let teamID of teamIDs) {
@@ -74,6 +93,7 @@ export default function SettingsScreen() {
                     );
 
                     scoutingData.push({
+                        id: "s_" + matchID + "_" + teamID,
                         matchID,
                         teamID,
                         values
@@ -126,8 +146,14 @@ export default function SettingsScreen() {
             <StandardButton
                 iconType={"delete-outline"}
                 title={"Clear Scouting Data"}
-                subtitle={"Wipes all scouting data on your device"}
+                subtitle={"Wipes all scouting data"}
                 onPress={() => { clearScoutingData(); }} />
+
+            <StandardButton
+                iconType={"delete-forever"}
+                title={"Reset"}
+                subtitle={"Wipes all app data"}
+                onPress={() => { clearAllData(); }} />
 
         </ScrollContainer>
     );

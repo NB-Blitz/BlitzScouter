@@ -29,3 +29,8 @@ export interface ExportData {
     exportID: string,
     scoutingData: ScoutingData[]
 }
+
+export interface QRHistory {
+    timestamp: string,
+    scoutIDs: string[],
+}

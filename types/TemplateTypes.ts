@@ -27,6 +27,8 @@ export interface ElementProps {
 export type ScoutingTemplate = ElementData[];
 
 export interface ScoutingData {
+    id: string,
+    isQRCodeScanned?: boolean;
     matchID: string;
     teamID: string;
     values: number[]

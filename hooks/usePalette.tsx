@@ -25,7 +25,7 @@ export const PaletteContext = React.createContext({
 });
 
 export function PaletteProvider(props: { children: React.ReactNode }) {
-    const [palette, setPalette] = useStorage<Palette>("palette", DEFAULT_PALETTE);
+    const [palette, setPalette] = useStorage<Palette>("palette", Object.assign({}, DEFAULT_PALETTE));
     const [version, setVersion] = React.useState(0);
 
     const setPaletteFromContext = (newPalette: Palette) => {

@@ -19,11 +19,13 @@ export default function TeamBanner(props: { teamID: string, onClick?: (teamID: s
     // Image
     const teamIcon = team.mediaPaths.length > 0 ? team.mediaPaths[0] : undefined;
 
+    if (team.id === "")
+        return null;
     return (
         <View>
             <StandardButton
                 iconData={teamIcon}
-                iconType={teamIcon ? undefined : "do-not-disturb"}
+                iconType={teamIcon ? undefined : "image-not-supported"}
                 title={team.name}
                 subtitle={team.number.toString()}
                 sidetitle={team.rank ? "#" + team.rank : ""}

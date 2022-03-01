@@ -16,6 +16,7 @@ import YearScreen from "../screens/Settings/Download/YearScreen";
 import { PaletteScreen } from "../screens/Settings/PaletteScreen";
 import EditTemplateScreen from "../screens/Settings/Template/EditTemplateScreen";
 import ElementChooserScreen from "../screens/Settings/Template/ElementChooserScreen";
+import ExportQRHistory from "../screens/Sharing/ExportQRHistory";
 import ExportQRScreen from "../screens/Sharing/ExportQRScreen";
 import ImportQRScreen from "../screens/Sharing/ImportQRScreen";
 import PrintSummaryScreen from "../screens/Sharing/PrintSummaryScreen";
@@ -91,6 +92,7 @@ export default function RootNavigator() {
                 <Stack.Screen name="Scout" component={ScoutingScreen} />
                 <Stack.Screen name="DefaultTeam" component={DefaultTeamScreen} />
                 <Stack.Screen name="ExportQR" component={ExportQRScreen} />
+                <Stack.Screen name="ExportQRHistory" component={ExportQRHistory} />
                 <Stack.Screen name="ImportQR" component={ImportQRScreen} />
                 <Stack.Screen name="PrintSummaryScreen" component={PrintSummaryScreen} />
                 <Stack.Screen name="About" component={AboutScreen} />

@@ -13,17 +13,63 @@ export function getChecksum(data: ScoutingData[]) {
     }, 0).toString();
 }
 
-export function useDataImporter() {
+export function useQRImporter() {
     const [event] = useEvent();
     const [scoutingData, setScoutingData] = useScoutingData();
     const [importedIDs, setImportedIDs] = React.useState([] as string[]);
 
-    const importJsonData = async (data: string) => {
+    const importData = async (data: string) => {
+        try {
+            // Decompress
+            const splitData = data.split("|");
+            if (splitData.length <= 0) {
+                ToastAndroid.show("Invalid QR code", ToastAndroid.SHORT);
+                return;
+            }
+            const exportID = splitData.shift() as string;
+            const scouts = splitData.map((data) => {
+                const split = data.split(",");
+                if (split.length < 2)
+                    return undefined;
+                return {
+                    teamID: split[0],
+                    matchID: split[1],
+                    values: split.slice(2).map((val) => parseInt(val))
+                } as ScoutingData;
+            }).filter((scout) => scout !== undefined) as ScoutingData[];
+
+
+            // Check Duplicates
+            if (importedIDs.includes(exportID)) {
+                return;
+            }
+            importedIDs.push(exportID);
+            setImportedIDs(importedIDs);
+
+            // Append Data
+            scoutingData.push(...scouts);
+            setScoutingData(scoutingData);
+            ToastAndroid.show("Imported " + scouts.length + " matches.", ToastAndroid.SHORT);
+        }
+        catch (e) {
+            ToastAndroid.show("Invalid Data Import", ToastAndroid.SHORT);
+        }
+    };
+
+    return importData;
+}
+
+export function useJSONImporter() {
+    const [event] = useEvent();
+    const [scoutingData, setScoutingData] = useScoutingData();
+    const [importedIDs, setImportedIDs] = React.useState([] as string[]);
+
+    const importData = async (data: string) => {
         try {
             // Decompress
             const decompressedData = JSON.parse(data) as ExportData;
             if (!decompressedData) {
-                ToastAndroid.show("Invalid QR code", ToastAndroid.SHORT);
+                ToastAndroid.show("Invalid JSON Data", ToastAndroid.SHORT);
                 return;
             }
 
@@ -50,10 +96,10 @@ export function useDataImporter() {
         }
     };
 
-    return importJsonData;
+    return importData;
 }
 
-export function useDataExporter() {
+export function useJSONExporter() {
     const [scoutingData] = useScoutingData();
     const [event] = useEvent();
 

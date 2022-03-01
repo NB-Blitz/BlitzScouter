@@ -31,8 +31,8 @@ export default function TeamPreview(props: { teamID: string }) {
             <View style={{ padding: 1 }}>
                 <View style={[styles.thumbnail, { backgroundColor: palette.innerBox }]}>
                     <MaterialIcons
-                        name="block"
-                        size={40}
+                        name="image-not-supported"
+                        size={30}
                         color={palette.navigationText} />
                 </View>
 

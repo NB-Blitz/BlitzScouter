@@ -3,7 +3,7 @@ import * as React from "react";
 import { Image, StyleSheet, View } from "react-native";
 import PagerView from 'react-native-pager-view';
 import Animated from "react-native-reanimated";
-import logo from "../../../assets/images/logo.png";
+import bolt from "../../../assets/images/bolt.png";
 import tbalamp from "../../../assets/images/tba_lamp.png";
 import Button from "../../../components/common/Button";
 import Subtitle from "../../../components/text/Subtitle";
@@ -53,14 +53,14 @@ export default function OnboardingScreen() {
                     })}>
 
                     <View style={styles.page} key="1">
-                        <Image source={logo} style={[styles.img, { width: 160, height: 160 }]} />
+                        <Image source={bolt} style={styles.img} />
                         <Subtitle style={styles.subtitle}>Welcome to</Subtitle>
                         <Title style={styles.title}>Blitz Scouter</Title>
                         <Text style={styles.text}>Blitz Scouter is a simple, easy to use scouting app for use at a FIRST{"\u00AE"} Robotics Competition.</Text>
                     </View>
                     <View style={[styles.page, { backgroundColor: "#3f51b5" }]} key="2">
                         <View style={{ height: 90 }} />
-                        <Animated.Image source={tbalamp} style={[styles.img, { width: 100, height: 160 }]} />
+                        <Image source={tbalamp} style={styles.img} />
                         <Subtitle style={styles.subtitle}>Import From</Subtitle>
                         <Title style={styles.title}>The Blue Alliance</Title>
                         <Text style={styles.text}>Import Teams and Event data while your online, and continue to use them offline.</Text>
@@ -116,7 +116,9 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     img: {
-        alignSelf: "center",
+        width: 200,
+        height: 200,
+        alignSelf: "center"
     },
     button: {
         marginTop: 50,
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
     },
     pageDot: {
         position: "absolute",
-        bottom: 10,
+        bottom: 30,
         right: 10,
         height: 8,
         width: 8,

@@ -63,3 +63,18 @@ export interface TBARankings {
         precision: number;
     }[];
 }
+
+export interface TBAZebra {
+    key: string;
+    times: number[];
+    alliances: {
+        blue: TBAZebraTeam[],
+        red: TBAZebraTeam[]
+    }
+}
+
+export interface TBAZebraTeam {
+    team_key: string;
+    xs: number[];
+    ys: number[];
+}

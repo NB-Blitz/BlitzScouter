@@ -37,7 +37,7 @@ export default function StandardButton(props: ButtonProps) {
                 {/*  FA Icon  */}
                 {props.iconType ?
                     <View style={styles.buttonIconFA} >
-                        <MaterialIcons name={props.iconType} size={30} style={{ color: palette.textPrimary }} />
+                        <MaterialIcons name={props.iconType} size={28} style={{ color: palette.textPrimary }} />
                     </View>
                     : null}
 

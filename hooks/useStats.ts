@@ -34,7 +34,6 @@ export function useEventStats(): [Stat[], number] {
                 const teamScoutingData = scoutingData.filter((data) => data.teamID === teamID);
                 const teamValues = getScoutingValues(teamScoutingData, i);
 
-
                 let teamAvg = 0;
                 if (teamValues.length > 0)
                     teamAvg = teamValues.reduce((prev, cur) => prev + cur) / teamValues.length;

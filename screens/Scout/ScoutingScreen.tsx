@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
-import { Alert, Image, StyleSheet, View } from 'react-native';
+import { Alert, Image, StyleSheet, Vibration, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Button from '../../components/common/Button';
 import ScoutingElement from '../../components/elements/ScoutingElement';
@@ -27,22 +27,27 @@ export default function ScoutingScreen({ route }: any) {
     }
     const onSubmit = () => {
         let data: ScoutingData = {
+            id: "s_" + route.params.matchID + "_" + route.params.teamID,
             teamID: route.params.teamID,
             matchID: route.params.matchID,
             values: template.map(elem => elem.value).filter(val => val != undefined) as number[]
         };
         setScoutingDataHook([...scoutingData, data]);
 
-        navigator.goBack();
-        navigator.goBack();
+        if (navigator.canGoBack())
+            navigator.goBack();
+        if (navigator.canGoBack())
+            navigator.goBack();
+        Vibration.vibrate(200);
         Alert.alert("Success", "Data has been saved to storage", [
             {
                 text: "Undo",
                 onPress: () => {
                     getScoutingData().then((data) => {
                         if (data) {
-                            data.splice(scoutingData.length - 1, 1);
+                            const oldData = data.splice(scoutingData.length - 1, 1);
                             setScoutingData(scoutingData);
+                            Vibration.vibrate(200);
                             Alert.alert("Success", "Last round has been cleared");
                         }
                     });

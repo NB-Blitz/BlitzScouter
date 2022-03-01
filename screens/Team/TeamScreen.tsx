@@ -150,7 +150,7 @@ export default function TeamScreen({ route }: any) {
                 </ScrollView>
 
                 <View>
-                    <Title>{team.name}</Title>
+                    <Title style={{ marginRight: 25 }}>{team.name}</Title>
                     <Subtitle>{team.number}</Subtitle>
                     <Text style={[styles.sidetitle, { color: palette.textSecondary }]}>
                         {team.rank ? "#" + team.rank : ""}

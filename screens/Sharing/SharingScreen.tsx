@@ -6,7 +6,7 @@ import * as React from 'react';
 import StandardButton from '../../components/common/StandardButton';
 import ScrollContainer from '../../components/containers/ScrollContainer';
 import NavTitle from '../../components/text/NavTitle';
-import { useDataExporter, useDataImporter } from '../../hooks/useCompressedData';
+import { useJSONExporter, useJSONImporter } from '../../hooks/useCompressedData';
 import useEvent from '../../hooks/useEvent';
 import useScoutingData from '../../hooks/useScoutingData';
 import useTemplate from '../../hooks/useTemplate';
@@ -16,8 +16,8 @@ export default function SharingScreen() {
     const [scoutingData] = useScoutingData();
     const [template] = useTemplate();
     const [event] = useEvent();
-    const importJsonData = useDataImporter();
-    const exportJsonData = useDataExporter();
+    const importJsonData = useJSONImporter();
+    const exportJsonData = useJSONExporter();
 
     const exportJson = async () => {
         const path = FileSystem.documentDirectory + "data.json";
