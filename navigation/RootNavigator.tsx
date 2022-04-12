@@ -82,7 +82,7 @@ export default function RootNavigator() {
                 <Stack.Screen name="Onboard" component={OnboardingScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="Match" component={MatchScreen} />
                 <Stack.Screen name="Team" component={TeamScreen} />
-                <Stack.Screen name="Media" component={MediaScreen} options={{ headerStyle: { backgroundColor: "#000000" } }} />
+                <Stack.Screen name="Media" component={MediaScreen} options={{ headerStyle: { backgroundColor: "#000000" }, headerTintColor: "#fff" }} />
                 <Stack.Screen name="Year" component={YearScreen} />
                 <Stack.Screen name="Regional" component={RegionalScreen} />
                 <Stack.Screen name="Download" component={DownloadScreen} />

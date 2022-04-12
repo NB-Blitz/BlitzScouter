@@ -2,7 +2,7 @@
     "expo": {
         "name": "Blitz Scouter",
         "slug": "BlitzScouter",
-        "version": "1.0.3",
+        "version": "1.1.0",
         "orientation": "portrait",
         "scheme": "blitz",
         "icon": "./assets/images/icon.png",
@@ -22,7 +22,7 @@
         "ios": {
             "supportsTablet": true,
             "bundleIdentifier": "com.team5148.blitzscouter",
-            "buildNumber": "1.0.3",
+            "buildNumber": "1.1.0",
             "icon": "./assets/images/icon.png"
         },
         "android": {

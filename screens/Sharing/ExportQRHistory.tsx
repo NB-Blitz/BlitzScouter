@@ -7,32 +7,34 @@ import StandardButton from '../../components/common/StandardButton';
 import Subtitle from '../../components/text/Subtitle';
 import Text from '../../components/text/Text';
 import Title from '../../components/text/Title';
-import { usePalette } from '../../hooks/usePalette';
 import useQRHistory from '../../hooks/useQRHistory';
 
 
 export default function ExportQRHistory({ route }: any) {
     const navigator = useNavigation<StackNavigationProp<any>>();
-    const [palette] = usePalette();
     const [qrHistory, setQRHistory] = useQRHistory();
-    const version = React.useState(0);
+    const [version, setVersion] = React.useState(0);
 
     // Sort By Date
     React.useEffect(() => {
-        qrHistory.sort((a, b) => Date.parse(a.timestamp) - Date.parse(b.timestamp))
+        qrHistory.sort((a, b) => Date.parse(b.timestamp) - Date.parse(a.timestamp))
     }, [qrHistory])
 
     React.useEffect(() => {
-        const t = setInterval(() => {
-            
-        })
+        const interval = setInterval(() => {
+            setVersion(v => v + 1);
+        }, 1000);
+
+        return () => {
+            clearInterval(interval);
+        }
     }, [])
 
     return (
         <ScrollView>
             <View style={styles.container}>
                 <Title>QR History</Title>
-                <Subtitle>Recover Previous Scouting Data</Subtitle>
+                <Subtitle>Share Previous QR Codes</Subtitle>
                 {qrHistory.length > 0 ?
                     qrHistory.map((scan, index) => {
                         const date = new Date(scan.timestamp);
@@ -44,7 +46,7 @@ export default function ExportQRHistory({ route }: any) {
                         return (
                             <StandardButton
                                 key={index}
-                                iconText={scan.scoutIDs.length.toString()}
+                                iconType={"qr-code"}
                                 title={title}
                                 subtitle={scan.scoutIDs.length + " matches"}
                                 onPress={() => { navigator.push("ExportQR", { scoutIDs: scan.scoutIDs }) }} />

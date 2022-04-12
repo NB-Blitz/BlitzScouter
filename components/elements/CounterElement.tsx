@@ -34,7 +34,7 @@ export default function CounterElement(props: ElementProps) {
 
         // Vibrate
         if (delta > 0)
-            Vibration.vibrate(10);
+            Vibration.vibrate(30);
         else
             Vibration.vibrate(100);
 

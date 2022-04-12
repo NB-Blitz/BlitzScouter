@@ -1,7 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { BottomTabBarButtonProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as React from 'react';
-import { PixelRatio, TouchableNativeFeedback, View } from 'react-native';
+import { TouchableNativeFeedback, View } from 'react-native';
 import { usePalette } from '../hooks/usePalette';
 import MatchesScreen from '../screens/Matches/MatchesScreen';
 import SettingsScreen from '../screens/Settings/SettingsScreen';
@@ -12,8 +12,6 @@ const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
     const [palette] = usePalette();
-
-    const dpi = PixelRatio.get();
 
     const buttonNativeFeedback = ({ children, style, ...props }: BottomTabBarButtonProps) => (
         <TouchableNativeFeedback
@@ -37,7 +35,7 @@ export default function TabNavigator() {
                 tabBarActiveTintColor: palette.navigationTextSelected,
                 tabBarInactiveTintColor: palette.navigationText,
                 tabBarStyle: {
-                    height: 170 / dpi,
+                    height: 60,
                     borderTopWidth: 0
                 },
                 tabBarLabelStyle: {

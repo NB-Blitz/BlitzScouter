@@ -29,7 +29,7 @@ export default function CheckboxElement(props: ElementProps) {
 
         // Vibrate
         if (isChecked)
-            Vibration.vibrate(10);
+            Vibration.vibrate(30);
         else
             Vibration.vibrate(100);
 

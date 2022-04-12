@@ -75,21 +75,26 @@ export function useJSONImporter() {
 
             // Check Duplicates
             if (importedIDs.includes(decompressedData.exportID)) {
+                ToastAndroid.show("Duplicate JSON Data", ToastAndroid.SHORT);
                 return;
             }
             importedIDs.push(decompressedData.exportID);
             setImportedIDs(importedIDs);
 
-            // Check Event
-            if (decompressedData.eventID !== event.id) {
-                ToastAndroid.show("Invalid Event", ToastAndroid.SHORT);
-                return;
-            }
+            /* // Check Event
+             * if (decompressedData.eventID !== event.id) {
+             *    ToastAndroid.show("Invalid Event", ToastAndroid.SHORT);
+             *    return;
+             * }
+            */
 
-            // Append Data
-            scoutingData.push(...decompressedData.scoutingData);
+            // Filter & Append Data
+            const uniqueData = decompressedData.scoutingData.filter(scoutA =>
+                scoutingData.findIndex(scoutB => scoutB.id === scoutA.id) === -1
+            );
+            scoutingData.push(...uniqueData);
             setScoutingData(scoutingData);
-            ToastAndroid.show("Imported " + scoutingData.length + " matches.", ToastAndroid.SHORT);
+            ToastAndroid.show("Imported " + uniqueData.length + " matches.", ToastAndroid.SHORT);
         }
         catch (e) {
             ToastAndroid.show("Invalid Data Import", ToastAndroid.SHORT);

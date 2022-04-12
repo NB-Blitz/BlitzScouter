@@ -64,8 +64,6 @@ export default function ExportQRScreen({ route }: any) {
             setQRHistory(qrHistory);
         }
 
-
-
         Vibration.vibrate(100);
     }
     const onHistory = () => {
@@ -91,7 +89,9 @@ export default function ExportQRScreen({ route }: any) {
                         bgColor="black"
                         fgColor="white"
                     />
-                    <Text style={styles.text}>{scoutingChunk.length} / {scoutIDs !== undefined ? scoutingChunk.length : scoutingData.filter((scout) => !(scout.isQRCodeScanned)).length} Matches</Text>
+                    <Text style={styles.text}>
+                        {scoutingChunk.length} out of {scoutIDs !== undefined ? scoutingChunk.length : scoutingData.filter((scout) => !(scout.isQRCodeScanned)).length} Matches
+                    </Text>
                     <Button onPress={onCheck} style={[styles.checkButton, { backgroundColor: palette.navigationSelected }]}>
                         <MaterialIcons name={scoutingChunk.length === MAX_SIZE && scoutIDs === undefined ? "navigate-next" : "done"} size={40} color={palette.navigationTextSelected} />
                     </Button>

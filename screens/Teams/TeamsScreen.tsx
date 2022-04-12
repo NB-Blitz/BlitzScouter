@@ -93,7 +93,8 @@ export default function TeamsScreen() {
                 selectedValue={sortType}
                 onValueChange={(type) => { onSort(type) }}
                 dropdownIconColor={palette.background}
-                style={{ alignSelf: "flex-end" }}>
+
+                style={{ alignSelf: "flex-end", minWidth: 200, color: palette.background }}>
 
                 <Picker.Item
                     label="Team Number"

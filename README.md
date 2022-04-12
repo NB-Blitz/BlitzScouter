@@ -1,16 +1,37 @@
-![Blitz Scouter](https://i.imgur.com/eANWZcA.png "Blitz Scouter")
+<p align="center">
+<a href="https://team5148.org/#/">
+<img alt="Blitz Scouter" src="https://i.imgur.com/eANWZcA.png" />
+</a>
+</p>
 
-# Features
-- Easy to use
-- Import from [The Blue Alliance](https://www.thebluealliance.com/)
-- Import & Export data without internet access
-- Customizable color palette
+<p align="center">
+<a href="https://github.com/NB-Blitz/BlitzScouter/releases">
+<img alt="GitHub all releases" src="https://img.shields.io/github/downloads/NB-Blitz/BlitzScouter/total">
+</a>
+<a href="https://github.com/NB-Blitz/BlitzScouter/issues">
+<img alt="GitHub issues" src="https://img.shields.io/github/issues/NB-Blitz/BlitzScouter">
+</a>
+</p>
+
+<p align="center">
+<img alt="BlitzScouter Matches" src="https://i.imgur.com/6rzXtkB.jpg" width="30%" height="30%" >
+<img alt="BlitzScouter Teams" src="https://i.imgur.com/weB4lfc.jpg" width="30%" height="30%" >
+</p>
 
 # Download
-.APKs can be downloaded and installed under the [Releases](https://github.com/NB-Blitz/BlitzScouter-Offline/releases) tab
+At the moment, BlitzScouter is only supported on **Android** devices. APKs can be downloaded and installed under the [Releases](https://github.com/NB-Blitz/BlitzScouter/releases) tab.
+
+# Features
+- 🎨 Customizable color palette
+- 📋 Customizable scouting templates
+- 📷 Take and manage robot photos
+- 💾 Take event data from [The Blue Alliance](https://www.thebluealliance.com/) offline
+- 📁 Share data using json, csv, or QR codes
+- 🥊 Quick match summaries for strategy
+- 🧑‍🤝‍🧑 Sort and analyze teams
 
 # Building
-Requires [NPM](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/)
+Requires [Node](https://nodejs.org/en/)
 1. Install Expo:
 ```
 npm install --global expo-cli

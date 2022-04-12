@@ -7,8 +7,9 @@ import ScoutingElement from '../../components/elements/ScoutingElement';
 import Subtitle from '../../components/text/Subtitle';
 import Text from '../../components/text/Text';
 import Title from '../../components/text/Title';
+import useMatch from '../../hooks/useMatch';
 import { usePalette } from '../../hooks/usePalette';
-import useScoutingData, { getScoutingData, setScoutingData } from '../../hooks/useScoutingData';
+import useScoutingData from '../../hooks/useScoutingData';
 import useTeam from '../../hooks/useTeam';
 import useTemplate from '../../hooks/useTemplate';
 import { ElementData, ScoutingData } from '../../types/TemplateTypes';
@@ -18,7 +19,10 @@ export default function ScoutingScreen({ route }: any) {
     const [scoutingData, setScoutingDataHook] = useScoutingData();
     const [template] = useTemplate();
     const [team] = useTeam(route.params.teamID);
+    const [match] = useMatch(route.params.matchID);
     const [palette] = usePalette();
+
+    const isRed = match.redTeamIDs.includes(route.params.teamID);
 
     const onChange = (element: ElementData) => {
         const index = template.findIndex(e => e.id === element.id);
@@ -26,37 +30,26 @@ export default function ScoutingScreen({ route }: any) {
             template[index] = element;
     }
     const onSubmit = () => {
-        let data: ScoutingData = {
-            id: "s_" + route.params.matchID + "_" + route.params.teamID,
-            teamID: route.params.teamID,
-            matchID: route.params.matchID,
-            values: template.map(elem => elem.value).filter(val => val != undefined) as number[]
-        };
-        setScoutingDataHook([...scoutingData, data]);
-
-        if (navigator.canGoBack())
-            navigator.goBack();
-        if (navigator.canGoBack())
-            navigator.goBack();
-        Vibration.vibrate(200);
-        Alert.alert("Success", "Data has been saved to storage", [
+        Alert.alert("Are you sure?", "This will save your scouting data to local storage. You won't be able to return to this match in the future", [
             {
-                text: "Undo",
-                onPress: () => {
-                    getScoutingData().then((data) => {
-                        if (data) {
-                            const oldData = data.splice(scoutingData.length - 1, 1);
-                            setScoutingData(scoutingData);
-                            Vibration.vibrate(200);
-                            Alert.alert("Success", "Last round has been cleared");
-                        }
-                    });
+                text: "Confirm", onPress: () => {
+                    const data: ScoutingData = {
+                        id: "s_" + route.params.matchID + "_" + route.params.teamID,
+                        teamID: route.params.teamID,
+                        matchID: route.params.matchID,
+                        values: template.map(elem => elem.value).filter(val => val != undefined) as number[]
+                    };
+                    setScoutingDataHook([...scoutingData, data]);
+
+                    if (navigator.canGoBack())
+                        navigator.goBack();
+                    if (navigator.canGoBack())
+                        navigator.goBack();
+                    Vibration.vibrate(200);
+                    Alert.alert("Success", "Data has been saved to storage");
                 }
             },
-            {
-                text: "OK",
-                style: "cancel"
-            }
+            { text: "Cancel", style: "cancel" },
         ], { cancelable: true });
     }
 
@@ -68,11 +61,11 @@ export default function ScoutingScreen({ route }: any) {
                     {team.mediaPaths.length > 0 ?
                         <Button
                             style={styles.thumbnail}
-                            onPress={() => { navigator.navigate("Media", { mediaPath: team.mediaPaths[team.mediaPaths.length - 1] }) }}>
+                            onPress={() => { navigator.navigate("Media", { mediaPath: team.mediaPaths[0] }) }}>
                             <Image
                                 style={styles.thumbnail}
-                                source={{ uri: team.mediaPaths[team.mediaPaths.length - 1] }}
-                                key={team.id + "-" + (team.mediaPaths.length - 1)} />
+                                source={{ uri: team.mediaPaths[0] }}
+                                key={team.id + "-0"} />
                         </Button>
                         : null}
                     <View style={{ alignSelf: "center", marginLeft: 10 }}>
@@ -80,6 +73,8 @@ export default function ScoutingScreen({ route }: any) {
                         <Subtitle>{team.name}</Subtitle>
                     </View>
                 </View>
+
+                <View style={[styles.allianceFooter, { backgroundColor: (isRed ? "#e7311f" : "#008cf1") }]} />
 
 
                 {template.map((element, index) =>
@@ -126,5 +121,10 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 8
+    },
+    allianceFooter: {
+        borderRadius: 10,
+        height: 10,
+        marginTop: 5
     },
 });
