@@ -1,34 +1,41 @@
 {
-  "expo": {
-    "name": "BlitzScouter",
-    "slug": "BlitzScouter",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
-    "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#000000"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#000000"
-      }
-    },
-    "web": {
-      "favicon": "./assets/images/favicon.png"
+    "expo": {
+        "name": "Blitz Scouter",
+        "slug": "BlitzScouter",
+        "version": "1.1.0",
+        "orientation": "portrait",
+        "scheme": "blitz",
+        "icon": "./assets/images/icon.png",
+        "userInterfaceStyle": "light",
+        "primaryColor": "#856a00",
+        "splash": {
+            "image": "./assets/images/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#141416"
+        },
+        "updates": {
+            "fallbackToCacheTimeout": 0
+        },
+        "assetBundlePatterns": [
+            "**/*"
+        ],
+        "ios": {
+            "supportsTablet": true,
+            "bundleIdentifier": "com.team5148.blitzscouter",
+            "buildNumber": "1.1.0",
+            "icon": "./assets/images/icon.png"
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/images/logo.png",
+                "backgroundColor": "#141416"
+            },
+            "icon": "./assets/images/icon.png",
+            "package": "com.team5148.blitzscouter",
+            "versionCode": 1
+        },
+        "web": {
+            "favicon": "./assets/images/icon.png"
+        }
     }
-  }
 }
